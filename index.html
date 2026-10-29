@@ -7,6 +7,18 @@
 body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--fg);font-family:'Google Sans',system-ui,sans-serif}
 main{width:min(560px,100% - 32px)}h1{font-size:28px;margin:0 0 20px}
 a{display:block;padding:18px 22px;margin:0 0 12px;border-radius:16px;color:var(--fg);text-decoration:none;font-size:19px;border:1px solid color-mix(in oklab,var(--fg) 14%,transparent)}
-a:hover{border-color:var(--p);color:var(--p)}
+a:hover{border-color:var(--p);color:var(--p)}a[hidden]{display:none}
+.search{display:flex;align-items:center;gap:12px;padding:0 18px;margin:0 0 16px;border-radius:16px;background:color-mix(in oklab,var(--fg) 6%,transparent);border:1px solid transparent}
+.search:focus-within{border-color:var(--p)}.search svg{flex:none;opacity:.6}
+.search input{all:unset;flex:1;padding:15px 0;font-size:17px}.search input::placeholder{color:var(--fg);opacity:.5}
+.empty{display:none;padding:18px 4px;opacity:.6}
+footer{position:fixed;left:0;right:0;bottom:20px;text-align:center;font-size:14px;opacity:.3}
 </style></head>
-<body><main><h1>Presentations</h1><a href="presentation.html">Container Technologies on Enterprise Linux</a><a href="presentation2.html">Deploying a Live Project with Docker</a></main></body></html>
+<body><main><h1>Presentations</h1>
+<label class="search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="q" type="search" placeholder="Search presentations" aria-label="Search presentations" autocomplete="off"></label>
+<div id="list"><a href="presentation.html">Container Technologies on Enterprise Linux</a><a href="presentation2.html">Deploying a Live Project with Docker</a></div><p class="empty" id="none">No presentations match your search.</p></main>
+<footer>by Drubajyoti Debnath</footer>
+<script>
+const q=document.getElementById('q'),items=[...document.querySelectorAll('#list a')];
+q.addEventListener('input',()=>{const t=q.value.trim().toLowerCase();let n=0;items.forEach(a=>{const hit=a.textContent.toLowerCase().includes(t);a.hidden=!hit;n+=hit});document.getElementById('none').style.display=n?'none':'block'});
+</script></body></html>

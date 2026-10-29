@@ -98,6 +98,8 @@ pre.file::before{content:attr(data-n);position:absolute;top:10px;right:18px;font
 #toc button{all:unset;cursor:pointer;display:flex;align-items:center;gap:18px;padding:16px 22px;border-radius:18px;font-size:26px;background:color-mix(in oklab,var(--BC) 5%,transparent);border:1px solid transparent;transition:border-color .2s}
 #toc button:hover{border-color:var(--P)}
 #toc .n{font-weight:700;color:var(--P);width:40px}#toc svg{width:30px;height:30px;color:var(--P)}#toc .tm{margin-left:auto;font-size:19px;opacity:.6}
+.nextdeck{all:unset;cursor:pointer;display:flex;align-items:center;gap:22px;width:max-content;margin-top:40px;padding:16px 24px;border-radius:18px;font-size:24px;background:color-mix(in oklab,var(--BC) 5%,transparent);border:1px solid transparent;transition:border-color .2s}
+.nextdeck:hover,.nextdeck:focus-visible{border-color:var(--P)}.nextdeck small{display:block;font-size:16px;opacity:.6;margin-bottom:4px}.nextdeck svg{width:28px;height:28px;color:var(--P)}
 .orbit{position:absolute;right:120px;top:50%;margin-top:-190px;width:380px;height:380px}
 .orbit .core{position:absolute;inset:105px;border-radius:50%;background:var(--P);color:var(--PC);display:grid;place-items:center;animation:float 4s ease-in-out infinite}
 .orbit .core svg{width:84px;height:84px}
@@ -682,6 +684,7 @@ $ podman compose up -d</pre>
 <div class="li"><i data-lucide="shield-check"></i>On Oracle Linux: Podman plus SELinux labels</div></section>
 
 <section class="slide" data-k="Thank you" data-ic="message-square"><h2 class="t big" style="max-width:640px">Questions and <em>Discussion</em></h2><p class="lead" style="max-width:640px">Container Technologies on Enterprise Linux</p>
+<a class="nextdeck" href="presentation2.html"><span><small>Next session</small>Deploying a Live Project with Docker</span><i data-lucide="arrow-right"></i></a>
 <div class="orbit"><div class="ring"><span><i data-lucide="container"></i></span><span><i data-lucide="boxes"></i></span><span><i data-lucide="shield-check"></i></span><span><i data-lucide="terminal"></i></span></div><div class="core"><i data-lucide="message-circle-question"></i></div></div></section>
 
 </div>
@@ -723,7 +726,7 @@ function go(n){if(n<0||n>=S.length)return;const p=S[cur],q=S[n],adj=Math.abs(n-c
  const z=deck.getBoundingClientRect().width/1280;moves.forEach(([c,r])=>{const b=c.getBoundingClientRect(),dx=(r.left-b.left)/z,dy=(r.top-b.top)/z;if(Math.abs(dx)+Math.abs(dy)<1)return;c.style.transition='none';c.style.transform='translate('+dx+'px,'+dy+'px)';c.offsetWidth;c.style.transition='transform .5s cubic-bezier(.2,.7,.2,1)';c.style.transform=''});
  document.getElementById('cnt').textContent=(n+1)+' / '+S.length;document.getElementById('pg').style.width=Math.round((n/(S.length-1))*100)+'%';history.replaceState(null,'','#'+(n+1));
  if(ready&&n>0&&!T.used)timerToggle();syncNotes()}
-function next(){go(cur+1)}
+function next(){if(cur===S.length-1)location.href='presentation2.html';else go(cur+1)}
 function prev(){go(cur-1)}
 function fsToggle(doc=document){if(!doc.fullscreenElement)doc.documentElement.requestFullscreen().catch(()=>{});else doc.exitFullscreen()}
 function onKey(e){const k=e.key,doc=e.target.ownerDocument||e.target.document||document;
