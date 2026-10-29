@@ -989,9 +989,10 @@ const toc=document.getElementById('toc');
 dvs.forEach((d,n)=>{const b=document.createElement('button');b.innerHTML='<span class="n">0'+(n+1)+'</span><i data-lucide="'+d.ic+'"></i><span>'+d.t+'</span><span class="tm">'+d.tm+'</span>';b.onclick=e=>{e.stopPropagation();go(d.i);deck.focus()};toc.appendChild(b)});
 document.querySelectorAll('pre.sh,pre.file').forEach(p=>{const sh=p.classList.contains('sh');p.innerHTML=p.innerHTML.replace(/^\n/,'').replace(/\s+$/,'').split('\n').map(l=>{let pre='',cm='';const pm=sh&&l.match(/^(\$|PS&gt;) /);if(pm){pre='<span class="pr">'+pm[1]+'</span> ';l=l.slice(pm[0].length)}else if(/^\s*#/.test(l)){return '<span class="cm">'+l+'</span>'}else if(sh&&!/^\s/.test(l)){const k=l.search(/\s#\s/);return k>=0?'<span class="out">'+l.slice(0,k)+'</span><span class="cm">'+l.slice(k)+'</span>':'<span class="out">'+l+'</span>'}const k=l.search(/\s#\s/);if(k>=0){cm='<span class="cm">'+l.slice(k)+'</span>';l=l.slice(0,k)}return pre+l+cm}).join('\n')+'<span class="cur"></span>'});
 // Phones held upright get a tall 720px-wide canvas with a one-column layout (html.vert).
-function fit(){const v=innerHeight>innerWidth*1.15&&innerWidth<900;document.documentElement.classList.toggle('vert',v);
- if(v){const s=innerWidth/720;deck.style.width='720px';deck.style.height=Math.round(innerHeight/s)+'px';deck.style.transform='translate(-50%,-50%) scale('+s+')'}
- else{deck.style.width=deck.style.height='';const s=Math.min(innerWidth/1280,innerHeight/720)*(innerWidth<900?.98:.86);deck.style.transform='translate(-50%,-50%) scale('+s+')'}}
+// clientWidth, not innerWidth: phones can report a widened innerWidth before the deck is scaled.
+function fit(){const W=document.documentElement.clientWidth,H=document.documentElement.clientHeight,v=H>W*1.15&&W<900;document.documentElement.classList.toggle('vert',v);
+ if(v){const s=W/720;deck.style.width='720px';deck.style.height=Math.round(H/s)+'px';deck.style.transform='translate(-50%,-50%) scale('+s+')'}
+ else{deck.style.width=deck.style.height='';const s=Math.min(W/1280,H/720)*(W<900?.98:.86);deck.style.transform='translate(-50%,-50%) scale('+s+')'}}
 addEventListener('resize',fit);fit();
 let uiT;function poke(){document.body.classList.add('ui');clearTimeout(uiT);uiT=setTimeout(()=>document.body.classList.remove('ui'),2200)}
 addEventListener('pointermove',poke);addEventListener('pointerdown',poke);
@@ -1099,7 +1100,7 @@ const start=parseInt(location.hash.slice(1),10);go(start>0&&start<=S.length?star
 let tx=null,ty=0;
 addEventListener('touchstart',e=>{const pre=e.target.closest('pre');if(e.touches.length>1||e.target.closest('.bar,button,a')||(pre&&pre.scrollWidth>pre.clientWidth+2)){tx=null;return}tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
 addEventListener('touchend',e=>{if(tx===null||(window.visualViewport&&visualViewport.scale>1.05))return;const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;tx=null;
- if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?next():prev()}else if(Math.abs(dx)<12&&Math.abs(dy)<12){t.clientX>innerWidth/3?next():prev()}});
+ if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?next():prev()}else if(Math.abs(dx)<12&&Math.abs(dy)<12){t.clientX>document.documentElement.clientWidth/3?next():prev()}});
 if(!document.documentElement.requestFullscreen)document.getElementById('fs').style.display='none';
 if(matchMedia('(pointer:coarse)').matches)poke();
 if(window.lucide)lucide.createIcons();
