@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="forest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Container Technologies on Enterprise Linux</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css">
+<style>
+:root{--P:var(--color-primary,#1eb854);--PC:var(--color-primary-content,#001a08);--B1:var(--color-base-100,#1b1717);--BC:var(--color-base-content,#cac9c9);--N:var(--color-neutral,#1e3a30);--A:var(--color-accent,#1db88e)}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--B1)}
+*{box-sizing:border-box}
+body::before{content:'';position:fixed;inset:-80px;z-index:0;pointer-events:none;background:var(--grain,none);animation:grain 160s linear infinite alternate}
+@keyframes grain{to{transform:translate3d(-60px,-40px,0)}}
+@media (prefers-reduced-motion:reduce){body::before{animation:none}}
+.deck{position:absolute;z-index:1;left:50%;top:50%;width:1280px;height:720px;transform-origin:center;overflow:hidden;background:transparent;color:var(--BC);font-family:'Google Sans','Google Sans Flex',system-ui,sans-serif;outline:none}
+.slide{position:absolute;inset:0;padding:36px 96px;display:flex;flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transform:translateX(60px);transition:opacity .55s,transform .55s,visibility .55s;z-index:2}
+.slide.on{opacity:1;visibility:visible;transform:none}
+.slide.past{transform:translateX(-60px)}
+.slide.on>*:not(.hero):not(.orbit){animation:up .7s both;animation-delay:calc(var(--d,0)*110ms)}
+.slide.hh>*:not(.hero){max-width:700px}
+.k{display:flex;align-items:center;gap:12px;color:var(--P);font-size:20px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-bottom:16px}
+.k svg{width:24px;height:24px}
+.t{font-size:58px;font-weight:700;line-height:1.12;margin:0 0 24px;color:var(--BC)}
+.t em,.lead em,.q em{font-style:normal;color:var(--P)}
+.t.big{font-size:80px}
+.t.mid{font-size:44px;margin-bottom:14px}
+.lead{font-size:34px;line-height:1.45;margin:0 0 14px;color:color-mix(in oklab,var(--BC) 88%,transparent)}
+.note{font-size:24px;margin:22px 0 0;color:color-mix(in oklab,var(--BC) 65%,transparent);display:flex;gap:14px;align-items:center}
+.note svg{width:28px;height:28px;color:var(--P);flex:none}
+.li{display:flex;align-items:center;gap:22px;font-size:33px;line-height:1.3;margin:12px 0}
+.li>svg{width:40px;height:40px;color:var(--P);flex:none;padding:8px;border-radius:14px;background:color-mix(in oklab,var(--P) 14%,transparent);box-sizing:content-box}
+.li b{font-weight:700}
+.hero{position:absolute;right:110px;top:50%;margin-top:-150px;width:300px;height:300px;border-radius:50%;display:grid;place-items:center;color:var(--P);background:color-mix(in oklab,var(--P) 12%,transparent);animation:float 5s ease-in-out infinite}
+.hero svg{width:130px;height:130px}
+.hero::after{content:'';position:absolute;inset:-24px;border-radius:50%;border:3px dashed color-mix(in oklab,var(--P) 45%,transparent);animation:spin 22s linear infinite}
+.hero.s{width:220px;height:220px;margin-top:-110px;top:32%}
+.hero.s svg{width:96px;height:96px}
+pre.sh,pre.file{position:relative;margin:8px 0 0;padding:28px 32px;border-radius:20px;background:color-mix(in oklab,var(--N) 70%,black);font-family:'Google Sans Code',ui-monospace,monospace;font-size:27px;line-height:1.6;white-space:pre;overflow:hidden;color:var(--BC);border:1px solid color-mix(in oklab,var(--P) 22%,transparent);max-width:1090px}
+pre.sm{font-size:22px;padding:24px 28px}
+pre.xs{font-size:19px;line-height:1.5}
+pre.file::before{content:attr(data-n);position:absolute;top:10px;right:18px;font-size:17px;color:var(--P);font-family:'Google Sans',sans-serif}
+.pr{color:var(--P);font-weight:700}.cm{color:color-mix(in oklab,var(--BC) 45%,transparent)}.out{color:var(--A)}
+.cur{display:inline-block;width:14px;height:1.1em;margin-left:6px;vertical-align:-4px;background:var(--P);animation:blink 1s steps(1) infinite}
+.chip{display:inline-flex;align-items:center;gap:12px;padding:16px 22px;border-radius:18px;font-size:27px;font-weight:500;white-space:nowrap;background:color-mix(in oklab,var(--P) 13%,transparent);border:1px solid color-mix(in oklab,var(--P) 35%,transparent)}
+.chip svg{width:30px;height:30px;color:var(--P)}
+.flow{display:flex;align-items:center;margin:24px 0}
+.wire{flex:1;min-width:40px;height:3px;margin:0 12px;position:relative;background:color-mix(in oklab,var(--P) 35%,transparent)}
+.wire::after{content:'';position:absolute;top:-6px;left:0;width:15px;height:15px;border-radius:50%;background:var(--P);animation:travel 1.8s linear infinite}
+.wire.lk svg{width:38px;height:38px;color:var(--P);background:var(--B1);padding:4px;box-sizing:content-box;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:8px}
+.card{padding:28px 32px;border-radius:22px;background:color-mix(in oklab,var(--BC) 5%,transparent);border:1px solid color-mix(in oklab,var(--BC) 12%,transparent)}
+.card h3{display:flex;align-items:center;gap:14px;font-size:34px;font-weight:700;margin:0 0 14px;color:var(--P)}
+.card h3 svg{width:34px;height:34px}
+.card p{font-size:27px;line-height:1.5;margin:6px 0}
+.stack{display:flex;flex-direction:column;gap:10px}
+.stack div{padding:16px 22px;border-radius:16px;font-size:27px;text-align:center;background:color-mix(in oklab,var(--BC) 7%,transparent);animation:bob 3.2s ease-in-out infinite}
+.stack div.hl{background:color-mix(in oklab,var(--P) 25%,transparent);font-weight:500}
+.stack div:nth-child(2){animation-delay:.2s}.stack div:nth-child(3){animation-delay:.4s}.stack div:nth-child(4){animation-delay:.6s}.stack div:nth-child(5){animation-delay:.8s}
+.cyc .chip{animation:cyc 6s infinite}
+.cyc .chip:nth-of-type(2){animation-delay:1.5s}.cyc .chip:nth-of-type(3){animation-delay:3s}.cyc .chip:nth-of-type(4){animation-delay:4.5s}
+.row{display:grid;grid-template-columns:330px 56px 1fr;align-items:center;font-size:29px;margin:11px 0}
+.row svg{width:32px;height:32px;color:var(--P)}
+.row b{font-weight:500;color:color-mix(in oklab,var(--BC) 70%,transparent)}
+.dv .num{font-size:190px;font-weight:700;line-height:.9;color:transparent;-webkit-text-stroke:3px color-mix(in oklab,var(--P) 70%,transparent);margin-bottom:14px}
+.dvic{position:absolute;right:130px;top:50%;margin-top:-120px;width:240px;height:240px;border-radius:50%;display:grid;place-items:center;background:var(--P);color:var(--PC)}
+.dvic svg{width:104px;height:104px}
+.dvic::before,.dvic::after{content:'';position:absolute;inset:0;border-radius:50%;border:3px solid var(--P);animation:ping 2.6s ease-out infinite}
+.dvic::after{animation-delay:1.3s}
+.qz .q{font-size:50px;font-weight:700;line-height:1.25;margin:0;max-width:1050px}
+.opts{list-style:none;counter-reset:o;margin:32px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1090px}
+.opts li{counter-increment:o;display:flex;align-items:center;gap:18px;padding:18px 22px;border-radius:18px;font-size:28px;line-height:1.3;background:color-mix(in oklab,var(--BC) 5%,transparent);border:1px solid color-mix(in oklab,var(--BC) 12%,transparent)}
+.opts li::before{content:counter(o,upper-alpha);flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;font-weight:700;color:var(--P);background:color-mix(in oklab,var(--P) 14%,transparent)}
+.opts code{font-family:'Google Sans Code',ui-monospace,monospace;font-size:.9em}
+.opts li.ok{background:color-mix(in oklab,var(--P) 18%,transparent);border-color:var(--P)}
+.opts li.ok::before{background:var(--P);color:var(--PC)}
+.opts li.no{opacity:.4}
+.rv.on .opts li.ok{animation:hl .5s .15s both,pick .6s .65s both}
+.rv.on .opts li.ok::before{animation:hlb .5s .15s both}
+.rv.on .opts li.no{animation:dim .5s .15s both}
+.deck.pair .slide{transition:none;transform:none}
+.deck.pair .slide.on>*:not(.hero):not(.orbit){animation:none}
+.deck.soft .slide{transform:none;transition:opacity .3s,visibility .3s}
+.deck.soft .slide.on{transition:none}
+.deck.soft .slide.on>.hero:not(.keep){animation:fade .5s both,float 5s ease-in-out infinite}
+.deck.soft .slide.on>.orbit:not(.keep){animation:fade .5s both}
+.deck .slide.on>.keep:not(.hero){animation:none}
+.slide>.gone{opacity:0!important}
+.why{margin:24px 0 0;font-size:26px;line-height:1.45;display:flex;gap:14px;align-items:flex-start;max-width:1090px;color:color-mix(in oklab,var(--BC) 80%,transparent)}
+.why svg{width:30px;height:30px;color:var(--P);flex:none;margin-top:3px}
+.qz:not(.rv) .why{visibility:hidden}
+.notes{display:none}
+.deck.pair .slide.rv.on>.why{animation:fade .5s .35s both}
+#toc{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px}
+#toc button{all:unset;cursor:pointer;display:flex;align-items:center;gap:18px;padding:16px 22px;border-radius:18px;font-size:26px;background:color-mix(in oklab,var(--BC) 5%,transparent);border:1px solid transparent;transition:border-color .2s}
+#toc button:hover{border-color:var(--P)}
+#toc .n{font-weight:700;color:var(--P);width:40px}#toc svg{width:30px;height:30px;color:var(--P)}#toc .tm{margin-left:auto;font-size:19px;opacity:.6}
+.orbit{position:absolute;right:120px;top:50%;margin-top:-190px;width:380px;height:380px}
+.orbit .core{position:absolute;inset:105px;border-radius:50%;background:var(--P);color:var(--PC);display:grid;place-items:center;animation:float 4s ease-in-out infinite}
+.orbit .core svg{width:84px;height:84px}
+.orbit .ring{position:absolute;inset:0;border-radius:50%;border:3px dashed color-mix(in oklab,var(--P) 45%,transparent);animation:spin 16s linear infinite}
+.orbit .ring span{position:absolute;width:78px;height:78px;margin:-39px;border-radius:50%;display:grid;place-items:center;background:var(--N);color:var(--P);animation:spin 16s linear infinite reverse}
+.orbit .ring span svg{width:38px;height:38px}
+.orbit .ring span:nth-child(1){left:50%;top:0}.orbit .ring span:nth-child(2){left:100%;top:50%}.orbit .ring span:nth-child(3){left:50%;top:100%}.orbit .ring span:nth-child(4){left:0;top:50%}
+.bar{position:fixed;right:16px;bottom:14px;display:flex;align-items:center;gap:2px;padding:4px;border-radius:12px;z-index:5;background:color-mix(in oklab,var(--BC) 6%,var(--B1));border:1px solid color-mix(in oklab,var(--BC) 12%,transparent);font:13px 'Google Sans',system-ui,sans-serif;color:color-mix(in oklab,var(--BC) 70%,transparent);opacity:0;transition:opacity .3s}
+body.ui .bar,.bar:hover{opacity:1}
+.nb{all:unset;cursor:pointer;width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--BC);transition:background .2s}
+.nb:hover{background:color-mix(in oklab,var(--P) 18%,transparent)}
+.nb svg{width:16px;height:16px}
+#cnt{min-width:58px;text-align:center;font-variant-numeric:tabular-nums}
+.prog{position:fixed;left:0;right:0;bottom:0;height:3px;z-index:5;background:color-mix(in oklab,var(--BC) 8%,transparent)}
+.prog span{display:block;height:100%;width:0;background:var(--P);transition:width .4s}
+.kbd svg{width:18px;height:18px}
+@keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(-12px)}50%{transform:translateY(12px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes travel{from{left:0}to{left:calc(100% - 15px)}}
+@keyframes bob{0%,100%{transform:translateX(0)}50%{transform:translateX(9px)}}
+@keyframes pick{50%{transform:scale(1.04)}}
+@keyframes hl{from{background:color-mix(in oklab,var(--BC) 5%,transparent);border-color:color-mix(in oklab,var(--BC) 12%,transparent)}}
+@keyframes hlb{from{background:color-mix(in oklab,var(--P) 14%,transparent);color:var(--P)}}
+@keyframes dim{from{opacity:1}}
+@keyframes fade{from{opacity:0}}
+@keyframes ping{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
+@keyframes cyc{0%,22%{background:var(--P);color:var(--PC)}26%,100%{background:color-mix(in oklab,var(--P) 13%,transparent);color:var(--BC)}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck" tabindex="0">
+
+<section class="slide" data-k="Technical session" data-ic="presentation">
+<h2 class="t big" style="max-width:640px">Container Technologies on <em>Enterprise Linux</em></h2>
+<p class="lead" style="max-width:640px">Linux fundamentals, Docker, SELinux and Podman</p>
+<div class="orbit"><div class="ring"><span><i data-lucide="terminal"></i></span><span><i data-lucide="database"></i></span><span><i data-lucide="server"></i></span><span><i data-lucide="shield-check"></i></span></div><div class="core"><i data-lucide="container"></i></div></div>
+</section>
+
+<section class="slide" data-k="About me" data-ic="user-round"><h2 class="t">Drubajyoti <em>Debnath</em></h2><p class="lead">Jr. Resource Person, NIELIT Agartala</p>
+<div class="li"><i data-lucide="code"></i>Web application development and server management</div>
+<div class="li"><i data-lucide="pen-tool"></i>UX engineer since 2019, freelance and working with product teams</div>
+<div class="li"><i data-lucide="container"></i>I build, ship and run apps like AMS in containers</div>
+<div class="hero"><i data-lucide="user-round"></i></div></section>
+
+<section class="slide" id="agenda" data-k="Contents" data-ic="list"><h2 class="t">What we'll cover</h2><div id="toc"></div></section>
+
+<section class="slide dv" data-sec="Linux brush-up" data-ic="terminal" data-time="0:03"><div class="num">01</div><h2 class="t big">Linux brush-up</h2><p class="lead">The commands you'll use every day around containers</p></section>
+
+<section class="slide"><h2 class="t">Why start with <em>Linux</em>?</h2>
+<div class="li"><i data-lucide="cpu"></i>Containers are just Linux processes</div>
+<div class="li"><i data-lucide="server"></i>Most servers are headless Linux</div>
+<div class="li"><i data-lucide="bug"></i>Debugging a container means debugging Linux</div>
+<div class="hero"><i data-lucide="terminal"></i></div></section>
+
+<section class="slide"><h2 class="t">Who am I running on?</h2><p class="lead"><em>uname</em> prints kernel and system information</p>
+<pre class="sh">$ uname -a
+Linux ol9 5.15.0-uek x86_64 GNU/Linux
+$ uname -r           # kernel release only
+$ uname -m           # architecture</pre></section>
+
+<section class="slide"><h2 class="t">fastfetch</h2><p class="lead">A good-looking system summary in one command</p>
+<pre class="sh">$ sudo dnf install -y oracle-epel-release-el9
+$ sudo dnf install -y fastfetch
+$ fastfetch</pre>
+<p class="note"><i data-lucide="sparkles"></i>The modern successor to neofetch: OS, kernel, CPU, memory and shell at a glance</p></section>
+
+<section class="slide"><h2 class="t">More about the system</h2>
+<pre class="sh">$ cat /etc/os-release    # distro and version
+$ hostnamectl            # hostname, OS, kernel
+$ whoami; id             # user, UID, groups
+$ uptime                 # running time, load</pre></section>
+
+<section class="slide"><h2 class="t">What is a <em>process</em>?</h2><p class="lead">A running program with its own ID: the PID</p>
+<div class="li"><i data-lucide="hash"></i>Every process has a PID and a parent PID</div>
+<div class="li"><i data-lucide="user"></i>It runs as a user, with that user's permissions</div>
+<div class="li"><i data-lucide="power"></i>PID 1 is the first process: systemd</div>
+<div class="hero"><i data-lucide="cpu"></i></div></section>
+
+<section class="slide"><h2 class="t">Listing processes with <em>ps</em></h2>
+<pre class="sh">$ ps aux                 # every process
+$ ps aux | grep httpd    # find one
+$ ps -ef --forest        # parent and child tree
+$ pgrep -a mysqld        # PIDs by name</pre></section>
+
+<section class="slide"><h2 class="t"><em>top</em>: a live task manager</h2>
+<pre class="sh">$ top
+# P  sort by CPU      M  sort by memory
+# k  kill a PID       q  quit
+$ htop       # friendlier, colorful</pre>
+<div class="hero s"><i data-lucide="activity"></i></div></section>
+
+<section class="slide"><h2 class="t">Stopping a process: <em>signals</em></h2>
+<div class="li"><i data-lucide="hand"></i><span><b>SIGTERM (15)</b> asks nicely, so the app can clean up</span></div>
+<div class="li"><i data-lucide="skull"></i><span><b>SIGKILL (9)</b> stops it instantly, no cleanup</span></div>
+<div class="li"><i data-lucide="refresh-cw"></i><span><b>SIGHUP (1)</b> tells many daemons to reload config</span></div></section>
+
+<section class="slide"><h2 class="t">Using <em>kill</em></h2>
+<pre class="sh">$ kill 4242              # SIGTERM
+$ kill -9 4242           # SIGKILL
+$ kill -HUP 4242         # reload
+$ pkill -f php-fpm       # by name</pre>
+<p class="note"><i data-lucide="lightbulb"></i>Try SIGTERM first. docker stop works exactly the same way.</p></section>
+
+<section class="slide"><h2 class="t">Memory and disk</h2>
+<pre class="sh">$ free -h        # memory usage
+$ df -h          # disk space per filesystem
+$ du -sh *       # size of each folder here
+$ lsblk          # disks and partitions</pre></section>
+
+<section class="slide"><h2 class="t">Network checks</h2>
+<pre class="sh">$ ip a                   # interfaces and IPs
+$ ss -tulpn              # who listens on which port
+$ ss -tulpn | grep 3306
+$ curl -I localhost      # quick HTTP check</pre></section>
+
+<section class="slide"><h2 class="t">Services and logs</h2>
+<pre class="sh">$ systemctl status httpd
+$ sudo systemctl enable --now sshd
+$ journalctl -u httpd -f     # follow logs
+$ tail -f /var/log/messages</pre></section>
+
+<section class="slide"><h2 class="t">Permissions</h2><p class="lead">read <em>4</em>, write <em>2</em>, execute <em>1</em>, for owner, group and others</p>
+<pre class="sh">$ chmod 644 index.php    # rw-r--r--
+$ chmod +x deploy.sh
+$ sudo chown -R apache:apache /var/www</pre></section>
+
+<section class="slide dv" data-sec="Enterprise Linux and remote access" data-ic="building-2" data-time="0:15"><div class="num">02</div><h2 class="t big">Enterprise Linux and remote access</h2><p class="lead">RHEL, Oracle Linux, TTY, SSH and RDP</p></section>
+
+<section class="slide"><h2 class="t">Red Hat Enterprise Linux</h2>
+<div class="li"><i data-lucide="calendar"></i>Built for servers, with a 10-year lifecycle</div>
+<div class="li"><i data-lucide="shield-check"></i>Subscription for updates and support</div>
+<div class="li"><i data-lucide="graduation-cap"></i>Free developer subscription for learning</div>
+<div class="hero"><i data-lucide="building-2"></i></div></section>
+
+<section class="slide"><h2 class="t">Oracle Linux</h2>
+<div class="li"><i data-lucide="copy"></i>Binary compatible with RHEL</div>
+<div class="li"><i data-lucide="circle-check"></i>Free to download, use and update</div>
+<div class="li"><i data-lucide="cpu"></i>Choose a kernel: RHCK or Oracle's UEK</div>
+<div class="hero"><i data-lucide="server"></i></div></section>
+
+<section class="slide"><h2 class="t">One family of distros</h2>
+<div class="flow"><span class="chip"><i data-lucide="flask-conical"></i>Fedora</span><span class="wire"></span><span class="chip"><i data-lucide="git-branch"></i>CentOS Stream</span><span class="wire"></span><span class="chip"><i data-lucide="building-2"></i>RHEL</span></div>
+<div class="flow"><span class="chip"><i data-lucide="server"></i>Oracle Linux</span><span class="wire"></span><span class="chip">Rocky Linux</span><span class="wire"></span><span class="chip">AlmaLinux</span></div>
+<p class="note"><i data-lucide="wrench"></i>Same tools everywhere: dnf, rpm, systemctl, firewalld and SELinux</p></section>
+
+<section class="slide"><h2 class="t">Installing, step 1: <em>media</em></h2>
+<div class="li"><i data-lucide="download"></i>Download the Oracle Linux 9 ISO</div>
+<div class="li"><i data-lucide="monitor"></i>VM: VirtualBox, VMware or KVM with 2 CPUs, 4 GB RAM, 30 GB disk</div>
+<div class="li"><i data-lucide="usb"></i>Bare metal: flash a USB with Rufus, Etcher or Ventoy</div></section>
+
+<section class="slide"><h2 class="t">Step 2: the <em>Anaconda</em> installer</h2>
+<div class="li"><i data-lucide="languages"></i>Pick language and keyboard</div>
+<div class="li"><i data-lucide="hard-drive"></i>Installation destination: automatic partitioning</div>
+<div class="li"><i data-lucide="package"></i>Software selection: Server or Minimal Install</div>
+<div class="li"><i data-lucide="wifi"></i>Network and hostname: switch it on</div>
+<div class="li"><i data-lucide="user-cog"></i>Root password plus an admin user</div></section>
+
+<section class="slide"><h2 class="t">Step 3: first boot</h2>
+<pre class="sh">$ sudo dnf update -y
+$ sudo dnf install -y oracle-epel-release-el9
+$ sudo dnf install -y htop fastfetch
+$ fastfetch</pre></section>
+
+<section class="slide"><h2 class="t"><em>TTY</em>: the text console</h2>
+<div class="li"><i data-lucide="keyboard"></i>TeleTYpewriter: a text terminal provided by the kernel</div>
+<div class="li"><i data-lucide="layers"></i><span><kbd class="kbd">Ctrl</kbd> <kbd class="kbd">Alt</kbd> <kbd class="kbd">F1</kbd> to <kbd class="kbd">F6</kbd> switch consoles</span></div>
+<div class="li"><i data-lucide="server"></i>Servers boot to text mode, no GUI needed</div></section>
+
+<section class="slide"><h2 class="t">TTY vs PTY</h2>
+<pre class="sh sm">$ tty
+/dev/pts/0               # remote session: pseudo terminal
+$ who                    # who is on which tty or pts
+$ systemctl get-default
+multi-user.target        # text mode, no GUI</pre>
+<p class="note"><i data-lucide="container"></i>Remember this: docker run -it asks for a pseudo-TTY</p></section>
+
+<section class="slide"><h2 class="t"><em>SSH</em>: secure shell</h2><p class="lead">An encrypted remote terminal on port 22</p>
+<div class="flow"><span class="chip"><i data-lucide="laptop"></i>Your laptop</span><span class="wire lk"><i data-lucide="lock"></i></span><span class="chip"><i data-lucide="server"></i>Headless server</span></div></section>
+
+<section class="slide"><h2 class="t">Connecting with SSH</h2>
+<pre class="sh">$ sudo systemctl enable --now sshd
+$ ssh admin@192.168.1.50
+$ scp app.zip admin@192.168.1.50:/tmp/</pre></section>
+
+<section class="slide"><h2 class="t">SSH keys: no more passwords</h2>
+<pre class="sh">$ ssh-keygen -t ed25519
+$ ssh-copy-id admin@192.168.1.50
+$ ssh admin@192.168.1.50  # key login</pre>
+<div class="hero s"><i data-lucide="key-round"></i></div></section>
+
+<section class="slide"><h2 class="t"><em>RDP</em>: a full desktop</h2><p class="lead">Port 3389, only when you really need a GUI</p>
+<div class="flow"><span class="chip"><i data-lucide="monitor"></i>Remote Desktop app</span><span class="wire"></span><span class="chip"><i data-lucide="server"></i>xrdp + desktop</span></div></section>
+
+<section class="slide"><h2 class="t">Setting up xrdp</h2>
+<pre class="sh sm">$ sudo dnf groupinstall -y "Server with GUI"
+$ sudo dnf install -y xrdp
+$ sudo systemctl enable --now xrdp
+$ sudo firewall-cmd --permanent --add-port=3389/tcp
+$ sudo firewall-cmd --reload</pre></section>
+
+<section class="slide qz" data-k="Checkpoint 1 / question 1" data-a="B"><p class="q">Which command shows a live view of running processes?</p>
+<ol class="opts"><li><code>ls</code></li><li><code>top</code></li><li><code>cd</code></li><li><code>mkdir</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>top refreshes every few seconds. Press q to quit.</p></section>
+<section class="slide qz" data-k="Checkpoint 1 / question 2" data-a="C"><p class="q">Which port does <em>SSH</em> use by default?</p>
+<ol class="opts"><li>80</li><li>443</li><li>22</li><li>3306</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>SSH gives you an encrypted remote terminal on port 22.</p></section>
+<section class="slide qz" data-k="Checkpoint 1 / question 3" data-a="D"><p class="q">Oracle Linux is built from which distribution?</p>
+<ol class="opts"><li>Ubuntu</li><li>Windows Server</li><li>Debian</li><li>Red Hat Enterprise Linux</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Oracle Linux is built from RHEL sources, so the same commands work on both.</p></section>
+
+<section class="slide dv" data-sec="How we deployed before Docker" data-ic="history" data-time="0:27"><div class="num">03</div><h2 class="t big">How we deployed before Docker</h2><p class="lead">A PHP project, XAMPP and a lot of hope</p></section>
+
+<section class="slide"><h2 class="t">The PHP project</h2>
+<div class="li"><i data-lucide="download"></i>Install XAMPP, or LAMPP on Linux</div>
+<div class="li"><i data-lucide="folder"></i>Copy the project into htdocs</div>
+<div class="li"><i data-lucide="database"></i>Import the SQL dump in phpMyAdmin</div>
+<div class="li"><i data-lucide="settings"></i>Tweak php.ini and httpd.conf by hand</div>
+<div class="li"><i data-lucide="circle-check"></i>It works!</div></section>
+
+<section class="slide"><h2 class="t big">"It works on <em>my</em> machine"</h2><p class="lead">Then we tried production.</p><div class="hero"><i data-lucide="laptop"></i></div></section>
+
+<section class="slide"><h2 class="t">Meanwhile, on the server</h2>
+<pre class="sh sm">$ sudo dnf install httpd php php-mysqlnd mariadb-server
+# dev laptop: PHP 8.2, server repo: PHP 8.0
+# missing extensions: gd, zip
+# different paths, users and permissions</pre></section>
+
+<section class="slide"><h2 class="t">Problem 1: <em>version drift</em></h2><p class="lead">Every machine has slightly different PHP, MySQL and Apache versions. Code that runs on one breaks on another.</p><div class="hero"><i data-lucide="git-compare"></i></div></section>
+
+<section class="slide"><h2 class="t">Problem 2: <em>tied to one machine</em></h2><p class="lead">The environment lives inside that OS: paths, config files, installed packages. Rebuilding it takes a day.</p><div class="hero"><i data-lucide="monitor-x"></i></div></section>
+
+<section class="slide"><h2 class="t">Problem 3: <em>conflicts</em></h2><p class="lead">Project A needs PHP 7.4, project B needs 8.2. Both want ports 80 and 3306.</p><div class="hero"><i data-lucide="triangle-alert"></i></div></section>
+
+<section class="slide"><h2 class="t">Problem 4: <em>tribal knowledge</em></h2><p class="lead">Setup steps live in someone's head. "Oh, you also need to enable gd."</p><div class="hero"><i data-lucide="brain"></i></div></section>
+
+<section class="slide"><h2 class="t">Problem 5: <em>people and scale</em></h2>
+<div class="li"><i data-lucide="users"></i>New developers spend days matching versions</div>
+<div class="li"><i data-lucide="rotate-ccw"></i>Upgrades happen in place, with no clean undo</div>
+<div class="li"><i data-lucide="copy"></i>Scaling means configuring every server by hand</div></section>
+
+<section class="slide dv" data-sec="Enter Docker" data-ic="container" data-time="0:35"><div class="num">04</div><h2 class="t big">Enter Docker</h2><p class="lead">Ship the environment, not just the code</p></section>
+
+<section class="slide"><h2 class="t">Docker in one sentence</h2><p class="lead" style="font-size:42px">Package your app with <em>everything it needs</em>, then run it the same way anywhere.</p><div class="hero"><i data-lucide="package"></i></div></section>
+
+<section class="slide"><h2 class="t">Image vs container</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="layers"></i>Image</h3><p>A read-only template.</p><p>The recipe.</p></div>
+<div class="card"><h3><i data-lucide="box"></i>Container</h3><p>A running instance of an image.</p><p>The dish.</p></div></div>
+<p class="note"><i data-lucide="copy"></i>One image, many containers</p></section>
+
+<section class="slide"><h2 class="t">Virtual machine vs container</h2>
+<div class="cols"><div class="stack"><div class="hl">App</div><div>Guest OS + kernel</div><div>Hypervisor</div><div>Hardware</div></div>
+<div class="stack"><div class="hl">App + libraries</div><div>Container runtime</div><div>Shared host kernel</div><div>Hardware</div></div></div>
+<p class="note"><i data-lucide="zap"></i>No guest OS: megabytes instead of gigabytes, seconds instead of minutes</p></section>
+
+<section class="slide"><h2 class="t">Under the hood</h2>
+<div class="li"><i data-lucide="eye-off"></i><span><b>Namespaces</b>: each container sees its own processes, network and files</span></div>
+<div class="li"><i data-lucide="gauge"></i><span><b>cgroups</b>: limit CPU and memory</span></div>
+<div class="li"><i data-lucide="layers"></i><span><b>Layered filesystem</b>: images stack read-only layers</span></div></section>
+
+<section class="slide"><h2 class="t">How Docker is wired</h2>
+<div class="flow"><span class="chip"><i data-lucide="terminal"></i>docker CLI</span><span class="wire"></span><span class="chip">dockerd</span><span class="wire"></span><span class="chip">containerd</span><span class="wire"></span><span class="chip">runc</span></div>
+<div class="flow"><span class="chip"><i data-lucide="cloud"></i>Docker Hub registry</span><span class="wire"></span><span class="chip"><i data-lucide="download"></i>pull and push images</span></div>
+<p class="note"><i data-lucide="shield"></i>dockerd is a daemon that runs as root. Keep that in mind for Podman later.</p></section>
+
+<section class="slide"><h2 class="t">Each problem, solved</h2>
+<div class="row"><b>Version drift</b><i data-lucide="arrow-right"></i>Pin tags like php:8.2-apache</div>
+<div class="row"><b>Tied to one machine</b><i data-lucide="arrow-right"></i>Same image on laptop, CI and server</div>
+<div class="row"><b>Conflicts</b><i data-lucide="arrow-right"></i>Isolated containers, different host ports</div>
+<div class="row"><b>Tribal knowledge</b><i data-lucide="arrow-right"></i>The Dockerfile is the documentation</div>
+<div class="row"><b>Onboarding</b><i data-lucide="arrow-right"></i>git clone, then docker compose up</div>
+<div class="row"><b>Rollback</b><i data-lucide="arrow-right"></i>Run the previous image tag</div></section>
+
+<section class="slide"><h2 class="t">Dev containers</h2><p class="lead">Your editor runs inside a container with the exact toolchain. Commit it, and the whole team gets <em>identical versions</em>.</p>
+<div class="li"><i data-lucide="code"></i>VS Code Dev Containers extension</div>
+<div class="li"><i data-lucide="cloud"></i>GitHub Codespaces</div>
+<div class="hero"><i data-lucide="users"></i></div></section>
+
+<section class="slide"><h2 class="t">devcontainer.json</h2>
+<pre class="file sm" data-n=".devcontainer/devcontainer.json">{
+  "name": "php-app",
+  "image": "mcr.microsoft.com/devcontainers/php:8.2",
+  "forwardPorts": [8080],
+  "postCreateCommand": "composer install"
+}</pre>
+<p class="note"><i data-lucide="search-x"></i>No more hunting for the exact PHP or Node version</p></section>
+
+<section class="slide qz" data-k="Checkpoint 2 / question 1" data-a="A"><p class="q">Which common problem does Docker solve?</p>
+<ol class="opts"><li>"It works on my machine"</li><li>Slow internet</li><li>Low screen resolution</li><li>Printer setup</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>The app ships with everything it needs, so it runs the same everywhere.</p></section>
+<section class="slide qz" data-k="Checkpoint 2 / question 2" data-a="B"><p class="q">What is a running copy of an image called?</p>
+<ol class="opts"><li>A volume</li><li>A container</li><li>A network</li><li>A Dockerfile</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>The image is the template. A container is a running copy of it.</p></section>
+<section class="slide qz" data-k="Checkpoint 2 / question 3" data-a="D"><p class="q">Compared with a virtual machine, a container is…</p>
+<ol class="opts"><li>Heavier and slower</li><li>Running its own full OS</li><li>Only for Windows</li><li>Lighter and faster to start</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Containers share the host's kernel instead of booting a whole operating system.</p></section>
+
+<section class="slide dv" data-sec="Live demo: PHP, Apache and MySQL" data-ic="play" data-time="0:48"><div class="num">05</div><h2 class="t big">Live demo</h2><p class="lead">The same XAMPP setup, rebuilt with containers</p></section>
+
+<section class="slide"><h2 class="t">The plan</h2>
+<div class="flow"><span class="chip"><i data-lucide="network"></i>Network</span><span class="wire"></span><span class="chip"><i data-lucide="database"></i>MySQL</span><span class="wire"></span><span class="chip"><i data-lucide="globe"></i>PHP + Apache</span><span class="wire"></span><span class="chip"><i data-lucide="file-code"></i>Compose</span></div></section>
+
+<section class="slide"><h2 class="t">Step 1: network and MySQL</h2>
+<pre class="sh sm">$ docker network create phpnet
+$ docker run -d --name db --network phpnet \
+    -e MYSQL_ROOT_PASSWORD=root \
+    -e MYSQL_DATABASE=appdb \
+    -v dbdata:/var/lib/mysql mysql:8.0
+$ docker logs -f db     # wait for: ready for connections</pre></section>
+
+<section class="slide"><h2 class="t">Step 2: the PHP page</h2>
+<pre class="file sm" data-n="src/index.php">&lt;?php
+$c = new mysqli("db", "root", "root", "appdb");
+if ($c-&gt;connect_error) die($c-&gt;connect_error);
+echo "MySQL " . $c-&gt;server_info . " / PHP " . PHP_VERSION;</pre>
+<p class="note"><i data-lucide="network"></i>The host name db works because both containers share phpnet</p></section>
+
+<section class="slide"><h2 class="t">Step 3: the Dockerfile</h2>
+<pre class="file" data-n="Dockerfile">FROM php:8.2-apache
+RUN docker-php-ext-install mysqli pdo_mysql
+COPY src/ /var/www/html/</pre>
+<p class="note"><i data-lucide="file-text"></i>Three lines replace a whole XAMPP install</p></section>
+
+<section class="slide"><h2 class="t">Step 4: build and run</h2>
+<pre class="sh">$ docker build -t myphp:1.0 .
+$ docker run -d --name web --network phpnet \
+    -p 8080:80 myphp:1.0
+$ curl http://localhost:8080
+MySQL 8.0 / PHP 8.2</pre></section>
+
+<section class="slide"><h2 class="t mid">Step 5: all of it in compose.yaml</h2>
+<pre class="file xs" data-n="compose.yaml">services:
+  web:
+    build: .
+    ports: ["8080:80"]
+    volumes: ["./src:/var/www/html"]
+    depends_on: [db]
+  db:
+    image: mysql:8.0
+    environment: { MYSQL_ROOT_PASSWORD: root, MYSQL_DATABASE: appdb }
+    volumes: ["dbdata:/var/lib/mysql"]
+  phpmyadmin:
+    image: phpmyadmin
+    ports: ["8081:80"]
+    environment: { PMA_HOST: db }
+volumes:
+  dbdata:</pre></section>
+
+<section class="slide"><h2 class="t">One command to rule them all</h2>
+<pre class="sh">$ docker compose up -d --build
+$ docker compose ps
+$ docker compose logs -f web
+$ docker compose down    # add -v to drop the data</pre>
+<p class="note"><i data-lucide="sparkles"></i>The whole XAMPP stack in one reproducible file</p></section>
+
+<section class="slide dv" data-sec="Docker in depth" data-ic="layers" data-time="1:00"><div class="num">06</div><h2 class="t big">Docker in depth</h2><p class="lead">Commands, images, containers and volumes</p></section>
+
+<section class="slide"><h2 class="t">Image commands</h2>
+<pre class="sh">$ docker pull nginx:1.27
+$ docker images
+$ docker build -t app:1.0 .
+$ docker tag app:1.0 me/app:1.0
+$ docker push me/app:1.0     # after docker login</pre></section>
+
+<section class="slide"><h2 class="t">More image commands</h2>
+<pre class="sh">$ docker history app:1.0     # layers and sizes
+$ docker rmi app:1.0
+$ docker image prune -a      # unused images
+$ docker save app:1.0 -o app.tar
+$ docker load -i app.tar     # offline transfer</pre></section>
+
+<section class="slide"><h2 class="t"><em>docker run</em>: the essentials</h2>
+<pre class="sh sm">$ docker run -d --name web nginx        # background, named
+$ docker run -p 8080:80 nginx           # host:container
+$ docker run -e APP_ENV=dev nginx       # environment
+$ docker run -it --rm ubuntu bash       # throwaway shell</pre></section>
+
+<section class="slide"><h2 class="t"><em>docker run</em>: production flags</h2>
+<pre class="sh sm">$ docker run --restart unless-stopped ...
+$ docker run -m 512m --cpus 1 ...       # cgroup limits
+$ docker run --network phpnet ...
+$ docker run -v data:/data ...          # volume</pre></section>
+
+<section class="slide"><h2 class="t">Managing containers</h2>
+<pre class="sh sm">$ docker ps              # running
+$ docker ps -a           # including stopped
+$ docker stop web        # SIGTERM, then SIGKILL after 10s
+$ docker start web
+$ docker rm -f web
+$ docker cp web:/etc/nginx/nginx.conf .
+$ docker system df       # disk usage</pre></section>
+
+<section class="slide"><h2 class="t">Dockerfile instructions</h2>
+<pre class="file sm" data-n="Dockerfile">FROM php:8.2-apache            # base image
+WORKDIR /var/www/html          # working folder
+RUN docker-php-ext-install zip # build-time command
+COPY . .                       # files from host
+ENV APP_ENV=prod               # environment variable
+EXPOSE 80                      # documents the port
+CMD ["apache2-foreground"]     # default start command</pre></section>
+
+<section class="slide"><h2 class="t">Layers and the cache</h2>
+<div class="cols" style="align-items:center"><div class="stack"><div class="hl">COPY . .</div><div>RUN composer install</div><div>COPY composer.json</div><div>RUN apt-get install</div><div>FROM php:8.2-apache</div></div>
+<p class="lead" style="font-size:30px">Each instruction is a cached layer. Change one, and only it and the layers <em>above</em> it rebuild.</p></div></section>
+
+<section class="slide"><h2 class="t">Building images well</h2>
+<div class="li"><i data-lucide="list-ordered"></i>Copy dependency files before source code</div>
+<div class="li"><i data-lucide="link"></i>Chain RUN commands and clean caches</div>
+<div class="li"><i data-lucide="eye-off"></i>Use .dockerignore for .git, node_modules, .env</div>
+<div class="li"><i data-lucide="pin"></i>Pin versions, avoid latest in production</div>
+<div class="li"><i data-lucide="box"></i>One main process per container</div></section>
+
+<section class="slide"><h2 class="t">Container lifecycle</h2><p class="lead"><em>docker run</em> is create plus start</p>
+<div class="flow cyc"><span class="chip">Created</span><span class="wire"></span><span class="chip">Running</span><span class="wire"></span><span class="chip">Stopped</span><span class="wire"></span><span class="chip">Removed</span></div></section>
+
+<section class="slide"><h2 class="t">Inside a container</h2>
+<div class="li"><i data-lucide="layers"></i>A thin writable layer on top of the image</div>
+<div class="li"><i data-lucide="trash-2"></i>docker rm deletes that layer and its data</div>
+<div class="li"><i data-lucide="power"></i>The main process is PID 1. When it exits, the container stops.</div></section>
+
+<section class="slide"><h2 class="t">Volumes: data that <em>survives</em></h2><p class="lead">Containers are disposable. Your database is not.</p><div class="hero"><i data-lucide="database"></i></div></section>
+
+<section class="slide"><h2 class="t">Named volumes</h2><p class="lead">Managed by Docker. Best for databases.</p>
+<pre class="sh sm">$ docker volume create dbdata
+$ docker run -v dbdata:/var/lib/mysql mysql:8.0
+$ docker volume ls
+$ docker volume inspect dbdata</pre></section>
+
+<section class="slide"><h2 class="t">Bind mounts</h2><p class="lead">A host folder mapped inside. Best for live code.</p>
+<pre class="sh sm">$ docker run -v $(pwd)/src:/var/www/html \
+    -p 8080:80 php:8.2-apache
+# edit on the host, refresh the browser</pre></section>
+
+<section class="slide"><h2 class="t">tmpfs and cleanup</h2>
+<pre class="sh sm">$ docker run --tmpfs /tmp ...       # memory only
+$ docker volume rm dbdata
+$ docker volume prune               # unused volumes</pre></section>
+
+<section class="slide"><h2 class="t">Prove it</h2>
+<pre class="sh sm">$ docker rm -f db
+$ docker run -d --name db -v dbdata:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=root mysql:8.0
+# the tables are still there</pre></section>
+
+<section class="slide qz" data-k="Checkpoint 3 / question 1" data-a="C"><p class="q">Which file has the steps to build an image?</p>
+<ol class="opts"><li><code>index.php</code></li><li><code>README.md</code></li><li><code>Dockerfile</code></li><li><code>.bashrc</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Each line in a Dockerfile is a step, like FROM, COPY or RUN.</p></section>
+<section class="slide qz" data-k="Checkpoint 3 / question 2" data-a="A"><p class="q">Which command starts everything in <em>compose.yaml</em>?</p>
+<ol class="opts"><li><code>docker compose up</code></li><li><code>docker stop</code></li><li><code>docker rm</code></li><li><code>docker logs</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Add -d to keep it running in the background.</p></section>
+<section class="slide qz" data-k="Checkpoint 3 / question 3" data-a="B"><p class="q">Where should database data live so it isn't lost?</p>
+<ol class="opts"><li>Inside the container</li><li>In a volume</li><li>Inside the image</li><li>In <code>/tmp</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>A volume keeps the data even when the container is removed.</p></section>
+
+<section class="slide dv" data-sec="Debugging containers" data-ic="bug" data-time="1:16"><div class="num">07</div><h2 class="t big">Debugging containers</h2><p class="lead">Logs, shells, inspection and common failures</p></section>
+
+<section class="slide"><h2 class="t">Start with the logs</h2><p class="lead">Whatever the app prints to stdout and stderr</p>
+<pre class="sh">$ docker logs web
+$ docker logs -f --tail 100 web
+$ docker logs --since 10m web
+$ docker compose logs -f</pre></section>
+
+<section class="slide"><h2 class="t">Get inside with <em>exec</em></h2>
+<pre class="sh sm">$ docker exec -it web bash          # or sh on alpine
+$ docker exec web cat /etc/hosts
+$ docker exec -it db mysql -uroot -p</pre></section>
+
+<section class="slide"><h2 class="t">Look closer with <em>inspect</em></h2>
+<pre class="sh sm">$ docker inspect web
+$ docker inspect -f '{{.State.ExitCode}}' web
+$ docker inspect -f '{{.Mounts}}' web
+$ docker port web</pre></section>
+
+<section class="slide"><h2 class="t">Watch it live</h2>
+<pre class="sh sm">$ docker stats          # CPU and memory per container
+$ docker top web        # processes inside
+$ docker events         # what the daemon is doing
+$ docker diff web       # files changed vs the image</pre></section>
+
+<section class="slide"><h2 class="t">When it keeps crashing</h2>
+<div class="li"><i data-lucide="skull"></i><span><b>Exit 137</b>: killed, often out of memory</span></div>
+<div class="li"><i data-lucide="circle-x"></i><span><b>Exit 1</b>: application error, read the logs</span></div>
+<div class="li"><i data-lucide="door-open"></i><span><b>Exit 0</b>: the main process finished on its own</span></div>
+<pre class="sh sm">$ docker run -it --entrypoint sh myphp:1.0   # bypass CMD</pre></section>
+
+<section class="slide"><h2 class="t">Common failures</h2>
+<div class="row"><b>Port allocated</b><i data-lucide="arrow-right"></i>ss -tulpn, then pick another host port</div>
+<div class="row"><b>Can't reach DB</b><i data-lucide="arrow-right"></i>Same network? Use the service name</div>
+<div class="row"><b>Mount denied</b><i data-lucide="arrow-right"></i>UID mismatch or SELinux</div>
+<div class="row"><b>Changes missing</b><i data-lucide="arrow-right"></i>Rebuild with --build or bind mount</div>
+<div class="row"><b>Disk full</b><i data-lucide="arrow-right"></i>docker system df, then prune</div></section>
+
+<section class="slide"><h2 class="t mid">Wait until the DB is <em>ready</em></h2>
+<pre class="file sm" data-n="compose.yaml">  db:
+    image: mysql:8.0
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 10
+  web:
+    depends_on:
+      db: { condition: service_healthy }</pre></section>
+
+<section class="slide dv" data-sec="Oracle Linux 9: SELinux and Podman" data-ic="shield-half" data-time="1:24"><div class="num">08</div><h2 class="t big">SELinux and Podman</h2><p class="lead">How containers behave on Oracle Linux 9</p></section>
+
+<section class="slide"><h2 class="t">What is <em>SELinux</em>?</h2><p class="lead">Mandatory access control. Every file and process has a label, and policy decides who can touch what, even root.</p><div class="hero"><i data-lucide="shield-check"></i></div></section>
+
+<section class="slide"><h2 class="t">chmod 777 and still <em>denied</em>?</h2><p class="lead">Classic permissions say yes. SELinux says no. Both must allow the access.</p><div class="hero"><i data-lucide="lock"></i></div></section>
+
+<section class="slide"><h2 class="t">SELinux modes</h2>
+<pre class="sh">$ getenforce
+Enforcing
+$ sestatus
+$ sudo setenforce 0     # Permissive, testing only</pre>
+<p class="note"><i data-lucide="triangle-alert"></i>Fix the label. Never disable SELinux in production.</p></section>
+
+<section class="slide"><h2 class="t">Labels, also called contexts</h2><p class="lead">user : role : <em>type</em> : level. The type matters most.</p>
+<pre class="sh sm">$ ls -Z /var/www/html
+system_u:object_r:httpd_sys_content_t:s0 index.php
+$ ps -eZ | grep httpd
+system_u:system_r:httpd_t:s0  1234  httpd</pre></section>
+
+<section class="slide"><h2 class="t">Finding denials</h2>
+<pre class="sh sm">$ sudo ausearch -m avc -ts recent
+$ sudo dnf install -y setroubleshoot-server
+$ sudo sealert -a /var/log/audit/audit.log</pre>
+<div class="hero s"><i data-lucide="scan-search"></i></div></section>
+
+<section class="slide"><h2 class="t">Fixing labels</h2>
+<pre class="sh xs">$ sudo restorecon -Rv /var/www/html
+$ sudo semanage fcontext -a -t httpd_sys_rw_content_t \
+    "/var/www/html/uploads(/.*)?"
+$ sudo restorecon -Rv /var/www/html/uploads
+$ sudo setsebool -P httpd_can_network_connect_db on</pre></section>
+
+<section class="slide"><h2 class="t">SELinux and container volumes</h2>
+<pre class="sh xs">$ podman run -v ./src:/var/www/html php:8.2-apache
+# Permission denied: files are labelled user_home_t
+$ podman run -v ./src:/var/www/html:Z ...   # private
+$ podman run -v ./shared:/data:z ...        # shared</pre>
+<p class="note"><i data-lucide="triangle-alert"></i>Never use :Z on system folders like /home or /etc</p></section>
+
+<section class="slide"><h2 class="t">Meet <em>Podman</em></h2><p class="lead">Oracle Linux 9 ships Podman, not Docker. Same images, same commands, no daemon.</p><div class="hero"><i data-lucide="boxes"></i></div></section>
+
+<section class="slide"><h2 class="t">Installing Podman</h2>
+<pre class="sh xs">$ sudo dnf install -y container-tools  # podman, buildah, skopeo
+$ podman run -d -p 8080:80 docker.io/library/nginx
+$ sudo dnf install -y podman-docker    # docker calls podman</pre></section>
+
+<section class="slide"><h2 class="t">Docker vs Podman</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="container"></i>Docker</h3><p>Central daemon, dockerd</p><p>Traditionally runs as root</p><p>Compose built in</p><p>Docker Desktop and Swarm</p></div>
+<div class="card"><h3><i data-lucide="boxes"></i>Podman</h3><p>Daemonless: fork and exec</p><p>Rootless by default</p><p>Kubernetes-style pods</p><p>systemd with Quadlet</p></div></div></section>
+
+<section class="slide"><h2 class="t">Daemon vs daemonless</h2>
+<div class="flow"><span class="chip"><i data-lucide="terminal"></i>docker</span><span class="wire"></span><span class="chip">dockerd (root)</span><span class="wire"></span><span class="chip"><i data-lucide="box"></i>container</span></div>
+<div class="flow"><span class="chip"><i data-lucide="terminal"></i>podman</span><span class="wire"></span><span class="chip"><i data-lucide="box"></i>container as your child process</span></div>
+<p class="note"><i data-lucide="shield-check"></i>No single root process to crash or to attack</p></section>
+
+<section class="slide"><h2 class="t">Pods, Kubernetes and compose</h2>
+<pre class="sh sm">$ podman pod create --name app -p 8080:80
+$ podman run -d --pod app mysql:8.0
+$ podman kube generate app &gt; app.yaml
+$ podman compose up -d</pre>
+<p class="note"><i data-lucide="settings"></i>Quadlet files in /etc/containers/systemd run containers as services</p></section>
+
+<section class="slide qz" data-k="Checkpoint 4 / question 1" data-a="D"><p class="q">A container keeps crashing. What do you check first?</p>
+<ol class="opts"><li>Restart the computer</li><li>Reinstall Docker</li><li>Delete the image</li><li><code>docker logs</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>The logs usually show the error straight away.</p></section>
+<section class="slide qz" data-k="Checkpoint 4 / question 2" data-a="A"><p class="q">Which container tool comes with Oracle Linux 9?</p>
+<ol class="opts"><li>Podman</li><li>VirtualBox</li><li>XAMPP</li><li>Notepad</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Podman runs the same images with the same commands, without a daemon.</p></section>
+<section class="slide qz" data-k="Checkpoint 4 / question 3" data-a="C"><p class="q">On Oracle Linux, what can block access even after <em>chmod 777</em>?</p>
+<ol class="opts"><li>The keyboard layout</li><li>The screen saver</li><li>SELinux</li><li>The time zone</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Mount volumes with :Z or :z so SELinux lets the container use them.</p></section>
+
+<section class="slide" data-k="Wrap-up" data-ic="list-checks"><h2 class="t">Key takeaways</h2>
+<div class="li"><i data-lucide="terminal"></i>Linux basics are the foundation of containers</div>
+<div class="li"><i data-lucide="history"></i>XAMPP-style setups tie apps to one machine</div>
+<div class="li"><i data-lucide="layers"></i>Images package, containers run, volumes persist</div>
+<div class="li"><i data-lucide="bug"></i>Debug with logs, exec, inspect and stats</div>
+<div class="li"><i data-lucide="shield-check"></i>On Oracle Linux: Podman plus SELinux labels</div></section>
+
+<section class="slide" data-k="Thank you" data-ic="message-square"><h2 class="t big" style="max-width:640px">Questions and <em>Discussion</em></h2><p class="lead" style="max-width:640px">Container Technologies on Enterprise Linux</p>
+<div class="orbit"><div class="ring"><span><i data-lucide="container"></i></span><span><i data-lucide="boxes"></i></span><span><i data-lucide="shield-check"></i></span><span><i data-lucide="terminal"></i></span></div><div class="core"><i data-lucide="message-circle-question"></i></div></div></section>
+
+</div>
+<div class="prog"><span id="pg"></span></div>
+<div class="bar">
+<button class="nb" id="pv" aria-label="Previous slide"><i data-lucide="chevron-left"></i></button>
+<span id="cnt">1</span>
+<button class="nb" id="nx" aria-label="Next slide"><i data-lucide="chevron-right"></i></button>
+<button class="nb" id="hm" aria-label="Contents"><i data-lucide="list"></i></button>
+<button class="nb" id="fs" aria-label="Full screen"><i data-lucide="maximize"></i></button>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(()=>{const c=document.createElement('canvas').getContext('2d');c.fillStyle=getComputedStyle(document.body).backgroundColor;c.fillRect(0,0,1,1);const[r,g,b]=c.getImageData(0,0,1,1).data,k=.1,o=v=>(v/255-k/2).toFixed(3);
+ const svg="<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g' color-interpolation-filters='sRGB'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='"+k+" 0 0 0 "+o(r)+" "+k+" 0 0 0 "+o(g)+" "+k+" 0 0 0 "+o(b)+" 0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(#g)'/></svg>";
+ document.body.style.setProperty('--grain','url("data:image/svg+xml,'+encodeURIComponent(svg)+'")')})();
+document.querySelectorAll('.slide.qz').forEach(q=>{const a=q.cloneNode(true),n=q.dataset.a.charCodeAt(0)-65;a.classList.add('rv');a.dataset.k=q.dataset.k.replace('question','answer');a.querySelectorAll('.opts li').forEach((li,i)=>li.classList.add(i===n?'ok':'no'));q.querySelectorAll('.rv-notes').forEach(e=>e.remove());a.querySelectorAll('.notes:not(.rv-notes)').forEach(e=>e.remove());q.after(a)});
+const deck=document.getElementById('deck'),S=[...deck.querySelectorAll('.slide')];let cur=0,sec='',sic='sparkles';const dvs=[];
+S.forEach((s,idx)=>{
+ if(s.classList.contains('dv')){sec=s.dataset.sec;sic=s.dataset.ic;dvs.push({i:idx,t:s.dataset.sec,ic:s.dataset.ic,tm:s.dataset.time});const c=document.createElement('div');c.className='dvic';c.innerHTML='<i data-lucide="'+sic+'"></i>';s.appendChild(c);s.style.paddingRight='420px'}
+ s.dataset.s=sec||'Introduction';
+ if(!s.classList.contains('dv')){const k=document.createElement('div');k.className='k';const ic=s.classList.contains('rv')?'circle-check':s.classList.contains('qz')?'circle-help':(s.dataset.k?(s.dataset.ic||'sparkles'):sic);k.innerHTML='<i data-lucide="'+ic+'"></i>'+(s.dataset.k||sec);s.prepend(k)}
+ if(s.querySelector(':scope>.hero'))s.classList.add('hh');
+ [...s.children].forEach((c,j)=>c.style.setProperty('--d',j));
+});
+const toc=document.getElementById('toc');
+dvs.forEach((d,n)=>{const b=document.createElement('button');b.innerHTML='<span class="n">0'+(n+1)+'</span><i data-lucide="'+d.ic+'"></i><span>'+d.t+'</span><span class="tm">'+d.tm+'</span>';b.onclick=e=>{e.stopPropagation();go(d.i);deck.focus()};toc.appendChild(b)});
+document.querySelectorAll('pre.sh,pre.file').forEach(p=>{const sh=p.classList.contains('sh');p.innerHTML=p.innerHTML.replace(/^\n/,'').replace(/\s+$/,'').split('\n').map(l=>{let pre='',cm='';if(sh&&l.startsWith('$ ')){pre='<span class="pr">$</span> ';l=l.slice(2)}else if(/^\s*#/.test(l)){return '<span class="cm">'+l+'</span>'}else if(sh&&!/^\s/.test(l)){const k=l.search(/\s#\s/);return k>=0?'<span class="out">'+l.slice(0,k)+'</span><span class="cm">'+l.slice(k)+'</span>':'<span class="out">'+l+'</span>'}const k=l.search(/\s#\s/);if(k>=0){cm='<span class="cm">'+l.slice(k)+'</span>';l=l.slice(0,k)}return pre+l+cm}).join('\n')+'<span class="cur"></span>'});
+function fit(){const s=Math.min(innerWidth/1280,innerHeight/720)*.86;deck.style.transform='translate(-50%,-50%) scale('+s+')'}
+addEventListener('resize',fit);fit();
+let uiT;function poke(){document.body.classList.add('ui');clearTimeout(uiT);uiT=setTimeout(()=>document.body.classList.remove('ui'),2200)}
+addEventListener('pointermove',poke);addEventListener('pointerdown',poke);
+const bare=e=>e.className.replace(/\s*\b(keep|gone)\b/g,'');
+function go(n){if(n<0||n>=S.length)return;const p=S[cur],q=S[n],adj=Math.abs(n-cur)===1,pair=adj&&S[Math.max(n,cur)].classList.contains('rv'),moves=[];
+ S.forEach(s=>{if(s!==p)s.querySelectorAll(':scope>.keep,:scope>.gone').forEach(e=>e.classList.remove('keep','gone'))});
+ if(adj&&!pair){const pc=[...p.children];[...q.children].forEach(c=>{const m=pc.find(o=>o.tagName===c.tagName&&bare(o)===bare(c)&&o.innerHTML===c.innerHTML);if(m){moves.push([c,m.getBoundingClientRect()]);c.classList.add('keep');m.classList.add('gone')}})}
+ deck.classList.toggle('pair',pair);deck.classList.toggle('soft',moves.length>0);cur=n;S.forEach((s,k)=>{s.classList.toggle('on',k===n);s.classList.toggle('past',k<n)});
+ const z=deck.getBoundingClientRect().width/1280;moves.forEach(([c,r])=>{const b=c.getBoundingClientRect(),dx=(r.left-b.left)/z,dy=(r.top-b.top)/z;if(Math.abs(dx)+Math.abs(dy)<1)return;c.style.transition='none';c.style.transform='translate('+dx+'px,'+dy+'px)';c.offsetWidth;c.style.transition='transform .5s cubic-bezier(.2,.7,.2,1)';c.style.transform=''});
+ document.getElementById('cnt').textContent=(n+1)+' / '+S.length;document.getElementById('pg').style.width=Math.round((n/(S.length-1))*100)+'%';history.replaceState(null,'','#'+(n+1));
+ if(ready&&n>0&&!T.used)timerToggle();syncNotes()}
+function next(){go(cur+1)}
+function prev(){go(cur-1)}
+function fsToggle(doc=document){if(!doc.fullscreenElement)doc.documentElement.requestFullscreen().catch(()=>{});else doc.exitFullscreen()}
+function onKey(e){const k=e.key,doc=e.target.ownerDocument||e.target.document||document;
+ if(e.target.closest&&e.target.closest('button')&&(k===' '||k==='Enter'))return;
+ if([' ','ArrowRight','ArrowDown','PageDown','Enter'].includes(k)){e.preventDefault();next()}
+ else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev()}
+ else if(k==='Home'){e.preventDefault();go(0)}else if(k==='End'){e.preventDefault();go(S.length-1)}
+ else if(k==='f'||k==='F'){e.preventDefault();fsToggle(doc)}
+ else if(k==='c'||k==='C'){e.preventDefault();go(1)}}
+document.addEventListener('keydown',onKey);
+
+// Speaker notes: a presenter window on the second screen, driven entirely from here.
+// Planned start time of every slide, spread evenly through each section's slot (session = 90 min).
+const TOTAL=90*60,mins=t=>{const[h,m]=t.split(':').map(Number);return(h*60+m)*60},plan=[];
+{const cuts=[[0,0],...dvs.map(d=>[d.i,mins(d.tm)]),[S.length,TOTAL]];
+ for(let j=0;j<cuts.length-1;j++){const[a,t0]=cuts[j],[b,t1]=cuts[j+1];for(let i=a;i<b;i++)plan[i]=t0+(i-a)*(t1-t0)/(b-a)}}
+const T={acc:0,from:0,run:false,used:false},elapsed=()=>T.acc+(T.run?(Date.now()-T.from)/1000:0);
+function timerToggle(){T.used=true;if(T.run){T.acc=elapsed();T.run=false}else{T.from=Date.now();T.run=true}syncNotes()}
+function timerReset(){T.acc=0;T.run=false;T.used=true;syncNotes()}
+const clock=s=>{s=Math.max(0,Math.round(s));const h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=String(s%60).padStart(2,'0');return h?h+':'+String(m).padStart(2,'0')+':'+x:m+':'+x};
+let pw=null,ready=false;
+const PCSS=`html,body{height:100%;overflow:hidden}body{margin:0;background:var(--B1);color:var(--BC);font-family:'Google Sans',system-ui,sans-serif}body::before{display:none}
+.pz{height:100vh;display:grid;grid-template-rows:auto minmax(0,1fr);gap:18px;padding:18px 22px}
+header{display:flex;align-items:center;gap:22px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid color-mix(in oklab,var(--BC) 12%,transparent)}
+.pos{font-size:16px;color:color-mix(in oklab,var(--BC) 70%,transparent)}.pos b{font-size:30px;color:var(--P);font-weight:700}#p-sec{display:block;margin-top:2px;font-size:14px;color:var(--P)}
+.tm{margin-left:auto;display:flex;align-items:center;gap:10px}#p-el{font:600 40px 'Google Sans Code',ui-monospace,monospace;font-variant-numeric:tabular-nums;min-width:4.6ch;text-align:right}
+.of{font-size:14px;color:color-mix(in oklab,var(--BC) 55%,transparent);line-height:1.3}
+.pace{padding:8px 14px;border-radius:10px;font-size:15px;font-weight:500;background:color-mix(in oklab,var(--BC) 8%,transparent)}
+.pace.ok{color:var(--P);background:color-mix(in oklab,var(--P) 14%,transparent)}.pace.late{color:#f5a524;background:color-mix(in oklab,#f5a524 14%,transparent)}.pace.early{color:#7cb7ff;background:color-mix(in oklab,#7cb7ff 14%,transparent)}
+#p-clock{font-size:22px;font-variant-numeric:tabular-nums;color:color-mix(in oklab,var(--BC) 75%,transparent)}
+.pb{all:unset;cursor:pointer;height:36px;min-width:36px;padding:0 12px;box-sizing:border-box;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;border:1px solid color-mix(in oklab,var(--BC) 18%,transparent)}
+.pb:hover{border-color:var(--P);background:color-mix(in oklab,var(--P) 12%,transparent)}.pb svg{width:18px;height:18px}
+main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:28px;min-height:0}
+.views{display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto}
+.lbl{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--P);font-weight:500;margin-top:6px}
+.view{position:relative;flex:none;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:12px;border:1px solid color-mix(in oklab,var(--BC) 14%,transparent)}.view.sm{width:66%}
+.view .end{position:absolute;inset:0;display:grid;place-items:center;font-size:15px;color:color-mix(in oklab,var(--BC) 55%,transparent)}
+.mini{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;background:var(--B1);color:var(--BC);font-family:'Google Sans','Google Sans Flex',system-ui,sans-serif}
+.mini *,.mini *::before,.mini *::after{animation:none!important;transition:none!important}.mini .slide{opacity:1;visibility:visible;transform:none}
+.ctl{display:flex;gap:8px;margin-top:10px}
+.nbx{display:flex;flex-direction:column;min-height:0}.nbx .lbl{display:flex;align-items:center;gap:8px;margin-top:0}.nbx .lbl span{margin-right:auto}
+#p-notes{flex:1;overflow:auto;margin-top:12px;padding-right:14px;font-size:var(--fs,24px);line-height:1.55}#p-notes p{margin:0 0 .85em}#p-notes .none{color:color-mix(in oklab,var(--BC) 50%,transparent)}
+@media (max-width:860px){main{grid-template-columns:1fr}.views{display:none}}`;
+const PHTML=`<div class="pz"><header>
+<div class="pos"><b id="p-n"></b> / ${S.length}<span id="p-sec"></span></div>
+<div class="tm"><div id="p-pace" class="pace"></div><span id="p-el">0:00</span><div class="of">of ${TOTAL/60} min<br><span id="p-plan"></span></div>
+<button class="pb" id="p-go"></button><button class="pb" id="p-rs" title="Reset timer"><i data-lucide="rotate-ccw"></i></button></div>
+<div id="p-clock"></div></header>
+<main><section class="views"><div class="lbl">Now</div><div class="view" id="p-cur"></div><div class="lbl">Next</div><div class="view sm" id="p-nx"></div>
+<div class="ctl"><button class="pb" id="p-pv" title="Previous slide"><i data-lucide="chevron-left"></i></button><button class="pb" id="p-ne" title="Next slide"><i data-lucide="chevron-right"></i>Next</button><button class="pb" id="p-fs" title="Full screen"><i data-lucide="maximize"></i></button></div></section>
+<section class="nbx"><div class="lbl"><span>Speaker notes</span><button class="pb" id="p-sm" title="Smaller text">A−</button><button class="pb" id="p-lg" title="Larger text">A+</button></div><div id="p-notes"></div></section></main></div>`;
+async function openNotes(){
+ if(pw&&!pw.closed){pw.focus();return}
+ pw=window.open('','speaker-notes','popup,width=1280,height=800');
+ if(!pw){alert('Please allow pop-ups for this page so the speaker notes window can open.');return}
+ const d=pw.document,head=[...document.querySelectorAll('link[rel=stylesheet],style')].map(e=>e.outerHTML).join('');
+ d.open();d.write('<!doctype html><html data-theme="'+document.documentElement.dataset.theme+'"><head><meta charset="utf-8"><title>Speaker notes</title>'+head+'<style>'+PCSS+'<\/style><\/head><body>'+PHTML+'<\/body><\/html>');d.close();
+ let fs=24;try{fs=+localStorage.getItem('notes-fs')||24}catch(e){}
+ const size=n=>{fs=Math.min(44,Math.max(16,n));d.body.style.setProperty('--fs',fs+'px');try{localStorage.setItem('notes-fs',fs)}catch(e){}};size(fs);
+ const on=(id,f)=>d.getElementById(id).addEventListener('click',e=>{f();e.currentTarget.blur()});
+ on('p-go',timerToggle);on('p-rs',timerReset);on('p-pv',prev);on('p-ne',next);on('p-fs',()=>fsToggle(d));on('p-sm',()=>size(fs-2));on('p-lg',()=>size(fs+2));
+ d.addEventListener('keydown',onKey);pw.addEventListener('resize',()=>syncNotes(true));
+ if(window.lucide)lucide.createIcons({root:d.body});
+ syncNotes(true);
+ // Move it to the other screen when the browser can see more than one (asks for permission once).
+ if('getScreenDetails' in window)try{const sd=await getScreenDetails(),o=sd.screens.find(s=>s!==sd.currentScreen);if(o){pw.moveTo(o.availLeft,o.availTop);pw.resizeTo(o.availWidth,o.availHeight)}}catch(e){}
+}
+function mini(box,s){box.textContent='';if(!s){box.innerHTML='<div class="end">End of presentation</div>';return}
+ const m=pw.document.createElement('div'),c=s.cloneNode(true);m.className='mini';
+ c.classList.add('on');c.classList.remove('past');c.querySelectorAll(':scope>*').forEach(e=>{e.classList.remove('keep','gone');e.style.transform=''});
+ m.appendChild(c);box.appendChild(m);m.style.transform='scale('+box.clientWidth/1280+')'}
+let shown=-1;
+function syncNotes(force){if(!pw||pw.closed)return;const d=pw.document,$=id=>d.getElementById(id);if(!$('p-n'))return;
+ if(force||shown!==cur){shown=cur;const s=S[cur],nt=s.querySelector(':scope>.notes');
+  $('p-n').textContent=cur+1;$('p-sec').textContent=s.dataset.s;
+  $('p-notes').innerHTML=nt?nt.innerHTML:'<p class="none">No notes for this slide.</p>';$('p-notes').scrollTop=0;
+  mini($('p-cur'),s);mini($('p-nx'),S[cur+1])}
+ const t=elapsed(),diff=t-plan[cur],m=Math.round(Math.abs(diff)/60),pace=$('p-pace');
+ $('p-el').textContent=clock(t);$('p-plan').textContent='planned '+clock(plan[cur]);
+ $('p-go').textContent=T.run?'Pause':(t>0?'Resume':'Start');
+ $('p-clock').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+ if(!T.run&&t===0){pace.className='pace';pace.textContent='Timer starts on the next slide'}
+ else if(Math.abs(diff)<60){pace.className='pace ok';pace.textContent='On time'}
+ else{pace.className='pace '+(diff>0?'late':'early');pace.textContent=m+' min '+(diff>0?'behind':'ahead')}}
+setInterval(()=>syncNotes(),500);
+addEventListener('pagehide',()=>{if(pw&&!pw.closed)pw.close()});
+document.getElementById('nx').onclick=e=>{e.stopPropagation();next();e.currentTarget.blur()};
+document.getElementById('pv').onclick=e=>{e.stopPropagation();prev();e.currentTarget.blur()};
+document.getElementById('hm').onclick=e=>{e.stopPropagation();go(1);e.currentTarget.blur()};
+document.getElementById('fs').onclick=e=>{e.stopPropagation();fsToggle();e.currentTarget.blur()};
+const start=parseInt(location.hash.slice(1),10);go(start>0&&start<=S.length?start-1:0);ready=true;
+if(window.lucide)lucide.createIcons();
+deck.focus();
+</script>
+</body>
+</html>
