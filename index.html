@@ -3,22 +3,26 @@
 <title>Presentations</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap">
 <style>
-:root{--bg:#1b1717;--fg:#cac9c9;--p:#1eb854}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--fg);font-family:'Google Sans',system-ui,sans-serif}
-main{width:min(560px,100% - 32px)}h1{font-size:28px;margin:0 0 20px}
-a{display:block;padding:18px 22px;margin:0 0 12px;border-radius:16px;color:var(--fg);text-decoration:none;font-size:19px;border:1px solid color-mix(in oklab,var(--fg) 14%,transparent)}
-a:hover{border-color:var(--p);color:var(--p)}a[hidden]{display:none}
+:root{--bg:#1b1717;--fg:#cac9c9;--p:#1eb854;--line:color-mix(in oklab,var(--fg) 14%,transparent)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px 16px 64px;background:var(--bg);color:var(--fg);font-family:'Google Sans',system-ui,sans-serif}
+main{width:min(560px,100%)}h1{font-size:28px;margin:0 0 20px}
+.row{display:flex;gap:10px;margin:0 0 12px}.row[hidden]{display:none}
+.row a{color:var(--fg);text-decoration:none;border-radius:16px;border:1px solid var(--line);transition:border-color .2s,color .2s}
+.row a:hover,.row a:focus-visible{border-color:var(--p);color:var(--p);outline:none}
+.open{flex:1;min-width:0;padding:18px 22px;font-size:19px;line-height:1.35}
+.pdf{flex:none;display:flex;align-items:center;gap:8px;padding:0 18px;font-size:15px}
 .search{display:flex;align-items:center;gap:12px;padding:0 18px;margin:0 0 16px;border-radius:16px;background:color-mix(in oklab,var(--fg) 6%,transparent);border:1px solid transparent}
 .search:focus-within{border-color:var(--p)}.search svg{flex:none;opacity:.6}
-.search input{all:unset;flex:1;padding:15px 0;font-size:17px}.search input::placeholder{color:var(--fg);opacity:.5}
+.search input{all:unset;flex:1;min-width:0;padding:15px 0;font-size:17px}.search input::placeholder{color:var(--fg);opacity:.5}
 .empty{display:none;padding:18px 4px;opacity:.6}
-footer{position:fixed;left:0;right:0;bottom:20px;text-align:center;font-size:14px;opacity:.3}
+footer{position:fixed;left:0;right:0;bottom:20px;text-align:center;font-size:14px;opacity:.3;pointer-events:none}
 </style></head>
 <body><main><h1>Presentations</h1>
 <label class="search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="q" type="search" placeholder="Search presentations" aria-label="Search presentations" autocomplete="off"></label>
-<div id="list"><a href="presentation.html">Container Technologies on Enterprise Linux</a><a href="presentation2.html">Deploying a Live Project with Docker</a></div><p class="empty" id="none">No presentations match your search.</p></main>
+<div id="list"><div class="row"><a class="open" href="presentation.html">Container Technologies on Enterprise Linux</a><a class="pdf" href="presentation.pdf" download aria-label="Download Container Technologies on Enterprise Linux as PDF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>PDF</a></div><div class="row"><a class="open" href="presentation2.html">Deploying a Live Project with Docker</a><a class="pdf" href="presentation2.pdf" download aria-label="Download Deploying a Live Project with Docker as PDF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>PDF</a></div></div><p class="empty" id="none">No presentations match your search.</p></main>
 <footer>by Drubajyoti Debnath</footer>
 <script>
-const q=document.getElementById('q'),items=[...document.querySelectorAll('#list a')];
-q.addEventListener('input',()=>{const t=q.value.trim().toLowerCase();let n=0;items.forEach(a=>{const hit=a.textContent.toLowerCase().includes(t);a.hidden=!hit;n+=hit});document.getElementById('none').style.display=n?'none':'block'});
+const q=document.getElementById('q'),items=[...document.querySelectorAll('#list .row')];
+q.addEventListener('input',()=>{const t=q.value.trim().toLowerCase();let n=0;items.forEach(r=>{const hit=r.querySelector('.open').textContent.toLowerCase().includes(t);r.hidden=!hit;n+=hit});document.getElementById('none').style.display=n?'none':'block'});
 </script></body></html>
