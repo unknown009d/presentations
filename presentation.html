@@ -129,18 +129,53 @@ body.ui .bar,.bar:hover{opacity:1}
 @keyframes fade{from{opacity:0}}
 @keyframes ping{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
 @keyframes cyc{0%,22%{background:var(--P);color:var(--PC)}26%,100%{background:color-mix(in oklab,var(--P) 13%,transparent);color:var(--BC)}}
-.rot{display:none;position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:6;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font:13px 'Google Sans',system-ui,sans-serif;white-space:nowrap;color:var(--BC);background:color-mix(in oklab,var(--BC) 8%,var(--B1));border:1px solid color-mix(in oklab,var(--BC) 14%,transparent)}
-.rot svg{width:16px;height:16px;color:var(--P)}
-@media (orientation:portrait) and (max-width:700px){.rot{display:flex}}
-.rot.x{display:none!important}
 body{touch-action:manipulation}
 @media (pointer:coarse){.bar{bottom:10px;right:10px}.nb{width:38px;height:38px}.nb svg{width:19px;height:19px}#cnt{min-width:64px}}
+@media screen{
+ html.vert .slide{padding:72px 48px 120px;justify-content:flex-start;justify-content:safe center;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+ html.vert .slide::-webkit-scrollbar{display:none}
+ html.vert .slide.dv{padding-right:48px!important}
+ html.vert .slide.hh>*:not(.hero){max-width:none}
+ html.vert .slide [style*="max-width"]{max-width:none!important}
+ html.vert .hero,html.vert .hero.s{position:relative;right:auto;top:auto;margin:0 0 36px;width:170px;height:170px;flex:none;order:-1}
+ html.vert .hero svg,html.vert .hero.s svg{width:76px;height:76px}
+ html.vert .hero::after{inset:-14px}
+ html.vert .orbit{position:relative;right:auto;top:auto;margin:0 0 48px;flex:none;order:-1;align-self:center}
+ html.vert .dvic{position:relative;right:auto;top:auto;margin:0 0 44px;width:170px;height:170px;flex:none;order:-1}
+ html.vert .dvic svg{width:76px;height:76px}
+ html.vert .dv .num{font-size:140px}
+ html.vert .t{font-size:50px}html.vert .t.big{font-size:64px}html.vert .t.mid{font-size:40px}
+ html.vert .lead,html.vert .lead[style]{font-size:30px!important}
+ html.vert .li{font-size:29px;gap:18px}
+ html.vert .li>svg{width:34px;height:34px}
+ html.vert .note{font-size:23px}
+ html.vert .cols{grid-template-columns:1fr!important;gap:18px}
+ html.vert .card{padding:22px 26px}html.vert .card h3{font-size:30px}html.vert .card p{font-size:25px}
+ html.vert .row{grid-template-columns:44px 1fr;row-gap:2px;font-size:27px;margin:14px 0}
+ html.vert .row b{grid-column:1/-1}
+ html.vert .flow{flex-direction:column;align-items:flex-start;margin:18px 0}
+ html.vert .flow .chip{white-space:normal;padding:12px 18px;font-size:25px}
+ html.vert .wire{flex:none;width:3px;min-width:0;height:22px;margin:5px 0 5px 32px}
+ html.vert .cols:has(>.stack){grid-template-columns:1fr 1fr!important}
+ html.vert .stack div{font-size:22px;padding:12px 14px}
+ html.vert .wire::after{left:-6px;animation-name:travelv}
+ html.vert pre.sh,html.vert pre.file{overflow-x:auto;scrollbar-width:none;flex:none;font-size:22px;padding:22px 24px;max-width:none}
+ html.vert pre::-webkit-scrollbar{display:none}
+ html.vert pre.sm{font-size:20px}html.vert pre.xs{font-size:18px}
+ html.vert .qz .q{font-size:40px}
+ html.vert .opts{grid-template-columns:1fr;gap:12px;margin-top:26px}
+ html.vert .opts li{font-size:26px;padding:14px 18px}
+ html.vert .why{font-size:24px}
+ html.vert #toc{grid-template-columns:1fr;gap:10px}
+ html.vert #toc button{font-size:24px;padding:12px 18px}
+}
+@keyframes travelv{from{top:0}to{top:calc(100% - 15px)}}
 @media print{
  @page{size:1280px 720px;margin:0}
  html,body{width:1280px;height:auto;overflow:visible;-webkit-print-color-adjust:exact;print-color-adjust:exact}
- body::before,.bar,.prog,.rot{display:none!important}
+ body::before,.bar,.prog{display:none!important}
  *,*::before,*::after{animation:none!important;transition:none!important}
- .deck{position:static;transform:none!important;width:1280px;height:auto;overflow:visible}
+ .deck{position:static;transform:none!important;width:1280px!important;height:auto!important;overflow:visible}
  .deck .slide{position:relative;width:1280px;height:720px;opacity:1!important;visibility:visible!important;transform:none!important;background:var(--B1);overflow:hidden;break-inside:avoid}
  .deck .slide:not(:last-child){break-after:page}
  .slide>.gone{opacity:1!important}
@@ -731,7 +766,10 @@ S.forEach((s,idx)=>{
 const toc=document.getElementById('toc');
 dvs.forEach((d,n)=>{const b=document.createElement('button');b.innerHTML='<span class="n">0'+(n+1)+'</span><i data-lucide="'+d.ic+'"></i><span>'+d.t+'</span><span class="tm">'+d.tm+'</span>';b.onclick=e=>{e.stopPropagation();go(d.i);deck.focus()};toc.appendChild(b)});
 document.querySelectorAll('pre.sh,pre.file').forEach(p=>{const sh=p.classList.contains('sh');p.innerHTML=p.innerHTML.replace(/^\n/,'').replace(/\s+$/,'').split('\n').map(l=>{let pre='',cm='';if(sh&&l.startsWith('$ ')){pre='<span class="pr">$</span> ';l=l.slice(2)}else if(/^\s*#/.test(l)){return '<span class="cm">'+l+'</span>'}else if(sh&&!/^\s/.test(l)){const k=l.search(/\s#\s/);return k>=0?'<span class="out">'+l.slice(0,k)+'</span><span class="cm">'+l.slice(k)+'</span>':'<span class="out">'+l+'</span>'}const k=l.search(/\s#\s/);if(k>=0){cm='<span class="cm">'+l.slice(k)+'</span>';l=l.slice(0,k)}return pre+l+cm}).join('\n')+'<span class="cur"></span>'});
-function fit(){const s=Math.min(innerWidth/1280,innerHeight/720)*(innerWidth<900?.98:.86);deck.style.transform='translate(-50%,-50%) scale('+s+')'}
+// Phones held upright get a tall 720px-wide canvas with a one-column layout (html.vert).
+function fit(){const v=innerHeight>innerWidth*1.15&&innerWidth<900;document.documentElement.classList.toggle('vert',v);
+ if(v){const s=innerWidth/720;deck.style.width='720px';deck.style.height=Math.round(innerHeight/s)+'px';deck.style.transform='translate(-50%,-50%) scale('+s+')'}
+ else{deck.style.width=deck.style.height='';const s=Math.min(innerWidth/1280,innerHeight/720)*(innerWidth<900?.98:.86);deck.style.transform='translate(-50%,-50%) scale('+s+')'}}
 addEventListener('resize',fit);fit();
 let uiT;function poke(){document.body.classList.add('ui');clearTimeout(uiT);uiT=setTimeout(()=>document.body.classList.remove('ui'),2200)}
 addEventListener('pointermove',poke);addEventListener('pointerdown',poke);
@@ -740,7 +778,7 @@ function go(n){if(n<0||n>=S.length)return;const p=S[cur],q=S[n],adj=Math.abs(n-c
  S.forEach(s=>{if(s!==p)s.querySelectorAll(':scope>.keep,:scope>.gone').forEach(e=>e.classList.remove('keep','gone'))});
  if(adj&&!pair){const pc=[...p.children];[...q.children].forEach(c=>{const m=pc.find(o=>o.tagName===c.tagName&&bare(o)===bare(c)&&o.innerHTML===c.innerHTML);if(m){moves.push([c,m.getBoundingClientRect()]);c.classList.add('keep');m.classList.add('gone')}})}
  deck.classList.toggle('pair',pair);deck.classList.toggle('soft',moves.length>0);cur=n;S.forEach((s,k)=>{s.classList.toggle('on',k===n);s.classList.toggle('past',k<n)});
- const z=deck.getBoundingClientRect().width/1280;moves.forEach(([c,r])=>{const b=c.getBoundingClientRect(),dx=(r.left-b.left)/z,dy=(r.top-b.top)/z;if(Math.abs(dx)+Math.abs(dy)<1)return;c.style.transition='none';c.style.transform='translate('+dx+'px,'+dy+'px)';c.offsetWidth;c.style.transition='transform .5s cubic-bezier(.2,.7,.2,1)';c.style.transform=''});
+ const z=deck.getBoundingClientRect().width/deck.offsetWidth;moves.forEach(([c,r])=>{const b=c.getBoundingClientRect(),dx=(r.left-b.left)/z,dy=(r.top-b.top)/z;if(Math.abs(dx)+Math.abs(dy)<1)return;c.style.transition='none';c.style.transform='translate('+dx+'px,'+dy+'px)';c.offsetWidth;c.style.transition='transform .5s cubic-bezier(.2,.7,.2,1)';c.style.transform=''});
  document.getElementById('cnt').textContent=(n+1)+' / '+S.length;document.getElementById('pg').style.width=Math.round((n/(S.length-1))*100)+'%';history.replaceState(null,'','#'+(n+1));
  if(ready&&n>0&&!T.used)timerToggle();syncNotes()}
 function next(){if(cur===S.length-1)location.href='presentation2.html';else go(cur+1)}
@@ -835,13 +873,11 @@ document.getElementById('pv').onclick=e=>{e.stopPropagation();prev();e.currentTa
 document.getElementById('hm').onclick=e=>{e.stopPropagation();go(1);e.currentTarget.blur()};
 document.getElementById('fs').onclick=e=>{e.stopPropagation();fsToggle();e.currentTarget.blur()};
 const start=parseInt(location.hash.slice(1),10);go(start>0&&start<=S.length?start-1:0);ready=true;
-// Phones: swipe, or tap the right side for next and the left side for previous.
+// Phones: swipe, or tap the right side for next and the left side for previous. Wide code blocks scroll sideways instead.
 let tx=null,ty=0;
-addEventListener('touchstart',e=>{if(e.touches.length>1||e.target.closest('.bar,.rot,button,a')){tx=null;return}tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchstart',e=>{const pre=e.target.closest('pre');if(e.touches.length>1||e.target.closest('.bar,button,a')||(pre&&pre.scrollWidth>pre.clientWidth+2)){tx=null;return}tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
 addEventListener('touchend',e=>{if(tx===null||(window.visualViewport&&visualViewport.scale>1.05))return;const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;tx=null;
  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?next():prev()}else if(Math.abs(dx)<12&&Math.abs(dy)<12){t.clientX>innerWidth/3?next():prev()}});
-{const r=document.createElement('div');r.className='rot';r.innerHTML='<i data-lucide="smartphone"></i>Turn your phone sideways for a bigger view';r.onclick=()=>r.classList.add('x');document.body.appendChild(r);
- addEventListener('orientationchange',()=>r.classList.add('x'))}
 if(!document.documentElement.requestFullscreen)document.getElementById('fs').style.display='none';
 if(matchMedia('(pointer:coarse)').matches)poke();
 if(window.lucide)lucide.createIcons();
