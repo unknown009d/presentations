@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="forest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Front-End Web Development: HTML5, CSS, Bootstrap and JavaScript</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css">
+<style>
+:root{--P:var(--color-primary,#1eb854);--PC:var(--color-primary-content,#001a08);--B1:var(--color-base-100,#1b1717);--BC:var(--color-base-content,#cac9c9);--N:var(--color-neutral,#1e3a30);--A:var(--color-accent,#1db88e)}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--B1)}
+*{box-sizing:border-box}
+body::before{content:'';position:fixed;inset:-80px;z-index:0;pointer-events:none;background:var(--grain,none);animation:grain 160s linear infinite alternate}
+@keyframes grain{to{transform:translate3d(-60px,-40px,0)}}
+@media (prefers-reduced-motion:reduce){body::before{animation:none}}
+.deck{position:absolute;z-index:1;left:50%;top:50%;width:1280px;height:720px;transform-origin:center;overflow:hidden;background:transparent;color:var(--BC);font-family:'Google Sans','Google Sans Flex',system-ui,sans-serif;outline:none}
+.slide{position:absolute;inset:0;padding:36px 96px;display:flex;flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transform:translateX(60px);transition:opacity .55s,transform .55s,visibility .55s;z-index:2}
+.slide.on{opacity:1;visibility:visible;transform:none}
+.slide.past{transform:translateX(-60px)}
+.slide.on>*:not(.hero):not(.orbit){animation:up .7s both;animation-delay:calc(var(--d,0)*110ms)}
+.slide.hh>*:not(.hero){max-width:700px}
+.k{display:flex;align-items:center;gap:12px;color:var(--P);font-size:20px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-bottom:16px}
+.k svg{width:24px;height:24px}
+.t{font-size:58px;font-weight:700;line-height:1.12;margin:0 0 24px;color:var(--BC)}
+.t em,.lead em,.q em{font-style:normal;color:var(--P)}
+.t.big{font-size:80px}
+.t.mid{font-size:44px;margin-bottom:14px}
+.lead{font-size:34px;line-height:1.45;margin:0 0 14px;color:color-mix(in oklab,var(--BC) 88%,transparent)}
+.note{font-size:24px;margin:22px 0 0;color:color-mix(in oklab,var(--BC) 65%,transparent);display:flex;gap:14px;align-items:center}
+.note svg{width:28px;height:28px;color:var(--P);flex:none}
+.li{display:flex;align-items:center;gap:22px;font-size:33px;line-height:1.3;margin:12px 0}
+.li>svg{width:40px;height:40px;color:var(--P);flex:none;padding:8px;border-radius:14px;background:color-mix(in oklab,var(--P) 14%,transparent);box-sizing:content-box}
+.li b{font-weight:700}
+.hero{position:absolute;right:110px;top:50%;margin-top:-150px;width:300px;height:300px;border-radius:50%;display:grid;place-items:center;color:var(--P);background:color-mix(in oklab,var(--P) 12%,transparent);animation:float 5s ease-in-out infinite}
+.hero svg{width:130px;height:130px}
+.hero::after{content:'';position:absolute;inset:-24px;border-radius:50%;border:3px dashed color-mix(in oklab,var(--P) 45%,transparent);animation:spin 22s linear infinite}
+.hero.s{width:220px;height:220px;margin-top:-110px;top:32%}
+.hero.s svg{width:96px;height:96px}
+pre.sh,pre.file{position:relative;margin:8px 0 0;padding:28px 32px;border-radius:20px;background:color-mix(in oklab,var(--N) 70%,black);font-family:'Google Sans Code',ui-monospace,monospace;font-size:27px;line-height:1.6;white-space:pre;overflow:hidden;color:var(--BC);border:1px solid color-mix(in oklab,var(--P) 22%,transparent);max-width:1090px}
+pre.sm{font-size:22px;padding:24px 28px}
+pre.xs{font-size:19px;line-height:1.5}
+pre.file::before{content:attr(data-n);position:absolute;top:10px;right:18px;font-size:17px;color:var(--P);font-family:'Google Sans',sans-serif}
+.pr{color:var(--P);font-weight:700}.cm{color:color-mix(in oklab,var(--BC) 45%,transparent)}.out{color:var(--A)}
+.cur{display:inline-block;width:14px;height:1.1em;margin-left:6px;vertical-align:-4px;background:var(--P);animation:blink 1s steps(1) infinite}
+.chip{display:inline-flex;align-items:center;gap:12px;padding:16px 22px;border-radius:18px;font-size:27px;font-weight:500;white-space:nowrap;background:color-mix(in oklab,var(--P) 13%,transparent);border:1px solid color-mix(in oklab,var(--P) 35%,transparent)}
+.chip svg{width:30px;height:30px;color:var(--P)}
+.flow{display:flex;align-items:center;margin:24px 0}
+.wire{flex:1;min-width:40px;height:3px;margin:0 12px;position:relative;background:color-mix(in oklab,var(--P) 35%,transparent)}
+.wire::after{content:'';position:absolute;top:-6px;left:0;width:15px;height:15px;border-radius:50%;background:var(--P);animation:travel 1.8s linear infinite}
+.wire.lk svg{width:38px;height:38px;color:var(--P);background:var(--B1);padding:4px;box-sizing:content-box;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:8px}
+.card{padding:28px 32px;border-radius:22px;background:color-mix(in oklab,var(--BC) 5%,transparent);border:1px solid color-mix(in oklab,var(--BC) 12%,transparent)}
+.card h3{display:flex;align-items:center;gap:14px;font-size:34px;font-weight:700;margin:0 0 14px;color:var(--P)}
+.card h3 svg{width:34px;height:34px}
+.card p{font-size:27px;line-height:1.5;margin:6px 0}
+.stack{display:flex;flex-direction:column;gap:10px}
+.stack div{padding:16px 22px;border-radius:16px;font-size:27px;text-align:center;background:color-mix(in oklab,var(--BC) 7%,transparent);animation:bob 3.2s ease-in-out infinite}
+.stack div.hl{background:color-mix(in oklab,var(--P) 25%,transparent);font-weight:500}
+.stack div:nth-child(2){animation-delay:.2s}.stack div:nth-child(3){animation-delay:.4s}.stack div:nth-child(4){animation-delay:.6s}.stack div:nth-child(5){animation-delay:.8s}
+.cyc .chip{animation:cyc 6s infinite}
+.cyc .chip:nth-of-type(2){animation-delay:1.5s}.cyc .chip:nth-of-type(3){animation-delay:3s}.cyc .chip:nth-of-type(4){animation-delay:4.5s}
+.row{display:grid;grid-template-columns:330px 56px 1fr;align-items:center;font-size:29px;margin:11px 0}
+.row svg{width:32px;height:32px;color:var(--P)}
+.row b{font-weight:500;color:color-mix(in oklab,var(--BC) 70%,transparent)}
+.dv .num{font-size:190px;font-weight:700;line-height:.9;color:transparent;-webkit-text-stroke:3px color-mix(in oklab,var(--P) 70%,transparent);margin-bottom:14px}
+.dvic{position:absolute;right:130px;top:50%;margin-top:-120px;width:240px;height:240px;border-radius:50%;display:grid;place-items:center;background:var(--P);color:var(--PC)}
+.dvic svg{width:104px;height:104px}
+.dvic::before,.dvic::after{content:'';position:absolute;inset:0;border-radius:50%;border:3px solid var(--P);animation:ping 2.6s ease-out infinite}
+.dvic::after{animation-delay:1.3s}
+.qz .q{font-size:50px;font-weight:700;line-height:1.25;margin:0;max-width:1050px}
+.opts{list-style:none;counter-reset:o;margin:32px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1090px}
+.opts li{counter-increment:o;display:flex;align-items:center;gap:18px;padding:18px 22px;border-radius:18px;font-size:28px;line-height:1.3;background:color-mix(in oklab,var(--BC) 5%,transparent);border:1px solid color-mix(in oklab,var(--BC) 12%,transparent)}
+.opts li::before{content:counter(o,upper-alpha);flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;font-weight:700;color:var(--P);background:color-mix(in oklab,var(--P) 14%,transparent)}
+.opts code{font-family:'Google Sans Code',ui-monospace,monospace;font-size:.9em}
+.opts li.ok{background:color-mix(in oklab,var(--P) 18%,transparent);border-color:var(--P)}
+.opts li.ok::before{background:var(--P);color:var(--PC)}
+.opts li.no{opacity:.4}
+.rv.on .opts li.ok{animation:hl .5s .15s both,pick .6s .65s both}
+.rv.on .opts li.ok::before{animation:hlb .5s .15s both}
+.rv.on .opts li.no{animation:dim .5s .15s both}
+.deck.pair .slide{transition:none;transform:none}
+.deck.pair .slide.on>*:not(.hero):not(.orbit){animation:none}
+.deck.soft .slide{transform:none;transition:opacity .3s,visibility .3s}
+.deck.soft .slide.on{transition:none}
+.deck.soft .slide.on>.hero:not(.keep){animation:fade .5s both,float 5s ease-in-out infinite}
+.deck.soft .slide.on>.orbit:not(.keep){animation:fade .5s both}
+.deck .slide.on>.keep:not(.hero){animation:none}
+.slide>.gone{opacity:0!important}
+.why{margin:24px 0 0;font-size:26px;line-height:1.45;display:flex;gap:14px;align-items:flex-start;max-width:1090px;color:color-mix(in oklab,var(--BC) 80%,transparent)}
+.why svg{width:30px;height:30px;color:var(--P);flex:none;margin-top:3px}
+.qz:not(.rv) .why{visibility:hidden}
+.notes{display:none}
+.deck.pair .slide.rv.on>.why{animation:fade .5s .35s both}
+#toc{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
+#toc button{all:unset;cursor:pointer;display:flex;align-items:center;gap:18px;padding:11px 22px;border-radius:18px;font-size:26px;background:color-mix(in oklab,var(--BC) 5%,transparent);border:1px solid transparent;transition:border-color .2s}
+#toc button:hover{border-color:var(--P)}
+#toc .n{font-weight:700;color:var(--P);width:40px}#toc svg{width:30px;height:30px;color:var(--P)}
+.orbit{position:absolute;right:120px;top:50%;margin-top:-190px;width:380px;height:380px}
+.orbit .core{position:absolute;inset:105px;border-radius:50%;background:var(--P);color:var(--PC);display:grid;place-items:center;animation:float 4s ease-in-out infinite}
+.orbit .core svg{width:84px;height:84px}
+.orbit .ring{position:absolute;inset:0;border-radius:50%;border:3px dashed color-mix(in oklab,var(--P) 45%,transparent);animation:spin 16s linear infinite}
+.orbit .ring span{position:absolute;width:78px;height:78px;margin:-39px;border-radius:50%;display:grid;place-items:center;background:var(--N);color:var(--P);animation:spin 16s linear infinite reverse}
+.orbit .ring span svg{width:38px;height:38px}
+.orbit .ring span:nth-child(1){left:50%;top:0}.orbit .ring span:nth-child(2){left:100%;top:50%}.orbit .ring span:nth-child(3){left:50%;top:100%}.orbit .ring span:nth-child(4){left:0;top:50%}
+.bar{position:fixed;right:16px;bottom:14px;display:flex;align-items:center;gap:2px;padding:4px;border-radius:12px;z-index:5;background:color-mix(in oklab,var(--BC) 6%,var(--B1));border:1px solid color-mix(in oklab,var(--BC) 12%,transparent);font:13px 'Google Sans',system-ui,sans-serif;color:color-mix(in oklab,var(--BC) 70%,transparent);opacity:0;transition:opacity .3s}
+body.ui .bar,.bar:hover{opacity:1}
+.nb{all:unset;cursor:pointer;width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--BC);transition:background .2s}
+.nb:hover{background:color-mix(in oklab,var(--P) 18%,transparent)}
+.nb svg{width:16px;height:16px}
+#cnt{min-width:58px;text-align:center;font-variant-numeric:tabular-nums}
+.prog{position:fixed;left:0;right:0;bottom:0;height:3px;z-index:5;background:color-mix(in oklab,var(--BC) 8%,transparent)}
+.prog span{display:block;height:100%;width:0;background:var(--P);transition:width .4s}
+.kbd svg{width:18px;height:18px}
+@keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(-12px)}50%{transform:translateY(12px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes travel{from{left:0}to{left:calc(100% - 15px)}}
+@keyframes bob{0%,100%{transform:translateX(0)}50%{transform:translateX(9px)}}
+@keyframes pick{50%{transform:scale(1.04)}}
+@keyframes hl{from{background:color-mix(in oklab,var(--BC) 5%,transparent);border-color:color-mix(in oklab,var(--BC) 12%,transparent)}}
+@keyframes hlb{from{background:color-mix(in oklab,var(--P) 14%,transparent);color:var(--P)}}
+@keyframes dim{from{opacity:1}}
+@keyframes fade{from{opacity:0}}
+@keyframes ping{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
+@keyframes cyc{0%,22%{background:var(--P);color:var(--PC)}26%,100%{background:color-mix(in oklab,var(--P) 13%,transparent);color:var(--BC)}}
+body{touch-action:manipulation}
+@media (pointer:coarse){.bar{bottom:10px;right:10px}.nb{width:38px;height:38px}.nb svg{width:19px;height:19px}#cnt{min-width:64px}}
+@media screen{
+ html.vert .slide{padding:72px 48px 120px;justify-content:flex-start;justify-content:safe center;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+ html.vert .slide::-webkit-scrollbar{display:none}
+ html.vert .slide.dv{padding-right:48px!important}
+ html.vert .slide.hh>*:not(.hero){max-width:none}
+ html.vert .slide [style*="max-width"]{max-width:none!important}
+ html.vert .hero,html.vert .hero.s{position:relative;right:auto;top:auto;margin:0 0 36px;width:170px;height:170px;flex:none;order:-1}
+ html.vert .hero svg,html.vert .hero.s svg{width:76px;height:76px}
+ html.vert .hero::after{inset:-14px}
+ html.vert .orbit{position:relative;right:auto;top:auto;margin:0 0 48px;flex:none;order:-1;align-self:center}
+ html.vert .dvic{position:relative;right:auto;top:auto;margin:0 0 44px;width:170px;height:170px;flex:none;order:-1}
+ html.vert .dvic svg{width:76px;height:76px}
+ html.vert .dv .num{font-size:140px}
+ html.vert .t{font-size:50px}html.vert .t.big{font-size:64px}html.vert .t.mid{font-size:40px}
+ html.vert .lead,html.vert .lead[style]{font-size:30px!important}
+ html.vert .li{font-size:29px;gap:18px}
+ html.vert .li>svg{width:34px;height:34px}
+ html.vert .note{font-size:23px}
+ html.vert .cols{grid-template-columns:1fr!important;gap:18px}
+ html.vert .card{padding:22px 26px}html.vert .card h3{font-size:30px}html.vert .card p{font-size:25px}
+ html.vert .row{grid-template-columns:44px 1fr;row-gap:2px;font-size:27px;margin:14px 0}
+ html.vert .row b{grid-column:1/-1}
+ html.vert .flow{flex-direction:column;align-items:flex-start;margin:18px 0}
+ html.vert .flow .chip{white-space:normal;padding:12px 18px;font-size:25px}
+ html.vert .wire{flex:none;width:3px;min-width:0;height:22px;margin:5px 0 5px 32px}
+ html.vert .cols:has(>.stack){grid-template-columns:1fr 1fr!important}
+ html.vert .stack div{font-size:22px;padding:12px 14px}
+ html.vert .wire::after{left:-6px;animation-name:travelv}
+ html.vert pre.sh,html.vert pre.file{overflow-x:auto;scrollbar-width:none;flex:none;font-size:22px;padding:22px 24px;max-width:none}
+ html.vert pre::-webkit-scrollbar{display:none}
+ html.vert pre.sm{font-size:20px}html.vert pre.xs{font-size:18px}
+ html.vert .qz .q{font-size:40px}
+ html.vert .opts{grid-template-columns:1fr;gap:12px;margin-top:26px}
+ html.vert .opts li{font-size:26px;padding:14px 18px}
+ html.vert .why{font-size:24px}
+ html.vert #toc{grid-template-columns:1fr;gap:10px}
+ html.vert #toc button{font-size:24px;padding:12px 18px}
+}
+@keyframes travelv{from{top:0}to{top:calc(100% - 15px)}}
+@media print{
+ @page{size:1280px 720px;margin:0}
+ html,body{width:1280px;height:auto;overflow:visible;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ body::before,.bar,.prog{display:none!important}
+ *,*::before,*::after{animation:none!important;transition:none!important}
+ .deck{position:static;transform:none!important;width:1280px!important;height:auto!important;overflow:visible}
+ .deck .slide{position:relative;width:1280px;height:720px;opacity:1!important;visibility:visible!important;transform:none!important;background:var(--B1);overflow:hidden;break-inside:avoid}
+ .deck .slide:not(:last-child){break-after:page}
+ .slide>.gone{opacity:1!important}
+}
+code{font-family:'Google Sans Code',ui-monospace,monospace}
+.li code,.lead code,.note code,.card code,.row code,.why code{font-size:.86em;padding:2px 9px;border-radius:9px;color:var(--P);background:color-mix(in oklab,var(--P) 12%,transparent);white-space:nowrap}
+.t code{font-size:.9em;color:var(--P)}
+.split{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;margin-top:8px;max-width:1090px}
+.split.eq{grid-template-columns:1fr 1fr}
+.split.v{grid-template-columns:1fr;gap:16px}
+.split.w{grid-template-columns:1.9fr 1fr}
+.split pre{margin:0;max-width:none;min-width:0}
+.split>.pile{min-width:0;display:flex;flex-direction:column;gap:14px}
+.demo{display:flex;flex-direction:column;min-height:170px;min-width:0;border-radius:20px;overflow:hidden;background:#f6f6f1;border:1px solid color-mix(in oklab,var(--P) 22%,transparent)}
+.demo::before{content:'Browser output';flex:none;padding:7px 18px;font-size:16px;font-weight:500;color:#3a3a36;background:#e3e4dc}
+.demo iframe{flex:1;width:100%;min-height:0;border:0;display:block}
+.demo.h2{height:230px}.demo.h3{height:300px}
+.demo[data-console]::before{content:'Console output'}
+.pile>.demo{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:12px;max-width:1090px;margin:6px 0}
+.chips .chip{font-size:25px;padding:13px 20px}
+.chips.mono .chip{font-family:'Google Sans Code',ui-monospace,monospace;font-size:23px}
+.cols.c3{grid-template-columns:1fr 1fr 1fr;gap:20px}
+.c3 .card{padding:24px 26px}.c3 .card h3{font-size:29px}.c3 .card p{font-size:24px}
+.card pre{font-family:'Google Sans Code',ui-monospace,monospace;font-size:21px;line-height:1.5;margin:10px 0 0;white-space:pre;color:var(--BC)}
+.lay{display:grid;gap:10px;max-width:1090px}
+.lay div{padding:15px;border-radius:16px;text-align:center;font-size:25px;font-family:'Google Sans Code',ui-monospace,monospace;background:color-mix(in oklab,var(--BC) 7%,transparent)}
+.lay div.hl{background:color-mix(in oklab,var(--P) 25%,transparent)}
+.bm{position:relative;display:grid;place-items:center;padding:44px 40px 30px;border-radius:18px;font-size:22px}
+.bm>span{position:absolute;top:8px;left:16px;font-size:20px;font-weight:500}
+html.vert .split,html.vert .split.eq,html.vert .split.w{grid-template-columns:1fr}
+html.vert .demo{min-height:260px}
+html.vert .cols.c3{grid-template-columns:1fr!important}
+html.vert .chips .chip{white-space:normal}
+</style>
+</head>
+<body>
+<div class="deck" id="deck" tabindex="0">
+
+<section class="slide" data-k="Technical session" data-ic="presentation">
+<h2 class="t big" style="max-width:640px">Building the <em>Front End</em> of the Web</h2>
+<p class="lead" style="max-width:640px">HTML5, CSS, Bootstrap and JavaScript</p>
+<div class="orbit"><div class="ring"><span><i data-lucide="code-xml"></i></span><span><i data-lucide="palette"></i></span><span><i data-lucide="braces"></i></span><span><i data-lucide="smartphone"></i></span></div><div class="core"><i data-lucide="globe"></i></div></div></section>
+
+<section class="slide" data-k="About me" data-ic="user-round"><h2 class="t">Drubajyoti <em>Debnath</em></h2><p class="lead">Jr. Resource Person, NIELIT Agartala</p>
+<div class="li"><i data-lucide="code"></i>Web application development and server management</div>
+<div class="li"><i data-lucide="pen-tool"></i>UX engineer since 2019, freelance and working with product teams</div>
+<div class="li"><i data-lucide="layout-template"></i>I build products end to end, from the interface down to the server</div>
+<div class="hero"><i data-lucide="user-round"></i></div></section>
+
+<section class="slide" id="agenda" data-k="Contents" data-ic="list"><h2 class="t">What we'll cover</h2><div id="toc"></div></section>
+
+<section class="slide"><h2 class="t">How we will work today</h2>
+<div class="li"><i data-lucide="app-window"></i>Keep VS Code and Chrome open side by side</div>
+<div class="li"><i data-lucide="keyboard"></i>Type every example yourself, do not only watch</div>
+<div class="li"><i data-lucide="refresh-cw"></i>Save, refresh the browser, and see the change</div>
+<div class="li"><i data-lucide="hand"></i>Raise your hand whenever something is not clear</div></section>
+
+<section class="slide dv" data-sec="The Internet and the Web" data-ic="globe"><div class="num">01</div><h2 class="t big">The Internet and the Web</h2><p class="lead">What really happens when we open a website</p></section>
+
+<section class="slide"><h2 class="t">What is the <em>Internet</em>?</h2><p class="lead">A worldwide network of networks</p>
+<div class="li"><i data-lucide="cable"></i>Devices joined by cables, fibre, mobile towers and satellites</div>
+<div class="li"><i data-lucide="handshake"></i>They follow common rules, called protocols</div>
+<div class="li"><i data-lucide="users"></i>No single company or country owns it</div>
+<div class="hero"><i data-lucide="network"></i></div></section>
+
+<section class="slide"><h2 class="t">Internet vs <em>World Wide Web</em></h2>
+<div class="cols"><div class="card"><h3><i data-lucide="network"></i>Internet</h3><p>The network itself.</p><p>Like the roads of a country.</p></div>
+<div class="card"><h3><i data-lucide="globe"></i>World Wide Web</h3><p>Web pages linked to each other, travelling over the Internet.</p><p>Like the buses running on those roads.</p></div></div>
+<p class="note"><i data-lucide="info"></i>Email, WhatsApp and UPI also use the Internet, but they are not the Web</p></section>
+
+<section class="slide"><h2 class="t">Where we use the Internet</h2>
+<div class="li"><i data-lucide="message-circle"></i><span><b>Communication:</b> email, WhatsApp, video calls</span></div>
+<div class="li"><i data-lucide="indian-rupee"></i><span><b>Money:</b> UPI, net banking, bill payments</span></div>
+<div class="li"><i data-lucide="landmark"></i><span><b>Government services:</b> DigiLocker, UMANG, IRCTC</span></div>
+<div class="li"><i data-lucide="graduation-cap"></i><span><b>Learning:</b> SWAYAM, NPTEL, YouTube</span></div>
+<div class="li"><i data-lucide="shopping-cart"></i><span><b>Shopping and entertainment:</b> online shops, OTT, music</span></div></section>
+
+<section class="slide"><h2 class="t">Website, web page, home page</h2>
+<div class="li"><i data-lucide="file-text"></i><span><b>Web page:</b> one document that opens in the browser</span></div>
+<div class="li"><i data-lucide="files"></i><span><b>Website:</b> related web pages kept under one name</span></div>
+<div class="li"><i data-lucide="house"></i><span><b>Home page:</b> the first page of a website</span></div>
+<div class="li"><i data-lucide="link"></i><span><b>Hyperlink:</b> a click that takes us to another page</span></div></section>
+
+<section class="slide"><h2 class="t">Website address: the <em>URL</em></h2>
+<pre class="file sm" data-n="Uniform Resource Locator">https://www.example.in/courses/web-design.html?batch=morning#fees</pre>
+<div class="row"><b>https://</b><i data-lucide="arrow-right"></i>Protocol: how to talk to the server</div>
+<div class="row"><b>www.example.in</b><i data-lucide="arrow-right"></i>Domain name: which server</div>
+<div class="row"><b>/courses/web-design.html</b><i data-lucide="arrow-right"></i>Path: which page on that server</div>
+<div class="row"><b>?batch=morning</b><i data-lucide="arrow-right"></i>Query: extra information for the page</div>
+<div class="row"><b>#fees</b><i data-lucide="arrow-right"></i>Fragment: a place inside the page</div></section>
+
+<section class="slide"><h2 class="t"><em>IP address</em>: the real address</h2><p class="lead">Every device on the Internet has a number</p>
+<div class="li"><i data-lucide="hash"></i><span><b>IPv4:</b> four numbers from 0 to 255, like <code>192.168.1.10</code></span></div>
+<div class="li"><i data-lucide="binary"></i><span><b>IPv6:</b> longer, like <code>2001:db8::1</code></span></div>
+<div class="li"><i data-lucide="contact"></i>Names are for people, numbers are for machines</div></section>
+
+<section class="slide"><h2 class="t"><em>DNS</em>: the phone book of the Internet</h2>
+<div class="flow"><span class="chip"><i data-lucide="app-window"></i>Browser</span><span class="wire"></span><span class="chip"><i data-lucide="book-user"></i>DNS server</span><span class="wire"></span><span class="chip"><i data-lucide="hash"></i>IP address</span><span class="wire"></span><span class="chip"><i data-lucide="server"></i>Web server</span></div>
+<pre class="sh">$ nslookup google.com</pre>
+<p class="note"><i data-lucide="lightbulb"></i>Try this in the Command Prompt to see the IP address behind a name</p></section>
+
+<section class="slide"><h2 class="t">The <em>browser</em></h2><p class="lead">The software that fetches a page and draws it on the screen</p>
+<div class="li"><i data-lucide="compass"></i>Chrome, Edge, Firefox, Safari</div>
+<div class="li"><i data-lucide="scan-text"></i>It reads HTML, CSS and JavaScript, then shows the page</div>
+<div class="li"><i data-lucide="wrench"></i>Press <kbd class="kbd">F12</kbd> for the developer tools</div>
+<div class="hero"><i data-lucide="app-window"></i></div></section>
+
+<section class="slide"><h2 class="t">How a website works</h2>
+<div class="flow"><span class="chip"><i data-lucide="keyboard"></i>1. Type the URL</span><span class="wire"></span><span class="chip"><i data-lucide="book-user"></i>2. DNS gives the IP</span><span class="wire"></span><span class="chip"><i data-lucide="send"></i>3. Request sent</span></div>
+<div class="flow"><span class="chip"><i data-lucide="server"></i>4. Server finds the page</span><span class="wire"></span><span class="chip"><i data-lucide="package"></i>5. Response returns</span><span class="wire"></span><span class="chip"><i data-lucide="monitor"></i>6. Browser shows it</span></div>
+<p class="note"><i data-lucide="repeat"></i>Request and response: this cycle repeats for every page, image and file</p></section>
+
+<section class="slide"><h2 class="t">HTTP and <em>HTTPS</em></h2>
+<div class="li"><i data-lucide="arrow-left-right"></i><span><b>HTTP:</b> the rules for request and response on the web</span></div>
+<div class="li"><i data-lucide="lock"></i><span><b>HTTPS:</b> the same, but encrypted and secure</span></div>
+<div class="li"><i data-lucide="circle-check"></i><span><b>200</b> OK, <b>404</b> Not Found, <b>500</b> Server Error</span></div>
+<div class="hero"><i data-lucide="lock-keyhole"></i></div></section>
+
+<section class="slide"><h2 class="t">Front end and back end</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="monitor-smartphone"></i>Front end</h3><p>What the user sees and touches.</p><p>Runs in the browser.</p><p>HTML, CSS, JavaScript</p></div>
+<div class="card"><h3><i data-lucide="server-cog"></i>Back end</h3><p>The logic and the data behind it.</p><p>Runs on the server.</p><p>PHP, Python, Java, Node.js, MySQL</p></div></div>
+<p class="note"><i data-lucide="utensils"></i>The dining hall is the front end. The kitchen is the back end.</p></section>
+
+<section class="slide"><h2 class="t">Client-side and server-side scripting</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="laptop"></i>Client-side</h3><p>The code runs in the user's browser.</p><p>Quick response, no waiting for the server.</p><p>JavaScript</p></div>
+<div class="card"><h3><i data-lucide="server"></i>Server-side</h3><p>The code runs on the web server.</p><p>Can use the database. The user cannot see the code.</p><p>PHP, Python, Java, C#, Node.js</p></div></div></section>
+
+<section class="slide"><h2 class="t">Static and dynamic websites</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="file-text"></i>Static</h3><p>Every visitor gets the same page.</p><p>Ready-made HTML files. Fast and cheap to host.</p><p>A school information site, a portfolio</p></div>
+<div class="card"><h3><i data-lucide="database-zap"></i>Dynamic</h3><p>The page is prepared for each request.</p><p>Content comes from a database.</p><p>IRCTC, net banking, online shopping</p></div></div></section>
+
+<section class="slide"><h2 class="t"><em>Responsive</em> web design</h2><p class="lead">One website that fits the mobile, the tablet and the desktop</p>
+<div class="li"><i data-lucide="move-horizontal"></i>Layouts that stretch and shrink</div>
+<div class="li"><i data-lucide="image"></i>Images that resize with the screen</div>
+<div class="li"><i data-lucide="ruler"></i>Media queries: different CSS for different widths</div>
+<div class="hero"><i data-lucide="smartphone"></i></div></section>
+
+<section class="slide"><h2 class="t">The three languages of the front end</h2>
+<div class="cols c3"><div class="card"><h3><i data-lucide="code-xml"></i>HTML</h3><p>Structure</p><p>The walls and rooms of a house</p></div>
+<div class="card"><h3><i data-lucide="palette"></i>CSS</h3><p>Presentation</p><p>The paint, tiles and furniture</p></div>
+<div class="card"><h3><i data-lucide="braces"></i>JavaScript</h3><p>Behaviour</p><p>The switches, fans and lift</p></div></div>
+<p class="note"><i data-lucide="blocks"></i>Bootstrap is a ready-made collection of CSS and JavaScript</p></section>
+
+<section class="slide qz" data-k="Checkpoint 1 / question 1" data-a="C"><p class="q">What converts a domain name into an IP address?</p>
+<ol class="opts"><li>HTTP</li><li>The browser cache</li><li>DNS</li><li>HTML</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>DNS, the Domain Name System, is the phone book of the Internet.</p></section>
+<section class="slide qz" data-k="Checkpoint 1 / question 2" data-a="B"><p class="q">Which language runs in the browser, on the <em>client side</em>?</p>
+<ol class="opts"><li>PHP</li><li>JavaScript</li><li>MySQL</li><li>Python</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>JavaScript runs in the user's browser. PHP and Python run on the server.</p></section>
+<section class="slide qz" data-k="Checkpoint 1 / question 3" data-a="A"><p class="q">A site that shows <em>your own</em> bookings after login is…</p>
+<ol class="opts"><li>A dynamic website</li><li>A static website</li><li>A search engine</li><li>A browser</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Dynamic sites prepare the page for each user, using a database.</p></section>
+
+<section class="slide dv" data-sec="Editors and the first page" data-ic="square-pen"><div class="num">02</div><h2 class="t big">Editors and the first page</h2><p class="lead">Setting up the tools and saving our first file</p></section>
+
+<section class="slide"><h2 class="t">Why a <em>code editor</em>?</h2><p class="lead">HTML, CSS and JavaScript are plain text files</p>
+<div class="li"><i data-lucide="highlighter"></i>Colours for the code, so mistakes stand out</div>
+<div class="li"><i data-lucide="wand-sparkles"></i>Auto-complete, so we type less</div>
+<div class="li"><i data-lucide="folder-tree"></i>All the files of a project in one window</div>
+<div class="hero"><i data-lucide="square-pen"></i></div></section>
+
+<section class="slide"><h2 class="t">Free editors to choose from</h2>
+<div class="cols c3"><div class="card"><h3><i data-lucide="file-pen"></i>Notepad++</h3><p>Small and light</p><p>Only for Windows</p></div>
+<div class="card"><h3><i data-lucide="zap"></i>Sublime Text</h3><p>Very fast</p><p>Free to try, licence needed for regular use</p></div>
+<div class="card"><h3><i data-lucide="code"></i>VS Code</h3><p>Free, from Microsoft</p><p>Thousands of extensions</p></div></div>
+<p class="note"><i data-lucide="circle-check"></i>We will use Visual Studio Code today</p></section>
+
+<section class="slide"><h2 class="t">Installing <em>VS Code</em></h2>
+<div class="li"><i data-lucide="download"></i>Download it from <code>code.visualstudio.com</code></div>
+<div class="li"><i data-lucide="square-check"></i>In the installer, tick "Open with Code" and "Add to PATH"</div>
+<div class="li"><i data-lucide="folder-open"></i>Create a folder, then File, Open Folder</div>
+<div class="li"><i data-lucide="file-plus"></i>New file: <code>index.html</code></div></section>
+
+<section class="slide"><h2 class="t">Naming and saving files</h2>
+<div class="li"><i data-lucide="file-code"></i>End the name with <code>.html</code></div>
+<div class="li"><i data-lucide="case-lower"></i>Small letters, no spaces: <code>about-us.html</code></div>
+<div class="li"><i data-lucide="house"></i>The home page is always <code>index.html</code></div>
+<div class="li"><i data-lucide="save"></i><span><kbd class="kbd">Ctrl</kbd> <kbd class="kbd">S</kbd> to save, every time, before checking</span></div></section>
+
+<section class="slide"><h2 class="t">VS Code helpers</h2>
+<div class="li"><i data-lucide="zap"></i><span><b>Emmet:</b> type <code>!</code> and press <kbd class="kbd">Tab</kbd> for a full HTML page</span></div>
+<div class="li"><i data-lucide="radio"></i><span><b>Live Server:</b> the browser refreshes on every save</span></div>
+<div class="li"><i data-lucide="align-left"></i><span><b>Prettier:</b> arranges the code neatly</span></div>
+<div class="li"><i data-lucide="save-all"></i><span><b>Auto Save:</b> switch it on from the File menu</span></div></section>
+
+<section class="slide"><h2 class="t">Shortcuts worth remembering</h2>
+<div class="row"><b>Ctrl + S</b><i data-lucide="arrow-right"></i>Save the file</div>
+<div class="row"><b>Ctrl + /</b><i data-lucide="arrow-right"></i>Make the line a comment, or remove it</div>
+<div class="row"><b>Shift + Alt + F</b><i data-lucide="arrow-right"></i>Format the whole file</div>
+<div class="row"><b>Alt + ↑ or ↓</b><i data-lucide="arrow-right"></i>Move the line up or down</div>
+<div class="row"><b>Ctrl + Z</b><i data-lucide="arrow-right"></i>Undo the last change</div>
+<div class="row"><b>F12 in the browser</b><i data-lucide="arrow-right"></i>Open the developer tools</div></section>
+
+<section class="slide"><h2 class="t mid">Our first web page</h2>
+<div class="split"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello, World!&lt;/h1&gt;
+  &lt;p&gt;This is my first web page.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="demo"></div></div>
+<p class="note"><i data-lucide="play"></i>Save it, then double click the file, or use Open with Live Server</p></section>
+
+<section class="slide dv" data-sec="HTML basics" data-ic="code-xml"><div class="num">03</div><h2 class="t big">HTML basics</h2><p class="lead">Tags, text, links and images</p></section>
+
+<section class="slide"><h2 class="t">What is <em>HTML</em>?</h2><p class="lead">HyperText Markup Language</p>
+<div class="li"><i data-lucide="link"></i><span><b>HyperText:</b> text that links to other pages</span></div>
+<div class="li"><i data-lucide="tag"></i><span><b>Markup:</b> we mark the content with tags</span></div>
+<div class="li"><i data-lucide="circle-x"></i>It is not a programming language</div>
+<div class="hero"><i data-lucide="code-xml"></i></div></section>
+
+<section class="slide"><h2 class="t">Tags, elements and attributes</h2>
+<pre class="file sm" data-n="one element" data-l="html">&lt;a href="https://www.india.gov.in"&gt;National Portal of India&lt;/a&gt;</pre>
+<div class="row"><b>&lt;a&gt;</b><i data-lucide="arrow-right"></i>Opening tag</div>
+<div class="row"><b>href="…"</b><i data-lucide="arrow-right"></i>Attribute: a name and a value</div>
+<div class="row"><b>National Portal of India</b><i data-lucide="arrow-right"></i>Content</div>
+<div class="row"><b>&lt;/a&gt;</b><i data-lucide="arrow-right"></i>Closing tag, with a slash</div></section>
+
+<section class="slide"><h2 class="t">Nesting and empty elements</h2>
+<pre class="file" data-n="nesting" data-l="html">&lt;p&gt;Agartala is the &lt;b&gt;capital&lt;/b&gt; of Tripura.&lt;/p&gt;</pre>
+<div class="li"><i data-lucide="package-open"></i>The tag that opens last must close first</div>
+<div class="li"><i data-lucide="circle-dashed"></i><span>Empty elements have no closing tag: <code>&lt;br&gt;</code> <code>&lt;hr&gt;</code> <code>&lt;img&gt;</code> <code>&lt;input&gt;</code></span></div></section>
+
+<section class="slide"><h2 class="t mid">The basic structure of a page</h2>
+<pre class="file sm" data-n="index.html" data-l="html">&lt;!DOCTYPE html&gt;                &lt;!-- this is an HTML5 page --&gt;
+&lt;html lang="en"&gt;               &lt;!-- the root of the page --&gt;
+&lt;head&gt;
+  &lt;!-- information about the page, not shown on the page --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- everything that the user sees --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></section>
+
+<section class="slide"><h2 class="t mid">Inside the <em>head</em> section</h2>
+<pre class="file sm" data-n="index.html" data-l="html">&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;meta name="description" content="Computer courses in Agartala"&gt;
+  &lt;title&gt;Home | My Institute&lt;/title&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+  &lt;style&gt; /* CSS can be written here */ &lt;/style&gt;
+  &lt;script src="app.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;</pre></section>
+
+<section class="slide"><h2 class="t mid">Headings</h2>
+<div class="split" style="align-items:start"><pre class="file sm" data-n="headings.html" data-l="html">&lt;h1&gt;Heading 1&lt;/h1&gt;
+&lt;h2&gt;Heading 2&lt;/h2&gt;
+&lt;h3&gt;Heading 3&lt;/h3&gt;
+&lt;h4&gt;Heading 4&lt;/h4&gt;
+&lt;h5&gt;Heading 5&lt;/h5&gt;
+&lt;h6&gt;Heading 6&lt;/h6&gt;</pre><div class="demo" style="height:408px"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Only one h1 on a page. Choose a heading by its meaning, not by its size.</p></section>
+
+<section class="slide"><h2 class="t mid">Paragraphs, line breaks and lines</h2>
+<div class="split"><pre class="file sm xs" data-n="text.html" data-l="html">&lt;p&gt;This is the first paragraph.
+Extra    spaces and new lines
+are ignored by the browser.&lt;/p&gt;
+
+&lt;p&gt;NIELIT Agartala&lt;br&gt;
+Tripura&lt;br&gt;
+India&lt;/p&gt;
+
+&lt;hr&gt;
+&lt;p&gt;A line is drawn above this.&lt;/p&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Comments</h2>
+<pre class="file" data-n="index.html" data-l="html">&lt;!-- This is a comment. The browser will not show it. --&gt;
+
+&lt;p&gt;This line is visible.&lt;/p&gt;
+
+&lt;!-- &lt;p&gt;This line is switched off for now.&lt;/p&gt; --&gt;</pre>
+<p class="note"><i data-lucide="eye"></i>Comments are hidden on the page, but anyone can read them in View Page Source</p></section>
+
+<section class="slide"><h2 class="t mid">Formatting tags</h2>
+<div class="split"><pre class="file sm xs" data-n="format.html" data-l="html">&lt;b&gt;Bold&lt;/b&gt; and &lt;strong&gt;strong&lt;/strong&gt;&lt;br&gt;
+&lt;i&gt;Italic&lt;/i&gt; and &lt;em&gt;emphasis&lt;/em&gt;&lt;br&gt;
+&lt;u&gt;Underline&lt;/u&gt;&lt;br&gt;
+&lt;s&gt;Strikethrough&lt;/s&gt; and &lt;del&gt;deleted&lt;/del&gt;&lt;br&gt;
+&lt;mark&gt;Highlighted&lt;/mark&gt;&lt;br&gt;
+&lt;small&gt;Small text&lt;/small&gt;&lt;br&gt;
+H&lt;sub&gt;2&lt;/sub&gt;O and x&lt;sup&gt;2&lt;/sup&gt;</pre><div class="demo" style="min-height:262px"></div></div>
+<p class="note"><i data-lucide="triangle-alert"></i>The old <code>&lt;strike&gt;</code> tag is removed from HTML5. Use <code>&lt;s&gt;</code> or <code>&lt;del&gt;</code>.</p></section>
+
+<section class="slide"><h2 class="t mid">The <em>pre</em> tag</h2>
+<div class="split"><pre class="file sm xs" data-n="pre.html" data-l="html">&lt;pre&gt;
+Train    Departure   Platform
+12345    06:15       1
+54321    09:40       3
+&lt;/pre&gt;</pre><div class="demo"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Preformatted text: spaces and new lines stay exactly as we typed them</p></section>
+
+<section class="slide"><h2 class="t mid"><em>div</em> and <em>span</em></h2>
+<div class="split"><pre class="file sm xs" data-n="containers.html" data-l="html">&lt;div style="background: lightyellow"&gt;
+  &lt;h3&gt;Notice&lt;/h3&gt;
+  &lt;p&gt;The office is closed on
+    &lt;span style="color: red"&gt;Sunday&lt;/span&gt;.
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div style="background: lightblue"&gt;
+  A second div starts on a new line.
+&lt;/div&gt;</pre><div class="demo"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>div is a block: it takes the full width. span is inline: it stays inside the line.</p></section>
+
+<section class="slide"><h2 class="t mid">Anchor links</h2>
+<div class="split"><pre class="file sm xs" data-n="links.html" data-l="html">&lt;a href="https://www.india.gov.in"&gt;
+  National Portal&lt;/a&gt;&lt;br&gt;
+
+&lt;a href="about.html"&gt;About us&lt;/a&gt;&lt;br&gt;
+
+&lt;a href="https://swayam.gov.in"
+   target="_blank"&gt;SWAYAM (new tab)&lt;/a&gt;&lt;br&gt;
+
+&lt;a href="mailto:info@example.in"&gt;
+  Send an email&lt;/a&gt;&lt;br&gt;
+
+&lt;a href="tel:+911234567890"&gt;Call us&lt;/a&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t">Absolute and relative paths</h2>
+<div class="row"><b>https://swayam.gov.in</b><i data-lucide="arrow-right"></i>Absolute: the full address</div>
+<div class="row"><b>about.html</b><i data-lucide="arrow-right"></i>A file in the same folder</div>
+<div class="row"><b>images/logo.png</b><i data-lucide="arrow-right"></i>Inside a folder named images</div>
+<div class="row"><b>../index.html</b><i data-lucide="arrow-right"></i>One folder up</div>
+<div class="row"><b>/css/style.css</b><i data-lucide="arrow-right"></i>From the root of the website</div></section>
+
+<section class="slide"><h2 class="t mid">Named anchors: links inside a page</h2>
+<pre class="file sm" data-n="page.html" data-l="html">&lt;a href="#fees"&gt;Go to the fee details&lt;/a&gt;
+&lt;a href="courses.html#fees"&gt;Fee details on another page&lt;/a&gt;
+
+&lt;!-- much lower in the page --&gt;
+&lt;h2 id="fees"&gt;Fee details&lt;/h2&gt;
+
+&lt;a href="#"&gt;Back to top&lt;/a&gt;</pre>
+<p class="note"><i data-lucide="triangle-alert"></i>Older pages used <code>&lt;a name="fees"&gt;</code>. In HTML5 we use the <code>id</code> attribute.</p></section>
+
+<section class="slide"><h2 class="t mid">The image tag</h2>
+<pre class="file sm" data-n="gallery.html" data-l="html">&lt;img src="images/ujjayanta-palace.jpg"
+     alt="Ujjayanta Palace in Agartala"
+     width="400" height="300"&gt;
+
+&lt;!-- an image that works as a link --&gt;
+&lt;a href="index.html"&gt;
+  &lt;img src="images/logo.png" alt="Home"&gt;
+&lt;/a&gt;</pre>
+<p class="note"><i data-lucide="image"></i>Common formats: JPG for photos, PNG for logos, SVG for icons, WebP for smaller files</p></section>
+
+<section class="slide qz" data-k="Checkpoint 2 / question 1" data-a="D"><p class="q">Which file name does a web server look for as the <em>home page</em>?</p>
+<ol class="opts"><li><code>home.txt</code></li><li><code>main.css</code></li><li><code>first.html</code></li><li><code>index.html</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>The home page of a website is always named index.html.</p></section>
+<section class="slide qz" data-k="Checkpoint 2 / question 2" data-a="A"><p class="q">Which attribute of the anchor tag holds the address of the link?</p>
+<ol class="opts"><li><code>href</code></li><li><code>src</code></li><li><code>alt</code></li><li><code>link</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>href is for links. src is for images. alt is the alternate text of an image.</p></section>
+<section class="slide qz" data-k="Checkpoint 2 / question 3" data-a="B"><p class="q">Which of these is an <em>empty element</em>, with no closing tag?</p>
+<ol class="opts"><li><code>&lt;p&gt;</code></li><li><code>&lt;br&gt;</code></li><li><code>&lt;h1&gt;</code></li><li><code>&lt;div&gt;</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>br, hr, img and input have no content, so they have no closing tag.</p></section>
+
+<section class="slide dv" data-sec="Tables, lists and forms" data-ic="table"><div class="num">04</div><h2 class="t big">Tables, lists and forms</h2><p class="lead">Arranging data and collecting it from the user</p></section>
+
+<section class="slide"><h2 class="t mid">A simple table</h2>
+<div class="split"><pre class="file sm xs" data-n="table.html" data-l="html">&lt;table border="1"&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Roll No&lt;/th&gt; &lt;th&gt;Name&lt;/th&gt; &lt;th&gt;City&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt; &lt;td&gt;Ananya&lt;/td&gt; &lt;td&gt;Agartala&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;2&lt;/td&gt; &lt;td&gt;Rahul&lt;/td&gt; &lt;td&gt;Guwahati&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Table attributes</h2>
+<div class="split"><pre class="file sm xs" data-n="table.html" data-l="html">&lt;table border="2" cellpadding="10"
+       cellspacing="5" width="100%"
+       height="170"&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Item&lt;/th&gt;
+    &lt;th&gt;Price&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Tea&lt;/td&gt;
+    &lt;td&gt;₹10&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre><div class="demo"></div></div>
+<p class="note"><i data-lucide="triangle-alert"></i>These attributes still work, but HTML5 asks us to use CSS for them</p></section>
+
+<section class="slide"><h2 class="t mid"><em>Colspan</em> and <em>rowspan</em></h2>
+<div class="split"><pre class="file sm xs" data-n="merge.html" data-l="html">&lt;table border="1" cellpadding="8"&gt;
+  &lt;tr&gt;
+    &lt;th colspan="3"&gt;Time Table&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td rowspan="2"&gt;Monday&lt;/td&gt;
+    &lt;td&gt;10:30&lt;/td&gt;
+    &lt;td&gt;HTML&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;12:00&lt;/td&gt;
+    &lt;td&gt;CSS&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Ordered lists</h2>
+<div class="split"><pre class="file sm xs" data-n="lists.html" data-l="html">&lt;ol&gt;
+  &lt;li&gt;Boil the water&lt;/li&gt;
+  &lt;li&gt;Add tea leaves&lt;/li&gt;
+  &lt;li&gt;Add milk and sugar&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ol type="A" start="3"&gt;
+  &lt;li&gt;Third option&lt;/li&gt;
+  &lt;li&gt;Fourth option&lt;/li&gt;
+&lt;/ol&gt;</pre><div class="demo"></div></div>
+<p class="note"><i data-lucide="list-ordered"></i>type can be <code>1</code>, <code>A</code>, <code>a</code>, <code>I</code> or <code>i</code></p></section>
+
+<section class="slide"><h2 class="t mid">Unordered and nested lists</h2>
+<div class="split"><pre class="file sm xs" data-n="lists.html" data-l="html">&lt;ul&gt;
+  &lt;li&gt;Rice&lt;/li&gt;
+  &lt;li&gt;Vegetables
+    &lt;ul&gt;
+      &lt;li&gt;Potato&lt;/li&gt;
+      &lt;li&gt;Tomato&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Milk&lt;/li&gt;
+&lt;/ul&gt;</pre><div class="demo"></div></div>
+<p class="note"><i data-lucide="list"></i>The inner list is written inside an <code>&lt;li&gt;</code> of the outer list</p></section>
+
+<section class="slide"><h2 class="t mid">Definition lists</h2>
+<div class="split"><pre class="file sm xs" data-n="lists.html" data-l="html">&lt;dl&gt;
+  &lt;dt&gt;HTML&lt;/dt&gt;
+  &lt;dd&gt;Gives structure to a page&lt;/dd&gt;
+
+  &lt;dt&gt;CSS&lt;/dt&gt;
+  &lt;dd&gt;Gives style to a page&lt;/dd&gt;
+&lt;/dl&gt;</pre><div class="demo"></div></div>
+<p class="note"><i data-lucide="book-open"></i><code>dl</code> is the list, <code>dt</code> is the term, <code>dd</code> is its description</p></section>
+
+<section class="slide"><h2 class="t">What is a <em>form</em>?</h2><p class="lead">The way a website collects information from the user</p>
+<div class="li"><i data-lucide="log-in"></i>Login and registration</div>
+<div class="li"><i data-lucide="search"></i>Search boxes</div>
+<div class="li"><i data-lucide="ticket"></i>Booking and payment pages</div>
+<div class="hero"><i data-lucide="clipboard-list"></i></div></section>
+
+<section class="slide"><h2 class="t mid">The form tag</h2>
+<div class="split"><pre class="file sm xs" data-n="form.html" data-l="html">&lt;form action="register.php" method="post"&gt;
+
+  &lt;label for="name"&gt;Full name&lt;/label&gt;
+  &lt;input type="text" id="name"
+         name="fullname"&gt;
+
+  &lt;input type="submit" value="Register"&gt;
+
+&lt;/form&gt;</pre><div class="demo"></div></div>
+<div class="row"><b>action</b><i data-lucide="arrow-right"></i>Where the data should be sent</div>
+<div class="row"><b>method</b><i data-lucide="arrow-right"></i>How it is sent: get or post</div>
+<div class="row"><b>name</b><i data-lucide="arrow-right"></i>The label on the data when it reaches the server</div></section>
+
+<section class="slide"><h2 class="t">GET and POST</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="eye"></i>GET</h3><p>The data is added to the URL and is visible.</p><p>Good for a search. The page can be bookmarked.</p><p>Not for passwords.</p></div>
+<div class="card"><h3><i data-lucide="eye-off"></i>POST</h3><p>The data goes inside the request, not in the URL.</p><p>Good for login, registration and file upload.</p><p>Can carry large data, even files.</p></div></div></section>
+
+<section class="slide"><h2 class="t">Input types</h2>
+<div class="chips mono"><span class="chip">text</span><span class="chip">password</span><span class="chip">email</span><span class="chip">number</span><span class="chip">tel</span><span class="chip">url</span><span class="chip">date</span><span class="chip">time</span><span class="chip">checkbox</span><span class="chip">radio</span><span class="chip">file</span><span class="chip">range</span><span class="chip">color</span><span class="chip">search</span><span class="chip">hidden</span><span class="chip">submit</span><span class="chip">reset</span><span class="chip">button</span></div>
+<pre class="file" data-n="one tag, many types" data-l="html">&lt;input type="password" name="pwd"&gt;</pre></section>
+
+<section class="slide"><h2 class="t mid">Text inputs and their attributes</h2>
+<div class="split"><pre class="file sm xs" data-n="form.html" data-l="html">&lt;input type="text" name="name"
+       placeholder="Your full name"
+       maxlength="30"&gt;&lt;br&gt;&lt;br&gt;
+
+&lt;input type="text" name="country"
+       value="India" readonly&gt;&lt;br&gt;&lt;br&gt;
+
+&lt;input type="text" name="code"
+       value="Not available" disabled&gt;&lt;br&gt;&lt;br&gt;
+
+&lt;input type="password" name="pwd"
+       placeholder="Password"&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Text area and dropdown</h2>
+<div class="split"><pre class="file sm xs" data-n="form.html" data-l="html">&lt;label for="addr"&gt;Address&lt;/label&gt;&lt;br&gt;
+&lt;textarea id="addr" name="address"
+  rows="3" cols="28"&gt;&lt;/textarea&gt;&lt;br&gt;&lt;br&gt;
+
+&lt;label for="state"&gt;State&lt;/label&gt;
+&lt;select id="state" name="state"&gt;
+  &lt;option value=""&gt;Choose&lt;/option&gt;
+  &lt;option value="TR" selected&gt;Tripura&lt;/option&gt;
+  &lt;option value="AS"&gt;Assam&lt;/option&gt;
+  &lt;option value="WB"&gt;West Bengal&lt;/option&gt;
+&lt;/select&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Radio buttons and check boxes</h2>
+<div class="split"><pre class="file sm xs" data-n="form.html" data-l="html">&lt;p&gt;Batch:&lt;/p&gt;
+&lt;input type="radio" name="batch"
+       value="morning" id="m" checked&gt;
+&lt;label for="m"&gt;Morning&lt;/label&gt;
+&lt;input type="radio" name="batch"
+       value="evening" id="e"&gt;
+&lt;label for="e"&gt;Evening&lt;/label&gt;
+
+&lt;p&gt;Courses:&lt;/p&gt;
+&lt;input type="checkbox" name="course"
+       value="html" id="c1"&gt;
+&lt;label for="c1"&gt;HTML&lt;/label&gt;
+&lt;input type="checkbox" name="course"
+       value="css" id="c2"&gt;
+&lt;label for="c2"&gt;CSS&lt;/label&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Submit and reset buttons</h2>
+<div class="split"><pre class="file sm xs" data-n="form.html" data-l="html">&lt;form&gt;
+  &lt;input type="text" name="city"
+         placeholder="Your city"&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;input type="submit" value="Send"&gt;
+  &lt;input type="reset" value="Clear"&gt;
+  &lt;button type="button"&gt;Help&lt;/button&gt;
+&lt;/form&gt;</pre><div class="demo"></div></div>
+<div class="row"><b>submit</b><i data-lucide="arrow-right"></i>Sends the form data to the server</div>
+<div class="row"><b>reset</b><i data-lucide="arrow-right"></i>Brings every field back to its starting value</div>
+<div class="row"><b>button</b><i data-lucide="arrow-right"></i>Does nothing by itself, used with JavaScript</div></section>
+
+<section class="slide"><h2 class="t mid">A complete registration form</h2>
+<div class="split"><pre class="file sm xs" data-n="register.html" data-l="html">&lt;form action="register.php" method="post"&gt;
+  &lt;p&gt;&lt;label&gt;Name
+    &lt;input type="text" name="name"&gt;&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label&gt;Mobile
+    &lt;input type="tel" name="mobile"&gt;&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label&gt;Date of birth
+    &lt;input type="date" name="dob"&gt;&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label&gt;Photo
+    &lt;input type="file" name="photo"&gt;&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label&gt;&lt;input type="checkbox" name="ok"&gt;
+    I accept the rules&lt;/label&gt;&lt;/p&gt;
+  &lt;input type="submit" value="Register"&gt;
+  &lt;input type="reset"&gt;
+&lt;/form&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid"><em>Frames</em> and framesets</h2>
+<pre class="file sm" data-n="frames.html" data-l="html">&lt;!-- frameset is written in place of body --&gt;
+&lt;frameset cols="25%,75%"&gt;
+  &lt;frame src="menu.html"&gt;
+  &lt;frame src="content.html"&gt;
+&lt;/frameset&gt;</pre>
+<div class="li"><i data-lucide="columns-2"></i><span><code>cols</code> divides the window into columns, <code>rows</code> into rows</span></div>
+<div class="li"><i data-lucide="triangle-alert"></i>Removed from HTML5. Do not use it in new websites.</div></section>
+
+<section class="slide"><h2 class="t mid">Nested frames</h2>
+<div class="split eq"><pre class="file sm xs" data-n="frames.html" data-l="html">&lt;frameset rows="20%,80%"&gt;
+  &lt;frame src="header.html"&gt;
+  &lt;frameset cols="25%,75%"&gt;
+    &lt;frame src="menu.html"&gt;
+    &lt;frame src="main.html"&gt;
+  &lt;/frameset&gt;
+&lt;/frameset&gt;</pre>
+<div class="lay" style="grid-template-columns:1fr 3fr;grid-template-rows:auto 1fr"><div class="hl" style="grid-column:1/-1">header.html</div><div>menu.html</div><div style="display:grid;place-items:center">main.html</div></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Today we build the same layout with CSS, and use <code>&lt;iframe&gt;</code> to show another page</p></section>
+
+<section class="slide qz" data-k="Checkpoint 3 / question 1" data-a="B"><p class="q">Which attribute makes a table cell cover <em>two columns</em>?</p>
+<ol class="opts"><li><code>rowspan="2"</code></li><li><code>colspan="2"</code></li><li><code>cellpadding="2"</code></li><li><code>border="2"</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>colspan spreads a cell across columns. rowspan spreads it across rows.</p></section>
+<section class="slide qz" data-k="Checkpoint 3 / question 2" data-a="C"><p class="q">The user must choose <em>only one</em> option. Which input type do we use?</p>
+<ol class="opts"><li><code>checkbox</code></li><li><code>text</code></li><li><code>radio</code></li><li><code>file</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Radio buttons with the same name allow only one choice.</p></section>
+<section class="slide qz" data-k="Checkpoint 3 / question 3" data-a="D"><p class="q">Which form method keeps the data <em>out of the URL</em>?</p>
+<ol class="opts"><li>GET</li><li>LINK</li><li>SHOW</li><li>POST</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>POST sends the data inside the request. GET adds it to the URL.</p></section>
+
+<section class="slide dv" data-sec="HTML5" data-ic="layout-template"><div class="num">05</div><h2 class="t big">HTML5</h2><p class="lead">Semantic layout, audio and video, and smarter forms</p></section>
+
+<section class="slide"><h2 class="t">What is new in <em>HTML5</em>?</h2>
+<div class="li"><i data-lucide="file-check"></i><span>A simple first line: <code>&lt;!DOCTYPE html&gt;</code></span></div>
+<div class="li"><i data-lucide="layout-template"></i>Semantic elements that describe the parts of a page</div>
+<div class="li"><i data-lucide="circle-play"></i>Audio and video without any plug-in</div>
+<div class="li"><i data-lucide="shield-check"></i>New input types and built-in form validation</div>
+<div class="li"><i data-lucide="database"></i>New features for JavaScript, like local storage</div></section>
+
+<section class="slide"><h2 class="t">Why <em>semantic</em> elements?</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="box"></i>Before</h3><pre>&lt;div id="header"&gt;
+&lt;div id="menu"&gt;
+&lt;div id="content"&gt;
+&lt;div id="footer"&gt;</pre></div>
+<div class="card"><h3><i data-lucide="tags"></i>With HTML5</h3><pre>&lt;header&gt;
+&lt;nav&gt;
+&lt;main&gt;
+&lt;footer&gt;</pre></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Semantic means the tag itself tells the meaning of its content</p></section>
+
+<section class="slide"><h2 class="t">The semantic elements</h2>
+<div class="row"><b>&lt;header&gt;</b><i data-lucide="arrow-right"></i>The top part: logo and site title</div>
+<div class="row"><b>&lt;nav&gt;</b><i data-lucide="arrow-right"></i>The navigation links, the menu</div>
+<div class="row"><b>&lt;main&gt;</b><i data-lucide="arrow-right"></i>The main content, only one on a page</div>
+<div class="row"><b>&lt;section&gt;</b><i data-lucide="arrow-right"></i>One topic of the page, with its heading</div>
+<div class="row"><b>&lt;article&gt;</b><i data-lucide="arrow-right"></i>Complete in itself: a news item, a blog post</div>
+<div class="row"><b>&lt;aside&gt;</b><i data-lucide="arrow-right"></i>Side content: related links, notices</div>
+<div class="row"><b>&lt;footer&gt;</b><i data-lucide="arrow-right"></i>The bottom part: copyright and contact</div></section>
+
+<section class="slide"><h2 class="t mid">HTML layout</h2>
+<div class="split eq"><pre class="file sm xs" data-n="layout.html" data-l="html">&lt;body&gt;
+  &lt;header&gt;...&lt;/header&gt;
+  &lt;nav&gt;...&lt;/nav&gt;
+  &lt;main&gt;
+    &lt;section&gt;
+      &lt;article&gt;...&lt;/article&gt;
+      &lt;article&gt;...&lt;/article&gt;
+    &lt;/section&gt;
+    &lt;aside&gt;...&lt;/aside&gt;
+  &lt;/main&gt;
+  &lt;footer&gt;...&lt;/footer&gt;
+&lt;/body&gt;</pre>
+<div class="lay" style="grid-template-columns:2fr 1fr"><div class="hl" style="grid-column:1/-1">header</div><div style="grid-column:1/-1">nav</div><div>article</div><div style="grid-row:span 2;display:grid;place-items:center">aside</div><div>article</div><div class="hl" style="grid-column:1/-1">footer</div></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>The tags give the meaning. CSS places them side by side.</p></section>
+
+<section class="slide"><h2 class="t mid">The audio tag</h2>
+<pre class="file sm" data-n="media.html" data-l="html">&lt;audio controls&gt;
+  &lt;source src="song.mp3" type="audio/mpeg"&gt;
+  &lt;source src="song.ogg" type="audio/ogg"&gt;
+  Your browser does not support the audio tag.
+&lt;/audio&gt;</pre>
+<div class="chips mono"><span class="chip">controls</span><span class="chip">autoplay</span><span class="chip">loop</span><span class="chip">muted</span></div></section>
+
+<section class="slide"><h2 class="t mid">The video tag</h2>
+<pre class="file sm" data-n="media.html" data-l="html">&lt;video width="640" height="360" controls poster="cover.jpg"&gt;
+  &lt;source src="lesson.mp4" type="video/mp4"&gt;
+  &lt;source src="lesson.webm" type="video/webm"&gt;
+  Your browser does not support the video tag.
+&lt;/video&gt;</pre>
+<div class="chips mono"><span class="chip">controls</span><span class="chip">poster</span><span class="chip">autoplay</span><span class="chip">loop</span><span class="chip">muted</span></div></section>
+
+<section class="slide"><h2 class="t mid">The <em>iframe</em>: a page inside a page</h2>
+<pre class="file sm" data-n="embed.html" data-l="html">&lt;iframe src="notice.html" width="600" height="300"
+        title="Notice board"&gt;&lt;/iframe&gt;
+
+&lt;!-- a YouTube video: use the Share, then Embed option --&gt;
+&lt;iframe width="560" height="315"
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        title="Lesson video" allowfullscreen&gt;&lt;/iframe&gt;</pre>
+<p class="note"><i data-lucide="lightbulb"></i>YouTube and Google Maps give the ready iframe code. We only copy and paste it.</p></section>
+
+<section class="slide"><h2 class="t mid">Other ways to embed</h2>
+<pre class="file sm" data-n="embed.html" data-l="html">&lt;!-- a PDF file shown inside the page --&gt;
+&lt;embed src="prospectus.pdf" type="application/pdf"
+       width="600" height="400"&gt;
+
+&lt;object data="prospectus.pdf" type="application/pdf"
+        width="600" height="400"&gt;
+  &lt;a href="prospectus.pdf"&gt;Download the prospectus&lt;/a&gt;
+&lt;/object&gt;</pre>
+<p class="note"><i data-lucide="lightbulb"></i>For sound and video, always prefer the audio and video tags</p></section>
+
+<section class="slide"><h2 class="t mid">New input types</h2>
+<div class="split"><pre class="file sm xs" data-n="form.html" data-l="html">&lt;form&gt;
+  Email &lt;input type="email" name="email"&gt;
+  &lt;br&gt;&lt;br&gt;
+  Age &lt;input type="number" name="age"
+             min="18" max="60"&gt;
+  &lt;br&gt;&lt;br&gt;
+  Date &lt;input type="date" name="doj"&gt;
+  &lt;br&gt;&lt;br&gt;
+  Volume &lt;input type="range" name="vol"
+                min="0" max="100" step="10"&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;input type="submit"&gt;
+&lt;/form&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Form validation: <em>required</em> and <em>autofocus</em></h2>
+<div class="split"><pre class="file sm xs" data-n="form.html" data-l="html">&lt;form&gt;
+  &lt;input type="text" name="name"
+         placeholder="Name"
+         required autofocus&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;input type="email" name="email"
+         placeholder="Email" required&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;input type="submit" value="Send"&gt;
+&lt;/form&gt;</pre><div class="demo"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Validation means checking the data before it is sent</p></section>
+
+<section class="slide"><h2 class="t mid">Form validation: <em>pattern</em></h2>
+<div class="split"><pre class="file sm xs" data-n="form.html" data-l="html">&lt;form&gt;
+  &lt;input type="tel" name="mobile"
+     placeholder="Mobile number"
+     pattern="[6-9][0-9]{9}"
+     title="10 digits, starting with 6 to 9"
+     required&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;input type="text" name="pin"
+     placeholder="PIN code"
+     pattern="[1-9][0-9]{5}"
+     title="6 digit PIN code"
+     required&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;input type="submit" value="Check"&gt;
+&lt;/form&gt;</pre><div class="demo"></div></div></section>
+
+<section class="slide qz" data-k="Checkpoint 4 / question 1" data-a="A"><p class="q">Which HTML5 element is meant for the <em>navigation menu</em>?</p>
+<ol class="opts"><li><code>&lt;nav&gt;</code></li><li><code>&lt;menu-bar&gt;</code></li><li><code>&lt;aside&gt;</code></li><li><code>&lt;section&gt;</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>nav holds the main navigation links of a page.</p></section>
+<section class="slide qz" data-k="Checkpoint 4 / question 2" data-a="C"><p class="q">Which attribute makes a form field <em>compulsory</em>?</p>
+<ol class="opts"><li><code>autofocus</code></li><li><code>placeholder</code></li><li><code>required</code></li><li><code>readonly</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>With required, the browser will not submit the form while the field is empty.</p></section>
+<section class="slide qz" data-k="Checkpoint 4 / question 3" data-a="D"><p class="q">The video player shows no play button. Which attribute is missing?</p>
+<ol class="opts"><li><code>poster</code></li><li><code>loop</code></li><li><code>muted</code></li><li><code>controls</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>controls shows the play button, the progress bar and the volume.</p></section>
+
+<section class="slide dv" data-sec="CSS fundamentals" data-ic="palette"><div class="num">06</div><h2 class="t big">CSS fundamentals</h2><p class="lead">Selectors, colours, text and the box model</p></section>
+
+<section class="slide"><h2 class="t">What is <em>CSS</em>?</h2><p class="lead">Cascading Style Sheets</p>
+<div class="li"><i data-lucide="palette"></i>Controls colours, fonts, spacing and layout</div>
+<div class="li"><i data-lucide="split"></i>Keeps the design separate from the content</div>
+<div class="li"><i data-lucide="copy-check"></i>One CSS file can style every page of a website</div>
+<div class="hero"><i data-lucide="palette"></i></div></section>
+
+<section class="slide"><h2 class="t">The syntax of a CSS rule</h2>
+<pre class="file" data-n="style.css" data-l="css">h1 {
+  color: blue;
+  font-size: 32px;
+}</pre>
+<div class="row"><b>h1</b><i data-lucide="arrow-right"></i>Selector: which elements to style</div>
+<div class="row"><b>color</b><i data-lucide="arrow-right"></i>Property: what to change</div>
+<div class="row"><b>blue</b><i data-lucide="arrow-right"></i>Value: what to change it to</div></section>
+
+<section class="slide"><h2 class="t">Three types of CSS</h2>
+<div class="cols c3"><div class="card"><h3><i data-lucide="text-cursor-input"></i>Inline</h3><p>Inside the tag, for one element</p><pre>&lt;p style="color:red"&gt;</pre></div>
+<div class="card"><h3><i data-lucide="file-code"></i>Internal</h3><p>In the head, for one page</p><pre>&lt;style&gt;
+  p { color: red; }
+&lt;/style&gt;</pre></div>
+<div class="card"><h3><i data-lucide="files"></i>External</h3><p>A separate file, for all pages</p><pre>&lt;link rel="stylesheet"
+  href="style.css"&gt;</pre></div></div>
+<p class="note"><i data-lucide="circle-check"></i>For a real website, always prefer an external style sheet</p></section>
+
+<section class="slide"><h2 class="t mid">An external style sheet</h2>
+<div class="split eq"><pre class="file sm xs" data-n="index.html" data-l="html" data-skip>&lt;head&gt;
+  &lt;title&gt;My Page&lt;/title&gt;
+  &lt;link rel="stylesheet"
+        href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Welcome&lt;/h1&gt;
+  &lt;p&gt;Styled by a separate file.&lt;/p&gt;
+&lt;/body&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">body {
+  background-color: lightyellow;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: darkgreen;
+}</pre></div>
+<p class="note"><i data-lucide="folder"></i>Keep both files in the same folder, then save both and refresh</p></section>
+
+<section class="slide"><h2 class="t mid">Tag, class and ID selectors</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;h2 id="title"&gt;Notice Board&lt;/h2&gt;
+&lt;p&gt;The class starts at 10:30.&lt;/p&gt;
+&lt;p class="alert"&gt;Bring your ID card.&lt;/p&gt;
+&lt;p class="alert"&gt;Mobiles on silent.&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">p      { color: gray; }        /* tag */
+.alert { color: red; }         /* class */
+#title { color: darkblue; }    /* id */</pre></div><div class="demo"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>A dot for a class, a hash for an id. A class can be reused, an id must be unique.</p></section>
+
+<section class="slide"><h2 class="t mid">Universal and group selectors</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;h1&gt;Courses&lt;/h1&gt;
+&lt;h2&gt;Web Design&lt;/h2&gt;
+&lt;p&gt;HTML, CSS and JavaScript&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">* {
+  margin: 0;
+  font-family: Verdana, sans-serif;
+}
+
+h1, h2 {
+  color: darkgreen;
+}</pre></div><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Sub selectors: descendant and child</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;div class="box"&gt;
+  &lt;p&gt;A direct child of the box&lt;/p&gt;
+  &lt;section&gt;
+    &lt;p&gt;Deeper inside the box&lt;/p&gt;
+  &lt;/section&gt;
+&lt;/div&gt;
+&lt;p&gt;Outside the box&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">.box p   { color: blue; }
+.box &gt; p { font-weight: bold; }</pre></div><div class="demo"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>A space means anywhere inside. The <code>&gt;</code> sign means only the direct children.</p></section>
+
+<section class="slide"><h2 class="t mid">Attribute selectors</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;input type="text" placeholder="Name"&gt;
+&lt;input type="password" placeholder="Password"&gt;
+&lt;p&gt;&lt;a href="https://swayam.gov.in"
+      target="_blank"&gt;SWAYAM&lt;/a&gt;
+   &lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">input[type="text"] { background: lightyellow; }
+a[target]          { color: red; }</pre></div><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t">When two rules clash</h2>
+<div class="flow"><span class="chip"><i data-lucide="tag"></i>Tag</span><span class="wire"></span><span class="chip"><i data-lucide="circle-dot"></i>Class</span><span class="wire"></span><span class="chip"><i data-lucide="hash"></i>ID</span><span class="wire"></span><span class="chip"><i data-lucide="text-cursor-input"></i>Inline style</span></div>
+<div class="li"><i data-lucide="trending-up"></i>The more specific selector wins</div>
+<div class="li"><i data-lucide="arrow-down-to-line"></i>If both are equal, the rule written last wins</div>
+<div class="li"><i data-lucide="users"></i>Children inherit text styles from their parent</div></section>
+
+<section class="slide"><h2 class="t">Colours and units</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="droplet"></i>Colours</h3><pre>color: red;
+color: #FF9933;
+color: rgb(19, 136, 8);
+color: rgba(0, 0, 0, 0.5);</pre></div>
+<div class="card"><h3><i data-lucide="ruler"></i>Units</h3><pre>width: 300px;   /* pixels */
+width: 50%;     /* of the parent */
+font-size: 2em; /* 2 x parent */
+font-size: 1rem;/* root font size */
+height: 100vh;  /* screen height */</pre></div></div></section>
+
+<section class="slide"><h2 class="t mid">Background properties</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">.plain {
+  background-color: #FFF3E0;
+}
+
+.photo {
+  background-image: url("images/hills.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.shade {
+  background: linear-gradient(orange, white);
+}</pre><div class="demo"></div></div>
+<template><div class="plain" style="padding:16px">background-color</div><br><div class="shade" style="padding:28px 16px">linear-gradient</div></template></section>
+
+<section class="slide"><h2 class="t mid">Font and text properties</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">h2 {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: bold;
+  font-style: italic;
+  color: darkred;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+a {
+  text-decoration: none;
+}</pre><div class="demo"></div></div>
+<template><h2>Welcome to Tripura</h2><p><a href="#">A link without the underline</a></p></template></section>
+
+<section class="slide"><h2 class="t mid">Block properties: spacing of text</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">p {
+  line-height: 1.8;
+  text-indent: 40px;
+  word-spacing: 6px;
+  text-align: justify;
+}
+
+.one-line {
+  white-space: nowrap;
+}</pre><div class="demo"></div></div>
+<template><p>Agartala is the capital of Tripura. It lies on the bank of the Haora river, close to the border of Bangladesh. The city is known for the Ujjayanta Palace.</p></template></section>
+
+<section class="slide"><h2 class="t mid">The <em>box model</em></h2>
+<div class="split eq"><div class="pile"><pre class="file sm xs" data-n="style.css" data-l="css">.box {
+  width: 200px;
+  padding: 20px;
+  border: 5px solid green;
+  margin: 30px;
+}</pre>
+<div class="li" style="font-size:25px;margin:6px 0"><i data-lucide="calculator"></i><span>Total width: 200 + 40 + 10 = <b>250px</b></span></div>
+<div class="li" style="font-size:25px;margin:6px 0"><i data-lucide="box"></i><span><code>box-sizing: border-box</code> keeps it at 200px</span></div></div>
+<div class="bm" style="border:3px dashed color-mix(in oklab,var(--BC) 40%,transparent)"><span>margin</span><div class="bm" style="background:var(--P);color:var(--PC)"><span>border</span><div class="bm" style="background:color-mix(in oklab,var(--P) 30%,var(--B1));color:var(--BC)"><span>padding</span><div class="bm" style="background:var(--B1);padding:22px 50px">content</div></div></div></div></div></section>
+
+<section class="slide"><h2 class="t mid">Margin, padding and border</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">.card {
+  border: 2px solid #1E88E5;
+  border-radius: 12px;
+  padding: 10px 20px;
+  margin: 20px auto;
+  width: 70%;
+}
+
+.dotted { border-style: dotted; }
+.dashed { border-style: dashed; }
+.thick  { border-width: 6px;
+          border-color: orange; }</pre><div class="demo"></div></div>
+<template><div class="card">solid, rounded</div><div class="card dotted">dotted</div><div class="card dashed thick">dashed, thick</div></template></section>
+
+<section class="slide"><h2 class="t mid">Dimension and overflow</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">.box {
+  width: 100%;
+  max-width: 260px;
+  height: 90px;
+  border: 2px solid gray;
+  overflow: auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}</pre><div class="demo"></div></div>
+<template><div class="box">This box has a fixed height. When the content is more than the height, the browser shows a scroll bar because of overflow auto. Scroll down to read the remaining text of this box.</div></template></section>
+
+<section class="slide"><h2 class="t mid">List properties</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;ul class="a"&gt;&lt;li&gt;Tea&lt;/li&gt;&lt;li&gt;Coffee&lt;/li&gt;&lt;/ul&gt;
+&lt;ol class="b"&gt;&lt;li&gt;Tea&lt;/li&gt;&lt;li&gt;Coffee&lt;/li&gt;&lt;/ol&gt;
+&lt;ul class="c"&gt;&lt;li&gt;Tea&lt;/li&gt;&lt;li&gt;Coffee&lt;/li&gt;&lt;/ul&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">.a { list-style-type: square; }
+.b { list-style-type: upper-roman; }
+.c { list-style-type: none;
+     padding: 0; }</pre></div><div class="demo"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i><code>list-style-type: none</code> is the first step of every navigation menu</p></section>
+
+<section class="slide"><h2 class="t mid">Styling tables with CSS</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th, td {
+  border: 1px solid #999;
+  padding: 8px;
+  text-align: left;
+}
+th { background: #1E88E5; color: white; }
+tr:nth-child(even) { background: #E3F2FD; }
+tr:hover { background: #FFF59D; }</pre><div class="demo"></div></div>
+<template><table><tr><th>Subject</th><th>Marks</th></tr><tr><td>HTML</td><td>82</td></tr><tr><td>CSS</td><td>76</td></tr><tr><td>Bootstrap</td><td>88</td></tr><tr><td>JavaScript</td><td>91</td></tr></table></template></section>
+
+<section class="slide"><h2 class="t mid">The display property</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;span class="a"&gt;inline&lt;/span&gt;
+&lt;span class="a"&gt;inline&lt;/span&gt;
+&lt;span class="b"&gt;inline-block&lt;/span&gt;
+&lt;span class="b"&gt;inline-block&lt;/span&gt;
+&lt;span class="c"&gt;block&lt;/span&gt;
+&lt;span class="d"&gt;hidden&lt;/span&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">span { background: gold; width: 150px; }
+.b { display: inline-block; }
+.c { display: block; }
+.d { display: none; }</pre></div><div class="demo"></div></div></section>
+
+<section class="slide qz" data-k="Checkpoint 5 / question 1" data-a="B"><p class="q">Which selector styles every element with <code>class="alert"</code>?</p>
+<ol class="opts"><li><code>#alert</code></li><li><code>.alert</code></li><li><code>alert</code></li><li><code>*alert</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>A dot is for a class. A hash is for an id.</p></section>
+<section class="slide qz" data-k="Checkpoint 5 / question 2" data-a="D"><p class="q">In the box model, which space is <em>inside</em> the border?</p>
+<ol class="opts"><li>Margin</li><li>Outline</li><li>Spacing</li><li>Padding</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Padding is inside the border. Margin is outside the border.</p></section>
+<section class="slide qz" data-k="Checkpoint 5 / question 3" data-a="A"><p class="q">Which type of CSS can style <em>all the pages</em> of a website?</p>
+<ol class="opts"><li>External</li><li>Inline</li><li>Internal</li><li>None of these</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>One external .css file can be linked to every page.</p></section>
+
+<section class="slide dv" data-sec="CSS layout and effects" data-ic="layout-dashboard"><div class="num">07</div><h2 class="t big">CSS layout and effects</h2><p class="lead">Positioning, flexbox, menus, galleries and responsive pages</p></section>
+
+<section class="slide"><h2 class="t">The position property</h2>
+<div class="row"><b>static</b><i data-lucide="arrow-right"></i>The normal flow. This is the default.</div>
+<div class="row"><b>relative</b><i data-lucide="arrow-right"></i>Moved from its own normal place</div>
+<div class="row"><b>absolute</b><i data-lucide="arrow-right"></i>Placed inside its positioned parent</div>
+<div class="row"><b>fixed</b><i data-lucide="arrow-right"></i>Stuck to the screen, even while scrolling</div>
+<div class="row"><b>sticky</b><i data-lucide="arrow-right"></i>Scrolls normally, then sticks at the top</div>
+<p class="note"><i data-lucide="move"></i>Used with <code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code> and <code>z-index</code></p></section>
+
+<section class="slide"><h2 class="t mid">Relative and absolute</h2>
+<div class="split eq"><pre class="file sm xs" data-n="style.css" data-l="css">.card {
+  position: relative;
+  padding: 30px;
+  border: 2px solid gray;
+}
+
+.badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: red;
+  color: white;
+  padding: 2px 10px;
+}</pre>
+<div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;div class="card"&gt;
+  Web Design Course
+  &lt;span class="badge"&gt;New&lt;/span&gt;
+&lt;/div&gt;</pre><div class="demo"></div></div></div></section>
+
+<section class="slide"><h2 class="t mid">Sticky, fixed and z-index</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">header {
+  position: sticky;
+  top: 0;
+  background: #1E3A5F;
+  color: white;
+  padding: 10px;
+}
+
+.help {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10;
+}</pre><div class="demo"></div></div>
+<template><p>Scroll this page.</p><header>My Institute</header><p>Admissions are open for the new batch.</p><p>Classes are held from Monday to Friday.</p><p>The library is open on all working days.</p><p>The computer laboratory has sixty systems.</p><p>Certificates are given after the final examination.</p><p>Contact the office for the fee details.</p><p>This is the end of the page.</p><button class="help">Help</button></template>
+<p class="note"><i data-lucide="mouse"></i>Scroll inside the result: the header sticks, the Help button never moves</p></section>
+
+<section class="slide"><h2 class="t mid">Float and clear</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html" data-skip>&lt;img src="palace.jpg" alt="Palace"&gt;
+&lt;p&gt;The text flows beside the image...&lt;/p&gt;
+&lt;p class="clear"&gt;This starts below it.&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">img {
+  float: left;
+  width: 110px;
+  margin-right: 12px;
+}
+
+.clear {
+  clear: both;
+}</pre></div><div class="demo"></div></div>
+<template><img alt="Palace" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='180'%3E%3Crect width='220' height='180' fill='%231E88E5'/%3E%3C/svg%3E"><p>The text flows beside the image, on its right side, just like a photograph in a newspaper.</p><p class="clear">This starts below it.</p></template></section>
+
+<section class="slide"><h2 class="t mid">Aligning to the centre</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">/* 1. text inside a block */
+h3 { text-align: center; }
+
+/* 2. a block with a width */
+.box { width: 60%; margin: 0 auto; }
+
+/* 3. anything, in both directions */
+.hall {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 110px;
+}</pre><div class="demo"></div></div>
+<template><style>.box,.hall{border:2px solid gray}.box{padding:6px}h3{margin:0 0 10px}</style><h3>Centred text</h3><div class="box">A centred block</div><br><div class="hall"><span>In the exact centre</span></div></template></section>
+
+<section class="slide"><h2 class="t"><em>Flexbox</em></h2><p class="lead">Arrange items in a row or a column, with very little CSS</p>
+<div class="li"><i data-lucide="square-dashed"></i><span><b>Flex container:</b> the parent with <code>display: flex</code></span></div>
+<div class="li"><i data-lucide="layout-grid"></i><span><b>Flex items:</b> its direct children</span></div>
+<div class="li"><i data-lucide="move-horizontal"></i>The items share the space and can grow or shrink</div>
+<div class="hero"><i data-lucide="columns-3"></i></div></section>
+
+<section class="slide"><h2 class="t mid">Flexbox in action</h2>
+<div class="split eq"><pre class="file sm xs" data-n="style.css" data-l="css">.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 120px;
+  background: #EEEEEE;
+}
+
+.row div {
+  background: orange;
+  padding: 10px 20px;
+}</pre>
+<div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;div class="row"&gt;
+  &lt;div&gt;One&lt;/div&gt;
+  &lt;div&gt;Two&lt;/div&gt;
+  &lt;div&gt;Three&lt;/div&gt;
+&lt;/div&gt;</pre><div class="demo"></div></div></div></section>
+
+<section class="slide"><h2 class="t">Flexbox properties</h2>
+<div class="row"><b>flex-direction</b><i data-lucide="arrow-right"></i>row or column</div>
+<div class="row"><b>justify-content</b><i data-lucide="arrow-right"></i>Placing along the main direction</div>
+<div class="row"><b>align-items</b><i data-lucide="arrow-right"></i>Placing across it</div>
+<div class="row"><b>flex-wrap</b><i data-lucide="arrow-right"></i>Let the items go to the next line</div>
+<div class="row"><b>gap</b><i data-lucide="arrow-right"></i>Space between the items</div>
+<div class="row"><b>flex: 1</b><i data-lucide="arrow-right"></i>On an item: take the free space</div></section>
+
+<section class="slide"><h2 class="t mid">A page layout with flexbox</h2>
+<div class="split eq"><pre class="file sm xs" data-n="style.css" data-l="css">header, footer {
+  background: #1E3A5F;
+  color: white;
+  padding: 10px;
+}
+
+.middle { display: flex; }
+
+main  { flex: 3; padding: 10px; }
+
+aside { flex: 1; padding: 10px;
+        background: #FFE0B2; }</pre>
+<div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;header&gt;My Institute&lt;/header&gt;
+&lt;div class="middle"&gt;
+  &lt;main&gt;Main content&lt;/main&gt;
+  &lt;aside&gt;Notices&lt;/aside&gt;
+&lt;/div&gt;
+&lt;footer&gt;Contact us&lt;/footer&gt;</pre><div class="demo" style="min-height:228px"></div></div></div></section>
+
+<section class="slide"><h2 class="t mid">Pseudo-classes</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;ul&gt;
+  &lt;li&gt;Home&lt;/li&gt;&lt;li&gt;Courses&lt;/li&gt;&lt;li&gt;Contact&lt;/li&gt;
+&lt;/ul&gt;
+&lt;input type="text" placeholder="Click here"&gt;
+&lt;p&gt;&lt;a href="#"&gt;Move the mouse here&lt;/a&gt;&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">li:first-child { color: red; }
+li:last-child  { color: green; }
+a:hover        { background: yellow; }
+input:focus    { background: lightyellow; }</pre></div><div class="demo"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>A pseudo-class selects an element in a particular state or place</p></section>
+
+<section class="slide"><h2 class="t mid">Building a navigation bar</h2>
+<div class="split eq"><pre class="file sm xs" data-n="style.css" data-l="css">.menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background: #1E3A5F;
+}
+
+.menu a {
+  display: block;
+  padding: 12px 18px;
+  color: white;
+  text-decoration: none;
+}
+
+.menu a:hover { background: #FF9933; }</pre>
+<div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;ul class="menu"&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Courses&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</pre><div class="demo"></div></div></div></section>
+
+<section class="slide"><h2 class="t mid">An image gallery</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gallery img {
+  width: 110px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.gallery img:hover {
+  opacity: 0.6;
+}</pre><div class="demo"></div></div>
+<template><div class="gallery"><img alt="Photo 1" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23FF9933'/%3E%3C/svg%3E"><img alt="Photo 2" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%231E88E5'/%3E%3C/svg%3E"><img alt="Photo 3" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23138808'/%3E%3C/svg%3E"><img alt="Photo 4" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%238E24AA'/%3E%3C/svg%3E"><img alt="Photo 5" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23E53935'/%3E%3C/svg%3E"><img alt="Photo 6" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%2300897B'/%3E%3C/svg%3E"></div></template></section>
+
+<section class="slide"><h2 class="t mid">Image sprites</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">.icon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-image: url("icons.png");
+}
+
+.home  { background-position: 0 0; }
+.phone { background-position: -32px 0; }
+.mail  { background-position: -64px 0; }</pre>
+<div class="pile"><div class="lay" style="grid-template-columns:1fr 1fr 1fr;gap:0"><div class="hl" style="border-radius:16px 0 0 16px">home<br>0</div><div style="border-radius:0">phone<br>-32px</div><div class="hl" style="border-radius:0 16px 16px 0">mail<br>-64px</div></div>
+<p class="note" style="margin:0"><i data-lucide="image"></i>icons.png: one image, 96 by 32 pixels, holding three icons</p>
+<pre class="file sm xs" data-n="index.html" data-l="html">&lt;span class="icon phone"&gt;&lt;/span&gt;</pre></div></div></section>
+
+<section class="slide"><h2 class="t mid">Transitions</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  background: #1E88E5;
+  color: white;
+  transition: all 0.4s;
+}
+
+.btn:hover {
+  background: #FF9933;
+  transform: scale(1.15);
+}</pre><div class="demo"></div></div>
+<template><p style="padding:30px 20px"><span class="btn">Apply Now</span></p></template>
+<p class="note"><i data-lucide="mouse-pointer-2"></i>Move the mouse over the button</p></section>
+
+<section class="slide"><h2 class="t mid">Animations</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">@keyframes slide {
+  from { margin-left: 0; }
+  to   { margin-left: 250px; }
+}
+
+.ball {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: orange;
+  animation: slide 2s infinite alternate;
+}</pre><div class="demo"></div></div>
+<template><br><div class="ball"></div></template>
+<p class="note"><i data-lucide="lightbulb"></i>A transition needs a trigger like hover. An animation can run on its own.</p></section>
+
+<section class="slide"><h2 class="t mid">Media queries: responsive CSS</h2>
+<pre class="file sm xs" data-n="style.css" data-l="css">/* mobile first: every block takes the full width */
+.col { width: 100%; }
+
+/* tablets and bigger: two blocks in a row */
+@media (min-width: 768px) {
+  .col { width: 50%; float: left; }
+}
+
+/* desktops: four blocks in a row */
+@media (min-width: 1200px) {
+  .col { width: 25%; }
+}</pre>
+<p class="note"><i data-lucide="smartphone"></i>It needs this line in the head: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></p></section>
+
+<section class="slide qz" data-k="Checkpoint 6 / question 1" data-a="C"><p class="q">Which position keeps an element in the same place on the screen while scrolling?</p>
+<ol class="opts"><li><code>static</code></li><li><code>relative</code></li><li><code>fixed</code></li><li><code>absolute</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>A fixed element is attached to the screen, not to the page.</p></section>
+<section class="slide qz" data-k="Checkpoint 6 / question 2" data-a="A"><p class="q">Which line turns an element into a <em>flex container</em>?</p>
+<ol class="opts"><li><code>display: flex;</code></li><li><code>position: flex;</code></li><li><code>float: flex;</code></li><li><code>flex: container;</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>display: flex on the parent places its children in a row.</p></section>
+<section class="slide qz" data-k="Checkpoint 6 / question 3" data-a="B"><p class="q">Which pseudo-class works when the mouse is over an element?</p>
+<ol class="opts"><li><code>:focus</code></li><li><code>:hover</code></li><li><code>:first-child</code></li><li><code>:visited</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>:hover is for the mouse. :focus is for the cursor inside an input.</p></section>
+
+<section class="slide dv" data-sec="Bootstrap" data-ic="blocks"><div class="num">08</div><h2 class="t big">Bootstrap</h2><p class="lead">Ready-made, responsive design with a few class names</p></section>
+
+<section class="slide"><h2 class="t">What is <em>Bootstrap</em>?</h2><p class="lead">A free, open-source CSS framework</p>
+<div class="li"><i data-lucide="package-check"></i>Ready-made classes for layout, buttons, forms and menus</div>
+<div class="li"><i data-lucide="smartphone"></i>Responsive and mobile first</div>
+<div class="li"><i data-lucide="users"></i>The same look in every browser</div>
+<div class="hero"><i data-lucide="blocks"></i></div></section>
+
+<section class="slide"><h2 class="t">Two ways to set it up</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="cloud"></i>CDN link</h3><p>Copy two lines from <code>getbootstrap.com</code> into the page.</p><p>Nothing to download. It needs the Internet.</p></div>
+<div class="card"><h3><i data-lucide="download"></i>Download</h3><p>Download the files and keep them in the project folder.</p><p>It works without the Internet.</p></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>A CDN is a network of servers that delivers common files quickly</p></section>
+
+<section class="slide"><h2 class="t mid">The basic structure of a Bootstrap page</h2>
+<pre class="file sm xs" style="font-size:17px" data-n="index.html" data-l="html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;My Bootstrap Page&lt;/title&gt;
+  &lt;link rel="stylesheet"
+   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/css/bootstrap.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="container"&gt;
+    &lt;h1&gt;Hello, Bootstrap!&lt;/h1&gt;
+  &lt;/div&gt;
+  &lt;script
+   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></section>
+
+<section class="slide"><h2 class="t mid">Containers</h2>
+<div class="split v"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;div class="container bg-warning p-2"&gt;container: centred, with a fixed maximum width&lt;/div&gt;
+&lt;br&gt;
+&lt;div class="container-fluid bg-info p-2"&gt;container-fluid: always the full width&lt;/div&gt;</pre><div class="demo h2" data-bs></div></div></section>
+
+<section class="slide"><h2 class="t">The grid system: <em>12 columns</em></h2>
+<div class="lay" style="grid-template-columns:repeat(12,1fr);font-size:20px"><div>1</div><div>1</div><div>1</div><div>1</div><div>1</div><div>1</div><div>1</div><div>1</div><div>1</div><div>1</div><div>1</div><div>1</div>
+<div class="hl" style="grid-column:span 6">col-6</div><div class="hl" style="grid-column:span 6">col-6</div>
+<div style="grid-column:span 4">col-4</div><div style="grid-column:span 4">col-4</div><div style="grid-column:span 4">col-4</div>
+<div class="hl" style="grid-column:span 3">col-3</div><div class="hl" style="grid-column:span 9">col-9</div></div>
+<p class="note"><i data-lucide="lightbulb"></i>container, then row, then columns. The numbers in a row add up to 12.</p></section>
+
+<section class="slide"><h2 class="t mid">The grid in code</h2>
+<div class="split v"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;div class="container text-center"&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-8 bg-warning p-2"&gt;col-8&lt;/div&gt;
+    &lt;div class="col-4 bg-info p-2"&gt;col-4&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="row mt-3"&gt;
+    &lt;div class="col bg-light border p-2"&gt;col&lt;/div&gt;
+    &lt;div class="col bg-light border p-2"&gt;col&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre><div class="demo" data-bs style="min-height:0;height:162px"></div></div></section>
+
+<section class="slide"><h2 class="t">Breakpoints</h2>
+<div class="row"><b>col-</b><i data-lucide="arrow-right"></i>All screens, starting from the smallest mobile</div>
+<div class="row"><b>col-sm-</b><i data-lucide="arrow-right"></i>576px and wider: large mobiles</div>
+<div class="row"><b>col-md-</b><i data-lucide="arrow-right"></i>768px and wider: tablets</div>
+<div class="row"><b>col-lg-</b><i data-lucide="arrow-right"></i>992px and wider: laptops</div>
+<div class="row"><b>col-xl-</b><i data-lucide="arrow-right"></i>1200px and wider: desktops</div>
+<div class="row"><b>col-xxl-</b><i data-lucide="arrow-right"></i>1400px and wider: large monitors</div></section>
+
+<section class="slide"><h2 class="t mid">A responsive grid</h2>
+<div class="split v"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;div class="container"&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-12 col-md-6 col-lg-3 border p-3"&gt;One&lt;/div&gt;
+    &lt;div class="col-12 col-md-6 col-lg-3 border p-3"&gt;Two&lt;/div&gt;
+    &lt;div class="col-12 col-md-6 col-lg-3 border p-3"&gt;Three&lt;/div&gt;
+    &lt;div class="col-12 col-md-6 col-lg-3 border p-3"&gt;Four&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre><div class="demo" data-bs style="min-height:0;height:128px"></div></div>
+<p class="note"><i data-lucide="smartphone"></i>Mobile: one in a row. Tablet: two in a row. Laptop: four in a row.</p></section>
+
+<section class="slide"><h2 class="t mid">Buttons</h2>
+<div class="split v"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-success"&gt;Success&lt;/button&gt;
+&lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
+&lt;button class="btn btn-warning"&gt;Warning&lt;/button&gt;
+&lt;button class="btn btn-outline-primary"&gt;Outline&lt;/button&gt;
+&lt;button class="btn btn-dark btn-sm"&gt;Small&lt;/button&gt;
+&lt;a href="#" class="btn btn-success btn-lg"&gt;A large link&lt;/a&gt;</pre><div class="demo" data-bs></div></div></section>
+
+<section class="slide"><h2 class="t mid">A navigation bar</h2>
+<div class="split v"><pre class="file sm xs" style="font-size:17px" data-n="index.html" data-l="html">&lt;nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark"&gt;
+  &lt;div class="container-fluid"&gt;
+    &lt;a class="navbar-brand" href="#"&gt;My Institute&lt;/a&gt;
+    &lt;button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu"&gt;
+      &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;&lt;/button&gt;
+    &lt;div class="collapse navbar-collapse" id="menu"&gt;
+      &lt;ul class="navbar-nav"&gt;
+        &lt;li class="nav-item"&gt;&lt;a class="nav-link active" href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Courses&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;</pre><div class="demo" data-bs style="min-height:0;height:118px"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Cards and alerts</h2>
+<div class="split w"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;div class="card" style="width: 17rem"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Web Design&lt;/h5&gt;
+    &lt;p class="card-text"&gt;HTML, CSS and JavaScript&lt;/p&gt;
+    &lt;a href="#" class="btn btn-primary"&gt;Join now&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="alert alert-success mt-3"&gt;
+  Your form is saved.
+  &lt;span class="badge bg-danger"&gt;New&lt;/span&gt;
+&lt;/div&gt;</pre><div class="demo" data-bs></div></div></section>
+
+<section class="slide"><h2 class="t mid">Forms in Bootstrap</h2>
+<div class="split w"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;form&gt;
+  &lt;label class="form-label" for="em"&gt;Email&lt;/label&gt;
+  &lt;input class="form-control" type="email" id="em"&gt;
+
+  &lt;label class="form-label mt-2" for="b"&gt;Batch&lt;/label&gt;
+  &lt;select class="form-select" id="b"&gt;
+    &lt;option&gt;Morning&lt;/option&gt;
+    &lt;option&gt;Evening&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;button class="btn btn-success mt-3"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</pre><div class="demo" data-bs></div></div></section>
+
+<section class="slide"><h2 class="t">Utility classes</h2>
+<div class="row"><b>m-3, mt-3, p-2, px-4</b><i data-lucide="arrow-right"></i>Margin and padding, from 0 to 5</div>
+<div class="row"><b>text-center, fw-bold</b><i data-lucide="arrow-right"></i>Text alignment and weight</div>
+<div class="row"><b>text-danger, bg-light</b><i data-lucide="arrow-right"></i>Text and background colours</div>
+<div class="row"><b>border, rounded, shadow</b><i data-lucide="arrow-right"></i>Borders, round corners, shadow</div>
+<div class="row"><b>d-flex, d-none, d-md-block</b><i data-lucide="arrow-right"></i>The display property</div>
+<div class="row"><b>w-50, w-100</b><i data-lucide="arrow-right"></i>Width in percentage</div></section>
+
+<section class="slide"><h2 class="t mid">Utility classes in action</h2>
+<div class="split v"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;div class="d-flex justify-content-between align-items-center
+            p-3 bg-light border rounded shadow"&gt;
+  &lt;span class="fw-bold text-primary fs-4"&gt;My Institute&lt;/span&gt;
+  &lt;span class="text-danger"&gt;Admissions open&lt;/span&gt;
+  &lt;a href="#" class="btn btn-primary"&gt;Apply&lt;/a&gt;
+&lt;/div&gt;</pre><div class="demo h2" data-bs></div></div></section>
+
+<section class="slide"><h2 class="t mid">Customising with our own CSS</h2>
+<div class="split"><pre class="file sm xs" data-n="style.css" data-l="css">/* linked after the Bootstrap file */
+
+.btn-primary {
+  --bs-btn-bg: #FF9933;
+  --bs-btn-border-color: #FF9933;
+  --bs-btn-hover-bg: #E67E00;
+  --bs-btn-hover-border-color: #E67E00;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  letter-spacing: 1px;
+}</pre><div class="demo" data-bs></div></div>
+<template><p class="p-2"><button class="btn btn-primary">Apply Now</button></p><p class="p-2"><button class="btn btn-success">Not changed</button></p></template>
+<p class="note"><i data-lucide="triangle-alert"></i>Never edit the Bootstrap file itself. Write the changes in your own file.</p></section>
+
+<section class="slide qz" data-k="Checkpoint 7 / question 1" data-a="D"><p class="q">The Bootstrap grid divides a row into how many columns?</p>
+<ol class="opts"><li>4</li><li>8</li><li>10</li><li>12</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>12 can be divided by 2, 3, 4 and 6, so halves, thirds and quarters are easy.</p></section>
+<section class="slide qz" data-k="Checkpoint 7 / question 2" data-a="B"><p class="q">Which classes give a <em>green</em> button?</p>
+<ol class="opts"><li><code>btn btn-danger</code></li><li><code>btn btn-success</code></li><li><code>button green</code></li><li><code>btn-green</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>btn gives the shape. btn-success gives the green colour.</p></section>
+<section class="slide qz" data-k="Checkpoint 7 / question 3" data-a="A"><p class="q"><code>col-md-6</code> takes half the width on which screens?</p>
+<ol class="opts"><li>768px and wider</li><li>Only on mobiles</li><li>Only at exactly 768px</li><li>On no screen</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Bootstrap is mobile first: a class applies from that width upwards.</p></section>
+
+<section class="slide dv" data-sec="JavaScript basics" data-ic="braces"><div class="num">09</div><h2 class="t big">JavaScript basics</h2><p class="lead">Variables, conditions, loops, functions and objects</p></section>
+
+<section class="slide"><h2 class="t">What is <em>JavaScript</em>?</h2><p class="lead">The programming language of the browser</p>
+<div class="li"><i data-lucide="mouse-pointer-click"></i>Makes a page respond to the user</div>
+<div class="li"><i data-lucide="laptop"></i>A client-side scripting language</div>
+<div class="li"><i data-lucide="circle-x"></i>It is not Java. Only the name is similar.</div>
+<div class="hero"><i data-lucide="braces"></i></div></section>
+
+<section class="slide"><h2 class="t mid">Where do we write JavaScript?</h2>
+<pre class="file sm" data-n="index.html" data-l="html">&lt;body&gt;
+  &lt;h1&gt;My Page&lt;/h1&gt;
+
+  &lt;!-- 1. internal: inside a script tag --&gt;
+  &lt;script&gt;
+    console.log("Hello from the page");
+  &lt;/script&gt;
+
+  &lt;!-- 2. external: in a separate .js file --&gt;
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</pre>
+<p class="note"><i data-lucide="lightbulb"></i>Keep the script at the end of the body, so the page is ready before the code runs</p></section>
+
+<section class="slide"><h2 class="t mid">Our first script, and the console</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">console.log("Hello, JavaScript!");
+
+console.log(10 + 20);
+
+console.log("Total marks:", 82 + 76 + 91);
+
+// This line is a comment
+
+/* This is a comment
+   of many lines */</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="terminal"></i>Press <kbd class="kbd">F12</kbd> and open the Console tab to see the output</p></section>
+
+<section class="slide"><h2 class="t mid">Variables</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let marks = 82;        // can be changed
+marks = 90;
+console.log(marks);
+
+const city = "Agartala";   // cannot be changed
+console.log(city);
+
+var oldStyle = "avoid this";  // the old way
+
+let firstName = "Riya";
+let totalMarks = marks + 5;
+console.log(firstName, totalMarks);</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Use <code>const</code> by default, and <code>let</code> when the value has to change</p></section>
+
+<section class="slide"><h2 class="t mid">Data types</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let name = "Ananya";         // string
+let age = 21;                // number
+let fee = 1500.50;           // number
+let isPassed = true;         // boolean
+let address;                 // undefined
+let result = null;           // null
+let marks = [82, 76, 91];    // array
+let student = { age: 20 };   // object
+
+console.log(typeof name);
+console.log(typeof age);
+console.log(typeof isPassed);
+console.log(typeof address);
+console.log(typeof student);</pre><div class="demo" data-console></div></div></section>
+
+<section class="slide"><h2 class="t mid">Arithmetic and assignment operators</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let a = 10, b = 3;
+
+console.log(a + b);    // addition
+console.log(a - b);    // subtraction
+console.log(a * b);    // multiplication
+console.log(a / b);    // division
+console.log(a % b);    // remainder
+console.log(a ** b);   // power
+
+a++;                   // increase by 1
+a += 5;                // same as a = a + 5
+console.log(a);
+
+console.log("Roll no " + 7);   // joins the text
+console.log("5" + 5);          // careful!</pre><div class="demo" data-console></div></div></section>
+
+<section class="slide"><h2 class="t mid">Comparison and logical operators</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">console.log(5 &gt; 3);
+console.log(5 &lt;= 3);
+console.log("5" == 5);    // only the value
+console.log("5" === 5);   // value and type
+console.log(5 !== 3);     // not equal
+
+let age = 20, hasVoterId = true;
+console.log(age &gt;= 18 &amp;&amp; hasVoterId);   // AND
+
+let isSunday = false, isHoliday = true;
+console.log(isSunday || isHoliday);    // OR
+
+console.log(!isSunday);                // NOT</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Always prefer <code>===</code>. It checks the value and the type.</p></section>
+
+<section class="slide"><h2 class="t mid">Conditional statements: if and else</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let marks = 72;
+
+if (marks &gt;= 60) {
+  console.log("First division");
+} else if (marks &gt;= 45) {
+  console.log("Second division");
+} else if (marks &gt;= 33) {
+  console.log("Third division");
+} else {
+  console.log("Fail");
+}</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="git-branch"></i>Only the first block whose condition is true will run</p></section>
+
+<section class="slide"><h2 class="t mid">Conditional statements: switch</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let day = 3;
+
+switch (day) {
+  case 1:
+    console.log("Monday");
+    break;
+  case 2:
+    console.log("Tuesday");
+    break;
+  case 3:
+    console.log("Wednesday");
+    break;
+  default:
+    console.log("Some other day");
+}</pre><div class="demo" data-console></div></div></section>
+
+<section class="slide"><h2 class="t mid">Loops: for</h2>
+<div class="split" style="align-items:start"><pre class="file sm xs" data-n="app.js" data-l="js">for (let i = 1; i &lt;= 5; i++) {
+  console.log("7 x " + i + " = " + 7 * i);
+}</pre><div class="demo h2" data-console></div></div>
+<div class="row"><b>let i = 1</b><i data-lucide="arrow-right"></i>Start: runs once, at the beginning</div>
+<div class="row"><b>i &lt;= 5</b><i data-lucide="arrow-right"></i>Condition: checked before every round</div>
+<div class="row"><b>i++</b><i data-lucide="arrow-right"></i>Step: runs after every round</div></section>
+
+<section class="slide"><h2 class="t mid">Loops: while and do while</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let balance = 500;
+
+while (balance &gt;= 200) {
+  balance = balance - 200;
+  console.log("Took 200, left " + balance);
+}
+
+let n = 10;
+
+do {
+  console.log("Runs once, n is " + n);
+} while (n &lt; 5);</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>while checks first. do while runs once, and then checks.</p></section>
+
+<section class="slide"><h2 class="t mid">Functions</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">function add(a, b) {
+  return a + b;
+}
+
+console.log(add(5, 3));
+console.log(add(100, 250));
+
+function greet(name = "Friend") {
+  return "Hello, " + name + "!";
+}
+
+console.log(greet("Riya"));
+console.log(greet());</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Write once, use many times</p></section>
+
+<section class="slide"><h2 class="t mid">Data structures: arrays</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let fruits = ["Mango", "Banana", "Litchi"];
+
+console.log(fruits[0]);
+console.log(fruits.length);
+
+fruits.push("Guava");      // add at the end
+fruits[1] = "Pineapple";   // change one item
+console.log(fruits);
+
+fruits.pop();              // remove the last
+
+for (let fruit of fruits) {
+  console.log("I like " + fruit);
+}</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="triangle-alert"></i>Counting starts from 0, not from 1</p></section>
+
+<section class="slide"><h2 class="t mid">JavaScript objects</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let student = {
+  name: "Ananya",
+  rollNo: 12,
+  marks: [82, 76, 91],
+  greet: function () {
+    return "I am " + this.name;
+  }
+};
+
+console.log(student.name);
+console.log(student["rollNo"]);
+console.log(student.marks[0]);
+
+student.city = "Agartala";     // add a property
+console.log(student.greet());</pre><div class="demo" data-console></div></div></section>
+
+<section class="slide"><h2 class="t mid">Built-in objects: String, Math and Date</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let state = "Tripura";
+console.log(state.length);
+console.log(state.toUpperCase());
+console.log(state.includes("pur"));
+
+console.log(Math.round(4.6));
+console.log(Math.max(12, 45, 7));
+console.log(Math.floor(Math.random() * 6) + 1);
+
+let today = new Date();
+console.log(today.getFullYear());
+console.log(today.toLocaleDateString("en-IN"));
+
+console.log(Number("25") + 5);</pre><div class="demo" data-console></div></div></section>
+
+<section class="slide"><h2 class="t mid">Popup boxes</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;button onclick="alert('Saved!')"&gt;alert&lt;/button&gt;
+&lt;button onclick="ask()"&gt;confirm&lt;/button&gt;
+&lt;button onclick="getName()"&gt;prompt&lt;/button&gt;
+&lt;p id="out"&gt;&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="app.js" data-l="js">let out = document.getElementById("out");
+function ask() {
+  let ok = confirm("Delete this file?");
+  out.textContent = "You pressed: " + ok;
+}
+function getName() {
+  let name = prompt("Your name?", "Guest");
+  out.textContent = "Hello, " + name;
+}</pre></div><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Error handling: try, catch and finally</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">try {
+  console.log("Step 1: starting");
+  let total = price * 2;   // price is missing
+  console.log("Step 2: never reached");
+} catch (error) {
+  console.log("Problem: " + error.message);
+} finally {
+  console.log("Step 3: always runs");
+}
+
+console.log("The program continues");</pre><div class="demo" data-console></div></div></section>
+
+<section class="slide"><h2 class="t mid">Error handling: throw</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">function withdraw(amount) {
+  if (amount &gt; 10000) {
+    throw new Error("Limit is 10000");
+  }
+  return "Please collect " + amount;
+}
+
+try {
+  console.log(withdraw(2000));
+  console.log(withdraw(50000));
+} catch (error) {
+  console.log("Error: " + error.message);
+}</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>With <code>throw</code>, we create our own errors for our own rules</p></section>
+
+<section class="slide qz" data-k="Checkpoint 8 / question 1" data-a="C"><p class="q">Which keyword creates a variable that <em>cannot</em> be changed?</p>
+<ol class="opts"><li><code>let</code></li><li><code>var</code></li><li><code>const</code></li><li><code>fixed</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>const is for constants. let is for values that change.</p></section>
+<section class="slide qz" data-k="Checkpoint 8 / question 2" data-a="A"><p class="q">What does <code>"5" === 5</code> give?</p>
+<ol class="opts"><li><code>false</code></li><li><code>true</code></li><li><code>55</code></li><li>An error</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>Three equal signs compare the value and the type. A string is not a number.</p></section>
+<section class="slide qz" data-k="Checkpoint 8 / question 3" data-a="B"><p class="q">In <code>["Mango", "Banana", "Litchi"]</code>, what is at index <em>1</em>?</p>
+<ol class="opts"><li>Mango</li><li>Banana</li><li>Litchi</li><li>Nothing</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>The index starts from 0. So index 1 is the second item.</p></section>
+
+<section class="slide dv" data-sec="JavaScript in the browser" data-ic="mouse-pointer-click"><div class="num">10</div><h2 class="t big">JavaScript in the browser</h2><p class="lead">The DOM, events, forms, storage and modern JavaScript</p></section>
+
+<section class="slide"><h2 class="t">The <em>DOM</em></h2>
+<div class="cols"><div><p class="lead" style="font-size:30px">Document Object Model: the browser's own copy of the page, arranged as a tree of objects</p>
+<div class="li" style="font-size:28px"><i data-lucide="eye"></i>JavaScript can read it</div>
+<div class="li" style="font-size:28px"><i data-lucide="pencil"></i>JavaScript can change it</div></div>
+<div class="card"><pre>document
+└─ html
+   ├─ head
+   │  └─ title
+   └─ body
+      ├─ h1
+      └─ p</pre></div></div></section>
+
+<section class="slide"><h2 class="t">Selecting elements</h2>
+<pre class="file sm" data-n="app.js" data-l="js">document.getElementById("title");     // one element, by its id
+
+document.querySelector(".alert");     // the first match of a CSS selector
+
+document.querySelectorAll("li");      // all the matches, as a list</pre>
+<p class="note"><i data-lucide="lightbulb"></i>querySelector accepts the same selectors that we learnt in CSS</p></section>
+
+<section class="slide"><h2 class="t mid">Changing content and style</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;h3 id="title"&gt;Old heading&lt;/h3&gt;
+&lt;p class="info"&gt;Old text&lt;/p&gt;
+&lt;button onclick="change()"&gt;Change&lt;/button&gt;</pre>
+<pre class="file sm xs" data-n="app.js" data-l="js">function change() {
+  let title = document.getElementById("title");
+  title.textContent = "New heading";
+  title.style.color = "green";
+
+  let info = document.querySelector(".info");
+  info.innerHTML = "Text with &lt;b&gt;bold&lt;/b&gt;";
+  info.style.backgroundColor = "lightyellow";
+}</pre></div><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t">JS events</h2>
+<div class="row"><b>click, dblclick</b><i data-lucide="arrow-right"></i>The mouse button is pressed</div>
+<div class="row"><b>mouseover, mouseout</b><i data-lucide="arrow-right"></i>The pointer comes in or goes out</div>
+<div class="row"><b>keydown, keyup</b><i data-lucide="arrow-right"></i>A key is pressed or released</div>
+<div class="row"><b>input, change</b><i data-lucide="arrow-right"></i>The value of a form field changes</div>
+<div class="row"><b>submit</b><i data-lucide="arrow-right"></i>A form is being sent</div>
+<div class="row"><b>load, scroll</b><i data-lucide="arrow-right"></i>The page has loaded, or is scrolled</div></section>
+
+<section class="slide"><h2 class="t mid">Handling an event</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;button id="like"&gt;Like&lt;/button&gt;
+&lt;span id="count"&gt;0&lt;/span&gt; likes</pre>
+<pre class="file sm xs" data-n="app.js" data-l="js">let count = 0;
+let btn = document.getElementById("like");
+let box = document.getElementById("count");
+
+btn.addEventListener("click", function () {
+  count++;
+  box.textContent = count;
+});</pre></div><div class="demo"></div></div>
+<p class="note"><i data-lucide="lightbulb"></i><code>addEventListener</code> keeps the JavaScript out of the HTML</p></section>
+
+<section class="slide"><h2 class="t mid">Adding and removing a class</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;button id="mode"&gt;Dark mode&lt;/button&gt;
+&lt;p&gt;Click the button to change the theme.&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="style.css" data-l="css">.dark { background: #222222; color: white; }</pre>
+<pre class="file sm xs" data-n="app.js" data-l="js">let mode = document.getElementById("mode");
+
+mode.addEventListener("click", function () {
+  document.body.classList.toggle("dark");
+});</pre></div><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Creating and removing elements</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;input id="task" placeholder="New task"&gt;
+&lt;button onclick="addTask()"&gt;Add&lt;/button&gt;
+&lt;ul id="list"&gt;&lt;/ul&gt;</pre>
+<pre class="file sm xs" data-n="app.js" data-l="js">function addTask() {
+  let task = document.getElementById("task");
+  let li = document.createElement("li");
+  li.textContent = task.value;
+  li.onclick = function () { li.remove(); };
+  document.getElementById("list").append(li);
+  task.value = "";
+}</pre></div><div class="demo"></div></div>
+<p class="note"><i data-lucide="mouse-pointer-click"></i>Add a few tasks, then click on a task to remove it</p></section>
+
+<section class="slide"><h2 class="t mid">Working with forms</h2>
+<div class="split"><div class="pile"><pre class="file sm xs" data-n="index.html" data-l="html">&lt;p&gt;Price &lt;input id="price" value="250"&gt;&lt;/p&gt;
+&lt;p&gt;Qty &lt;input id="qty" value="2"&gt;&lt;/p&gt;
+&lt;button onclick="total()"&gt;Total&lt;/button&gt;
+&lt;p id="bill"&gt;&lt;/p&gt;</pre>
+<pre class="file sm xs" data-n="app.js" data-l="js">let price = document.getElementById("price");
+let qty = document.getElementById("qty");
+let bill = document.getElementById("bill");
+
+function total() {
+  let p = Number(price.value);
+  let q = Number(qty.value);
+  bill.textContent = "Total: ₹" + p * q;
+}</pre></div><div class="demo"></div></div></section>
+
+<section class="slide"><h2 class="t mid">Basic form validation</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let form = document.getElementById("reg");
+let user = document.getElementById("user");
+let mobile = document.getElementById("mobile");
+let msg = document.getElementById("msg");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();       // stop the sending
+  if (user.value.trim() === "") {
+    msg.textContent = "Please enter your name";
+  } else if (mobile.value.length !== 10) {
+    msg.textContent = "Mobile must be 10 digits";
+  } else {
+    msg.textContent = "Registered. Thank you!";
+  }
+});</pre><div class="demo"></div></div>
+<template><form id="reg"><p><input id="user" placeholder="Name"></p><p><input id="mobile" placeholder="Mobile number"></p><button>Register</button><p id="msg" style="color:#c62828;font-weight:bold"></p></form></template></section>
+
+<section class="slide"><h2 class="t">Local storage and session storage</h2>
+<div class="cols"><div class="card"><h3><i data-lucide="hard-drive"></i>localStorage</h3><p>Stays even after the browser is closed.</p><p>Removed only by our code or by the user.</p><p>Theme choice, saved cart</p></div>
+<div class="card"><h3><i data-lucide="timer"></i>sessionStorage</h3><p>Stays only while the tab is open.</p><p>Cleared when the tab is closed.</p><p>A half-filled form, the current step</p></div></div>
+<p class="note"><i data-lucide="triangle-alert"></i>Both keep only text, on the user's computer. Never keep passwords in them.</p></section>
+
+<section class="slide"><h2 class="t mid">Using web storage</h2>
+<pre class="file sm" data-n="app.js" data-l="js">localStorage.setItem("theme", "dark");         // save
+let theme = localStorage.getItem("theme");     // read: "dark"
+localStorage.removeItem("theme");              // delete one item
+localStorage.clear();                          // delete everything
+
+// an object must be changed into text first
+let student = { name: "Riya", marks: 82 };
+localStorage.setItem("student", JSON.stringify(student));
+let saved = JSON.parse(localStorage.getItem("student"));
+
+sessionStorage.setItem("step", "2");           // the same methods</pre>
+<p class="note"><i data-lucide="wrench"></i>See it in the developer tools: <kbd class="kbd">F12</kbd>, Application tab, Local Storage</p></section>
+
+<section class="slide"><h2 class="t">ES6 and modern JavaScript</h2>
+<div class="li"><i data-lucide="box"></i><span><code>let</code> and <code>const</code> in place of <code>var</code></span></div>
+<div class="li"><i data-lucide="text-quote"></i>Template literals for joining text</div>
+<div class="li"><i data-lucide="arrow-right"></i>Arrow functions</div>
+<div class="li"><i data-lucide="package-open"></i>Destructuring and the spread operator</div>
+<div class="li"><i data-lucide="puzzle"></i>Modules: <code>import</code> and <code>export</code></div></section>
+
+<section class="slide"><h2 class="t mid">Template literals</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">let student = "Riya";
+let marks = 82;
+
+// the old way
+console.log("Hi " + student +
+            ", marks: " + marks);
+
+// a template literal
+console.log(`Hi ${student}, marks: ${marks}`);
+
+console.log(`Next year: ${marks + 5}`);
+
+console.log(`Line one
+Line two`);</pre><div class="demo" data-console></div></div>
+<p class="note"><i data-lucide="lightbulb"></i>Use the backtick key, which is just below the <kbd class="kbd">Esc</kbd> key</p></section>
+
+<section class="slide"><h2 class="t mid">Arrow functions</h2>
+<div class="split"><pre class="file sm xs" data-n="app.js" data-l="js">// a normal function
+function square(n) {
+  return n * n;
+}
+
+// the same idea as an arrow function
+const cube = (n) =&gt; n * n * n;
+
+console.log(square(4), cube(3));
+
+const marks = [82, 45, 91, 30];
+const passed = marks.filter((m) =&gt; m &gt;= 33);
+const withBonus = marks.map((m) =&gt; m + 5);
+
+console.log(passed);
+console.log(withBonus);</pre><div class="demo" data-console></div></div></section>
+
+<section class="slide"><h2 class="t mid">Destructuring and spread</h2>
+<div class="split w"><pre class="file sm xs" data-n="app.js" data-l="js">const student = { fullName: "Riya", city: "Agartala" };
+
+// destructuring an object
+const { fullName, city } = student;
+console.log(fullName, city);
+
+// destructuring an array
+const [first, second] = ["Gold", "Silver", "Bronze"];
+console.log(first, second);
+
+// spread: three dots
+const morning = ["HTML", "CSS"];
+const fullDay = [...morning, "JavaScript"];
+console.log(fullDay);</pre><div class="demo" data-console></div></div></section>
+
+<section class="slide"><h2 class="t mid">Modules</h2>
+<div class="split eq"><pre class="file sm xs" data-n="maths.js" data-l="js">export function add(a, b) {
+  return a + b;
+}
+
+export const PI = 3.14159;</pre>
+<pre class="file sm xs" data-n="app.js" data-l="js">import { add, PI } from "./maths.js";
+
+console.log(add(2, 3));
+console.log(PI);</pre></div>
+<pre class="file sm xs" data-n="index.html" data-l="html" style="margin-top:14px">&lt;script type="module" src="app.js"&gt;&lt;/script&gt;</pre>
+<p class="note"><i data-lucide="triangle-alert"></i>Modules need a web server. Use Live Server, not a double click on the file.</p></section>
+
+<section class="slide"><h2 class="t">Loading content without reloading the page</h2>
+<div class="flow"><span class="chip"><i data-lucide="mouse-pointer-click"></i>The user acts</span><span class="wire"></span><span class="chip"><i data-lucide="send"></i>fetch() asks the server</span><span class="wire"></span><span class="chip"><i data-lucide="braces"></i>JSON comes back</span></div>
+<div class="flow"><span class="chip"><i data-lucide="pencil"></i>JavaScript updates the DOM</span><span class="wire"></span><span class="chip"><i data-lucide="circle-check"></i>Only that part of the page changes</span></div>
+<p class="note"><i data-lucide="lightbulb"></i>JSON is a simple text format for data. It looks like a JavaScript object.</p></section>
+
+<section class="slide"><h2 class="t mid">The fetch function</h2>
+<div class="split w"><pre class="file sm xs" data-n="app.js" data-l="js">const list = document.getElementById("list");
+
+async function loadStudents() {
+  try {
+    const response = await fetch("students.json");
+    const students = await response.json();
+
+    for (const s of students) {
+      const li = document.createElement("li");
+      li.textContent = `${s.name}, ${s.city}`;
+      list.append(li);
+    }
+  } catch (error) {
+    list.textContent = "Could not load the data";
+  }
+}</pre>
+<pre class="file sm xs" data-n="students.json">[
+  {
+    "name": "Ananya",
+    "city": "Agartala"
+  },
+  {
+    "name": "Rahul",
+    "city": "Guwahati"
+  }
+]</pre></div></section>
+
+<section class="slide qz" data-k="Checkpoint 9 / question 1" data-a="B"><p class="q">Which method selects an element by its <em>id</em>?</p>
+<ol class="opts"><li><code>querySelectorAll()</code></li><li><code>getElementById()</code></li><li><code>createElement()</code></li><li><code>console.log()</code></li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>document.getElementById("title") gives the one element with that id.</p></section>
+<section class="slide qz" data-k="Checkpoint 9 / question 2" data-a="D"><p class="q">Which storage keeps the data even after the browser is closed?</p>
+<ol class="opts"><li>sessionStorage</li><li>A <code>let</code> variable</li><li>The console</li><li>localStorage</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>sessionStorage is cleared when the tab is closed. localStorage stays.</p></section>
+<section class="slide qz" data-k="Checkpoint 9 / question 3" data-a="C"><p class="q">What does <code>event.preventDefault()</code> do in a submit handler?</p>
+<ol class="opts"><li>Deletes the form</li><li>Clears all the fields</li><li>Stops the form from being sent</li><li>Closes the browser</li></ol>
+<p class="why"><i data-lucide="lightbulb"></i>It stops the normal action, so our code can check the data first.</p></section>
+
+<section class="slide" data-k="The bigger picture" data-ic="workflow"><h2 class="t">The front-end life cycle</h2>
+<div class="flow"><span class="chip"><i data-lucide="clipboard-list"></i>1. Plan</span><span class="wire"></span><span class="chip"><i data-lucide="pen-tool"></i>2. Design</span><span class="wire"></span><span class="chip"><i data-lucide="code-xml"></i>3. Develop</span></div>
+<div class="flow"><span class="chip"><i data-lucide="bug"></i>4. Test</span><span class="wire"></span><span class="chip"><i data-lucide="rocket"></i>5. Deploy</span><span class="wire"></span><span class="chip"><i data-lucide="wrench"></i>6. Maintain</span></div>
+<p class="note"><i data-lucide="repeat"></i>After step 6, the cycle starts again with the next improvement</p></section>
+
+<section class="slide" data-k="The bigger picture" data-ic="workflow"><h2 class="t">Tools for each stage</h2>
+<div class="row"><b>Design</b><i data-lucide="arrow-right"></i>Figma, or even pen and paper</div>
+<div class="row"><b>Develop</b><i data-lucide="arrow-right"></i>VS Code with Live Server</div>
+<div class="row"><b>Track changes</b><i data-lucide="arrow-right"></i>Git and GitHub</div>
+<div class="row"><b>Test</b><i data-lucide="arrow-right"></i>Chrome developer tools, real mobiles</div>
+<div class="row"><b>Deploy</b><i data-lucide="arrow-right"></i>A web hosting service, GitHub Pages</div></section>
+
+<section class="slide" data-k="The bigger picture" data-ic="workflow"><h2 class="t">Website maintenance</h2>
+<div class="li"><i data-lucide="file-pen"></i>Keep the content up to date</div>
+<div class="li"><i data-lucide="link-2-off"></i>Find and correct broken links</div>
+<div class="li"><i data-lucide="refresh-cw"></i>Update libraries like Bootstrap</div>
+<div class="li"><i data-lucide="database-backup"></i>Take regular backups</div>
+<div class="li"><i data-lucide="gauge"></i>Check the speed, the mobile view and HTTPS</div></section>
+
+<section class="slide" data-k="Wrap-up" data-ic="list-checks"><h2 class="t">Key takeaways</h2>
+<div class="li"><i data-lucide="globe"></i>The web works on request and response</div>
+<div class="li"><i data-lucide="code-xml"></i>HTML gives the structure, with meaningful tags</div>
+<div class="li"><i data-lucide="palette"></i>CSS gives the look: selectors, the box model, flexbox</div>
+<div class="li"><i data-lucide="blocks"></i>Bootstrap gives a ready-made, responsive design</div>
+<div class="li"><i data-lucide="braces"></i>JavaScript gives the behaviour, through the DOM and events</div></section>
+
+<section class="slide" data-k="Thank you" data-ic="message-square"><h2 class="t big" style="max-width:640px">Questions and <em>Discussion</em></h2><p class="lead" style="max-width:640px">Building the Front End of the Web</p>
+<div class="orbit"><div class="ring"><span><i data-lucide="code-xml"></i></span><span><i data-lucide="palette"></i></span><span><i data-lucide="braces"></i></span><span><i data-lucide="blocks"></i></span></div><div class="core"><i data-lucide="message-circle-question"></i></div></div></section>
+
+</div>
+<div class="prog"><span id="pg"></span></div>
+<div class="bar">
+<button class="nb" id="pv" aria-label="Previous slide"><i data-lucide="chevron-left"></i></button>
+<span id="cnt">1</span>
+<button class="nb" id="nx" aria-label="Next slide"><i data-lucide="chevron-right"></i></button>
+<button class="nb" id="hm" aria-label="Contents"><i data-lucide="list"></i></button>
+<a class="nb" id="dl" href="presentation3.pdf" download aria-label="Download PDF" title="Download PDF"><i data-lucide="download"></i></a>
+<button class="nb" id="fs" aria-label="Full screen"><i data-lucide="maximize"></i></button>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(()=>{const c=document.createElement('canvas').getContext('2d');c.fillStyle=getComputedStyle(document.body).backgroundColor;c.fillRect(0,0,1,1);const[r,g,b]=c.getImageData(0,0,1,1).data,k=.1,o=v=>(v/255-k/2).toFixed(3);
+ const svg="<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g' color-interpolation-filters='sRGB'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='"+k+" 0 0 0 "+o(r)+" "+k+" 0 0 0 "+o(g)+" "+k+" 0 0 0 "+o(b)+" 0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(#g)'/></svg>";
+ document.body.style.setProperty('--grain','url("data:image/svg+xml,'+encodeURIComponent(svg)+'")')})();
+document.querySelectorAll('.slide.qz').forEach(q=>{const a=q.cloneNode(true),n=q.dataset.a.charCodeAt(0)-65;a.classList.add('rv');a.dataset.k=q.dataset.k.replace('question','answer');a.querySelectorAll('.opts li').forEach((li,i)=>li.classList.add(i===n?'ok':'no'));q.querySelectorAll('.rv-notes').forEach(e=>e.remove());a.querySelectorAll('.notes:not(.rv-notes)').forEach(e=>e.remove());q.after(a)});
+const deck=document.getElementById('deck'),S=[...deck.querySelectorAll('.slide')];let cur=0,sec='',sic='sparkles';const dvs=[];
+S.forEach((s,idx)=>{
+ if(s.classList.contains('dv')){sec=s.dataset.sec;sic=s.dataset.ic;dvs.push({i:idx,t:s.dataset.sec,ic:s.dataset.ic});const c=document.createElement('div');c.className='dvic';c.innerHTML='<i data-lucide="'+sic+'"></i>';s.appendChild(c);s.style.paddingRight='420px'}
+ s.dataset.s=sec||'Introduction';
+ if(!s.classList.contains('dv')){const k=document.createElement('div');k.className='k';const ic=s.classList.contains('rv')?'circle-check':s.classList.contains('qz')?'circle-help':(s.dataset.k?(s.dataset.ic||'sparkles'):sic);k.innerHTML='<i data-lucide="'+ic+'"></i>'+(s.dataset.k||sec);s.prepend(k)}
+ if(s.querySelector(':scope>.hero'))s.classList.add('hh');
+ [...s.children].forEach((c,j)=>c.style.setProperty('--d',j));
+});
+const toc=document.getElementById('toc');
+dvs.forEach((d,n)=>{const b=document.createElement('button');b.innerHTML='<span class="n">'+String(n+1).padStart(2,'0')+'</span><i data-lucide="'+d.ic+'"></i><span>'+d.t+'</span>';b.onclick=e=>{e.stopPropagation();go(d.i);deck.focus()};toc.appendChild(b)});
+// Live results: a slide with a .demo box gets an iframe built from that slide's own code blocks (plus a hidden <template>, if any).
+const BASE='<meta charset="utf-8"><style>html{color-scheme:light}body{font-family:system-ui,sans-serif;font-size:18px;line-height:1.45;margin:14px;color:#1b1717}</style>';
+const CON='<body><style>body{margin:8px 14px;font:16px/1.5 ui-monospace,Consolas,monospace}div{white-space:pre-wrap;border-bottom:1px solid #e0e0d8;padding:3px 0}.e{color:#c62828}</style><script>(()=>{const q=v=>typeof v==="string"?JSON.stringify(v):f(v),f=v=>Array.isArray(v)?"["+v.map(q).join(", ")+"]":v&&typeof v==="object"?"{"+Object.keys(v).map(k=>k+": "+q(v[k])).join(", ")+"}":String(v),p=(t,c)=>{const d=document.createElement("div");d.textContent=t;if(c)d.className=c;document.body.append(d)};console.log=(...a)=>p(a.map(v=>typeof v==="string"?v:f(v)).join(" "));addEventListener("error",e=>p(e.message,"e"))})()<\/script>';
+const BSV='https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/',BSC='<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="'+BSV+'css/bootstrap.min.css"><style>body{padding:12px}</style>',BSJ='<script src="'+BSV+'js/bootstrap.bundle.min.js"><\/script>';
+document.querySelectorAll('.demo').forEach(box=>{const s=box.closest('.slide'),bs=box.hasAttribute('data-bs'),x=s.querySelector(':scope>template'),f=document.createElement('iframe');
+ const code=l=>[...s.querySelectorAll('pre[data-l="'+l+'"]:not([data-skip])')].map(p=>p.textContent).join('\n');
+ f.title='Browser output';f.srcdoc=(bs?BSC:BASE)+(box.hasAttribute('data-console')?CON:'')+'<style>'+code('css')+'</style>'+(x?x.innerHTML:'')+code('html').replace(/\s+autofocus/g,'')+(bs?BSJ:'')+'<script>'+code('js')+'<\/script>';
+ f.addEventListener('load',()=>{try{const d=f.contentDocument;d.addEventListener('submit',e=>e.preventDefault());d.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a)return;const h=a.getAttribute('href');if(/^https?:/.test(h)){e.preventDefault();open(h,'_blank','noopener')}else if(!h.startsWith('#'))e.preventDefault()});d.addEventListener('keydown',e=>{if(e.key==='Escape'){deck.focus();return}if(e.target.closest('input,textarea,select,button,a,audio,video,summary'))return;if(e.key==='ArrowRight'||e.key==='PageDown')next();else if(e.key==='ArrowLeft'||e.key==='PageUp')prev()})}catch(e){}});
+ box.appendChild(f)});
+const W=(c,t)=>'<span class="'+c+'">'+t+'</span>';
+const HL={
+ html:t=>t.replace(/(&lt;!--[\s\S]*?--&gt;)|(&lt;\/?)([\w-]+)|("[^"\n]*")/g,(m,c,o,n,s)=>c?W('cm',c):n?o+W('pr',n):W('out',s)),
+ css:t=>t.replace(/(\/\*[\s\S]*?\*\/)|^([ \t]*)([^\s{}\/][^{};\n]*?)(?=\s*\{)|^([ \t]+)([\w-]+)(?=\s*:)/gm,(m,c,i,sel,j,p)=>c?W('cm',c):sel?i+W('pr',sel):j+W('out',p)),
+ js:t=>t.replace(/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`)|\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|default|try|catch|finally|throw|new|class|import|export|from|async|await|of|typeof|true|false|null|undefined)\b/g,(m,c,s,k)=>c?W('cm',c):s?W('out',s):W('pr',k))};
+document.querySelectorAll('pre.sh,pre.file').forEach(p=>{const sh=p.classList.contains('sh'),raw=p.innerHTML.replace(/^\n/,'').replace(/\s+$/,'');if(HL[p.dataset.l]){p.innerHTML=HL[p.dataset.l](raw)+'<span class="cur"></span>';return}p.innerHTML=raw.split('\n').map(l=>{let pre='',cm='';if(sh&&l.startsWith('$ ')){pre='<span class="pr">$</span> ';l=l.slice(2)}else if(/^\s*#/.test(l)){return '<span class="cm">'+l+'</span>'}else if(sh&&!/^\s/.test(l)){const k=l.search(/\s#\s/);return k>=0?'<span class="out">'+l.slice(0,k)+'</span><span class="cm">'+l.slice(k)+'</span>':'<span class="out">'+l+'</span>'}const k=l.search(/\s#\s/);if(k>=0){cm='<span class="cm">'+l.slice(k)+'</span>';l=l.slice(0,k)}return pre+l+cm}).join('\n')+'<span class="cur"></span>'});
+// Phones held upright get a tall 720px-wide canvas with a one-column layout (html.vert).
+// clientWidth, not innerWidth: phones can report a widened innerWidth before the deck is scaled.
+function fit(){const W=document.documentElement.clientWidth,H=document.documentElement.clientHeight,v=H>W*1.15&&W<900;document.documentElement.classList.toggle('vert',v);
+ if(v){const s=W/720;deck.style.width='720px';deck.style.height=Math.round(H/s)+'px';deck.style.transform='translate(-50%,-50%) scale('+s+')'}
+ else{deck.style.width=deck.style.height='';const s=Math.min(W/1280,H/720)*(W<900?.98:.86);deck.style.transform='translate(-50%,-50%) scale('+s+')'}}
+addEventListener('resize',fit);fit();
+let uiT;function poke(){document.body.classList.add('ui');clearTimeout(uiT);uiT=setTimeout(()=>document.body.classList.remove('ui'),2200)}
+addEventListener('pointermove',poke);addEventListener('pointerdown',poke);
+const bare=e=>e.className.replace(/\s*\b(keep|gone)\b/g,'');
+function go(n){if(n<0||n>=S.length)return;const p=S[cur],q=S[n],adj=Math.abs(n-cur)===1,pair=adj&&S[Math.max(n,cur)].classList.contains('rv'),moves=[];
+ S.forEach(s=>{if(s!==p)s.querySelectorAll(':scope>.keep,:scope>.gone').forEach(e=>e.classList.remove('keep','gone'))});
+ if(adj&&!pair){const pc=[...p.children];[...q.children].forEach(c=>{const m=pc.find(o=>o.tagName===c.tagName&&bare(o)===bare(c)&&o.innerHTML===c.innerHTML);if(m){moves.push([c,m.getBoundingClientRect()]);c.classList.add('keep');m.classList.add('gone')}})}
+ deck.classList.toggle('pair',pair);deck.classList.toggle('soft',moves.length>0);cur=n;S.forEach((s,k)=>{s.classList.toggle('on',k===n);s.classList.toggle('past',k<n)});
+ const z=deck.getBoundingClientRect().width/deck.offsetWidth;moves.forEach(([c,r])=>{const b=c.getBoundingClientRect(),dx=(r.left-b.left)/z,dy=(r.top-b.top)/z;if(Math.abs(dx)+Math.abs(dy)<1)return;c.style.transition='none';c.style.transform='translate('+dx+'px,'+dy+'px)';c.offsetWidth;c.style.transition='transform .5s cubic-bezier(.2,.7,.2,1)';c.style.transform=''});
+ document.getElementById('cnt').textContent=(n+1)+' / '+S.length;document.getElementById('pg').style.width=Math.round((n/(S.length-1))*100)+'%';history.replaceState(null,'','#'+(n+1));
+ if(ready&&n>0&&!T.used)timerToggle();syncNotes()}
+function next(){go(cur+1)}
+function prev(){go(cur-1)}
+function fsToggle(doc=document){if(!doc.fullscreenElement)doc.documentElement.requestFullscreen().catch(()=>{});else doc.exitFullscreen()}
+function onKey(e){const k=e.key,doc=e.target.ownerDocument||e.target.document||document;
+ if(e.target.closest&&e.target.closest('button')&&(k===' '||k==='Enter'))return;
+ if([' ','ArrowRight','ArrowDown','PageDown','Enter'].includes(k)){e.preventDefault();next()}
+ else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev()}
+ else if(k==='Home'){e.preventDefault();go(0)}else if(k==='End'){e.preventDefault();go(S.length-1)}
+ else if(k==='f'||k==='F'){e.preventDefault();fsToggle(doc)}
+ else if(k==='c'||k==='C'){e.preventDefault();go(1)}}
+document.addEventListener('keydown',onKey);
+
+// Speaker notes: a presenter window on the second screen, driven entirely from here.
+const T={acc:0,from:0,run:false,used:false},elapsed=()=>T.acc+(T.run?(Date.now()-T.from)/1000:0);
+function timerToggle(){T.used=true;if(T.run){T.acc=elapsed();T.run=false}else{T.from=Date.now();T.run=true}syncNotes()}
+function timerReset(){T.acc=0;T.run=false;T.used=true;syncNotes()}
+const clock=s=>{s=Math.max(0,Math.round(s));const h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=String(s%60).padStart(2,'0');return h?h+':'+String(m).padStart(2,'0')+':'+x:m+':'+x};
+let pw=null,ready=false;
+const PCSS=`html,body{height:100%;overflow:hidden}body{margin:0;background:var(--B1);color:var(--BC);font-family:'Google Sans',system-ui,sans-serif}body::before{display:none}
+.pz{height:100vh;display:grid;grid-template-rows:auto minmax(0,1fr);gap:18px;padding:18px 22px}
+header{display:flex;align-items:center;gap:22px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid color-mix(in oklab,var(--BC) 12%,transparent)}
+.pos{font-size:16px;color:color-mix(in oklab,var(--BC) 70%,transparent)}.pos b{font-size:30px;color:var(--P);font-weight:700}#p-sec{display:block;margin-top:2px;font-size:14px;color:var(--P)}
+.tm{margin-left:auto;display:flex;align-items:center;gap:10px}#p-el{font:600 40px 'Google Sans Code',ui-monospace,monospace;font-variant-numeric:tabular-nums;min-width:4.6ch;text-align:right}
+.of{font-size:14px;color:color-mix(in oklab,var(--BC) 55%,transparent);line-height:1.3}
+.pace{padding:8px 14px;border-radius:10px;font-size:15px;font-weight:500;background:color-mix(in oklab,var(--BC) 8%,transparent)}
+.pace.ok{color:var(--P);background:color-mix(in oklab,var(--P) 14%,transparent)}.pace.late{color:#f5a524;background:color-mix(in oklab,#f5a524 14%,transparent)}.pace.early{color:#7cb7ff;background:color-mix(in oklab,#7cb7ff 14%,transparent)}
+#p-clock{font-size:22px;font-variant-numeric:tabular-nums;color:color-mix(in oklab,var(--BC) 75%,transparent)}
+.pb{all:unset;cursor:pointer;height:36px;min-width:36px;padding:0 12px;box-sizing:border-box;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;border:1px solid color-mix(in oklab,var(--BC) 18%,transparent)}
+.pb:hover{border-color:var(--P);background:color-mix(in oklab,var(--P) 12%,transparent)}.pb svg{width:18px;height:18px}
+main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:28px;min-height:0}
+.views{display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto}
+.lbl{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--P);font-weight:500;margin-top:6px}
+.view{position:relative;flex:none;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:12px;border:1px solid color-mix(in oklab,var(--BC) 14%,transparent)}.view.sm{width:66%}
+.view .end{position:absolute;inset:0;display:grid;place-items:center;font-size:15px;color:color-mix(in oklab,var(--BC) 55%,transparent)}
+.mini{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;background:var(--B1);color:var(--BC);font-family:'Google Sans','Google Sans Flex',system-ui,sans-serif}
+.mini *,.mini *::before,.mini *::after{animation:none!important;transition:none!important}.mini .slide{opacity:1;visibility:visible;transform:none}
+.ctl{display:flex;gap:8px;margin-top:10px}
+.nbx{display:flex;flex-direction:column;min-height:0}.nbx .lbl{display:flex;align-items:center;gap:8px;margin-top:0}.nbx .lbl span{margin-right:auto}
+#p-notes{flex:1;overflow:auto;margin-top:12px;padding-right:14px;font-size:var(--fs,24px);line-height:1.55}#p-notes p{margin:0 0 .85em}#p-notes .none{color:color-mix(in oklab,var(--BC) 50%,transparent)}
+@media (max-width:860px){main{grid-template-columns:1fr}.views{display:none}}`;
+const PHTML=`<div class="pz"><header>
+<div class="pos"><b id="p-n"></b> / ${S.length}<span id="p-sec"></span></div>
+<div class="tm"><span id="p-el">0:00</span>
+<button class="pb" id="p-go"></button><button class="pb" id="p-rs" title="Reset timer"><i data-lucide="rotate-ccw"></i></button></div>
+<div id="p-clock"></div></header>
+<main><section class="views"><div class="lbl">Now</div><div class="view" id="p-cur"></div><div class="lbl">Next</div><div class="view sm" id="p-nx"></div>
+<div class="ctl"><button class="pb" id="p-pv" title="Previous slide"><i data-lucide="chevron-left"></i></button><button class="pb" id="p-ne" title="Next slide"><i data-lucide="chevron-right"></i>Next</button><button class="pb" id="p-fs" title="Full screen"><i data-lucide="maximize"></i></button></div></section>
+<section class="nbx"><div class="lbl"><span>Speaker notes</span><button class="pb" id="p-sm" title="Smaller text">A−</button><button class="pb" id="p-lg" title="Larger text">A+</button></div><div id="p-notes"></div></section></main></div>`;
+async function openNotes(){
+ if(pw&&!pw.closed){pw.focus();return}
+ pw=window.open('','speaker-notes','popup,width=1280,height=800');
+ if(!pw){alert('Please allow pop-ups for this page so the speaker notes window can open.');return}
+ const d=pw.document,head=[...document.querySelectorAll('link[rel=stylesheet],style')].map(e=>e.outerHTML).join('');
+ d.open();d.write('<!doctype html><html data-theme="'+document.documentElement.dataset.theme+'"><head><meta charset="utf-8"><title>Speaker notes</title>'+head+'<style>'+PCSS+'<\/style><\/head><body>'+PHTML+'<\/body><\/html>');d.close();
+ let fs=24;try{fs=+localStorage.getItem('notes-fs')||24}catch(e){}
+ const size=n=>{fs=Math.min(44,Math.max(16,n));d.body.style.setProperty('--fs',fs+'px');try{localStorage.setItem('notes-fs',fs)}catch(e){}};size(fs);
+ const on=(id,f)=>d.getElementById(id).addEventListener('click',e=>{f();e.currentTarget.blur()});
+ on('p-go',timerToggle);on('p-rs',timerReset);on('p-pv',prev);on('p-ne',next);on('p-fs',()=>fsToggle(d));on('p-sm',()=>size(fs-2));on('p-lg',()=>size(fs+2));
+ d.addEventListener('keydown',onKey);pw.addEventListener('resize',()=>syncNotes(true));
+ if(window.lucide)lucide.createIcons({root:d.body});
+ syncNotes(true);
+ // Move it to the other screen when the browser can see more than one (asks for permission once).
+ if('getScreenDetails' in window)try{const sd=await getScreenDetails(),o=sd.screens.find(s=>s!==sd.currentScreen);if(o){pw.moveTo(o.availLeft,o.availTop);pw.resizeTo(o.availWidth,o.availHeight)}}catch(e){}
+}
+function mini(box,s){box.textContent='';if(!s){box.innerHTML='<div class="end">End of presentation</div>';return}
+ const m=pw.document.createElement('div'),c=s.cloneNode(true);m.className='mini';
+ c.classList.add('on');c.classList.remove('past');c.querySelectorAll(':scope>*').forEach(e=>{e.classList.remove('keep','gone');e.style.transform=''});
+ m.appendChild(c);box.appendChild(m);m.style.transform='scale('+box.clientWidth/1280+')'}
+let shown=-1;
+function syncNotes(force){if(!pw||pw.closed)return;const d=pw.document,$=id=>d.getElementById(id);if(!$('p-n'))return;
+ if(force||shown!==cur){shown=cur;const s=S[cur],nt=s.querySelector(':scope>.notes');
+  $('p-n').textContent=cur+1;$('p-sec').textContent=s.dataset.s;
+  $('p-notes').innerHTML=nt?nt.innerHTML:'<p class="none">No notes for this slide.</p>';$('p-notes').scrollTop=0;
+  mini($('p-cur'),s);mini($('p-nx'),S[cur+1])}
+ const t=elapsed();$('p-el').textContent=clock(t);
+ $('p-go').textContent=T.run?'Pause':(t>0?'Resume':'Start');
+ $('p-clock').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+setInterval(()=>syncNotes(),500);
+addEventListener('pagehide',()=>{if(pw&&!pw.closed)pw.close()});
+document.getElementById('nx').onclick=e=>{e.stopPropagation();next();e.currentTarget.blur()};
+document.getElementById('pv').onclick=e=>{e.stopPropagation();prev();e.currentTarget.blur()};
+document.getElementById('hm').onclick=e=>{e.stopPropagation();go(1);e.currentTarget.blur()};
+document.getElementById('fs').onclick=e=>{e.stopPropagation();fsToggle();e.currentTarget.blur()};
+const start=parseInt(location.hash.slice(1),10);go(start>0&&start<=S.length?start-1:0);ready=true;
+// Phones: swipe, or tap the right side for next and the left side for previous. Wide code blocks scroll sideways instead.
+let tx=null,ty=0;
+addEventListener('touchstart',e=>{const pre=e.target.closest('pre');if(e.touches.length>1||e.target.closest('.bar,button,a')||(pre&&pre.scrollWidth>pre.clientWidth+2)){tx=null;return}tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchend',e=>{if(tx===null||(window.visualViewport&&visualViewport.scale>1.05))return;const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;tx=null;
+ if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?next():prev()}else if(Math.abs(dx)<12&&Math.abs(dy)<12){t.clientX>document.documentElement.clientWidth/3?next():prev()}});
+if(!document.documentElement.requestFullscreen)document.getElementById('fs').style.display='none';
+if(matchMedia('(pointer:coarse)').matches)poke();
+if(window.lucide)lucide.createIcons();
+deck.focus();
+</script>
+</body>
+</html>
